@@ -4,6 +4,6 @@ namespace FileManager.BusinessLayer.Interfaces
 {
     public interface IFileManagerObject
     {
-        void Save();
+        void SaveAsync();
     }
 }

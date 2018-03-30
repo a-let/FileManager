@@ -24,18 +24,13 @@ namespace FileManager.BusinessLayer
             }                 
         }
 
-        public async void Save()
+        public async void SaveAsync()
         {
             using (var context = new FileManagerContext())
             {
                 context.Season.Add(this);
 
-                if (this.SeasonId == 0)
-                {
-                    context.Entry(this).State = EntityState.Added;
-                }
-                else
-                    context.Entry(this).State = EntityState.Modified;
+                context.Entry(this).State = this.SeasonId == 0 ? EntityState.Added : EntityState.Modified;
 
                 await context.SaveChangesAsync();
             }
