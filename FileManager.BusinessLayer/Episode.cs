@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using FileManager.BusinessLayer;
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
@@ -16,13 +16,27 @@ namespace FileManager.BusinessLayer
                 
         private Episode() { }
 
-        public static Episode NewEpisode() => new Episode();
+        public static Episode NewEpisode()
+        {
+            using (var context = new FileManagerContext())
+            {
+                var episode = new Episode();
+                episode = context.Episode.Create();
+                return episode;
+            }
+        }
 
         public async void Save()
         {
             using (var context = new FileManagerContext())
             {
                 context.Episode.Add(this);
+
+                if (this.EpisodeId == 0)
+                    context.Entry(this).State = EntityState.Added;
+                else
+                    context.Entry(this).State = EntityState.Modified;
+
                 await context.SaveChangesAsync();
             }
         }
@@ -49,8 +63,8 @@ namespace FileManager.BusinessLayer
 
             return episodes;
         }
-                
-        public static Episode FindEpisode(string name)
+               
+        public static Episode GetEpisode(string name)
         {
             var episode = new Episode();
 
@@ -63,10 +77,16 @@ namespace FileManager.BusinessLayer
             return episode;
         }
         
-        // TODO: Implement, need to be internal?
-        internal static List<Episode> GetEpisodesBySeasonId()
+        public static IEnumerable<Episode> GetEpisodesBySeasonId(int id)
         {
-            return null;
+            IEnumerable<Episode> episodes = new List<Episode>();
+
+            using (var context = new FileManagerContext())
+            {
+                episodes = context.Episode.Where(e => e.SeasonId == id);
+            }
+
+            return episodes;
         }
     }
 }

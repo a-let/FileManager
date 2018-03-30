@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using FileManager.BusinessLayer;
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
@@ -12,13 +12,27 @@ namespace FileManager.BusinessLayer
 
         private Series() { }
 
-        public static Series NewSeries() => new Series();
+        public static Series NewSeries()
+        {
+            using (var context = new FileManagerContext())
+            {
+                var series = new Series();
+                series = context.Series.Create();
+                return series;
+            }
+        }
 
         public async void Save()
         {
             using (var context = new FileManagerContext())
             {
-                context.Series.Add(this);
+                context.Series.Add(this)
+                    ;
+                if (this.SeriesId == 0)
+                    context.Entry(this).State = EntityState.Added;
+                else
+                    context.Entry(this).State = EntityState.Modified;
+
                 await context.SaveChangesAsync();
             }
         }

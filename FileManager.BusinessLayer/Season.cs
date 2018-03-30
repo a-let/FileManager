@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using FileManager.BusinessLayer;
+using System.Data.Entity
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
@@ -9,22 +9,39 @@ namespace FileManager.BusinessLayer
         public int SeasonId { get; set; }
         public int ShowId { get; set; }
         public string SeasonNumber { get; set; }
-        public List<Episode> Episodes { get; set; }
+        public IEnumerable<Episode> Episodes { get; set; }
         public string Path { get; set; }
 
         private Season() { }
 
-        public static Season NewSeason() => new Season();
+        public static Season NewSeason()
+        {
+            using (var context = new FileManagerContext())
+            {
+                var season = new Season();
+                season = context.Season.Create();
+                return season;
+            }                 
+        }
 
         public async void Save()
         {
             using (var context = new FileManagerContext())
             {
                 context.Season.Add(this);
+
+                if (this.SeasonId == 0)
+                {
+                    context.Entry(this).State = EntityState.Added;
+                }
+                else
+                    context.Entry(this).State = EntityState.Modified;
+
                 await context.SaveChangesAsync();
             }
         }
 
+        // TODO: Episodes to EpisodeList? Fix Episode.Get call
         public static IEnumerable<Season> GetSeasons()
         {
             var seasons = new List<Season>();
@@ -38,7 +55,7 @@ namespace FileManager.BusinessLayer
                         SeasonId = s.SeasonId,
                         ShowId = s.ShowId,
                         SeasonNumber = s.SeasonNumber,
-                        Episodes = Episode.GetEpisodesBySeasonId(),
+                        Episodes = Episode.GetEpisodesBySeasonId(0),
                         Path = s.Path
                     });
                 }
