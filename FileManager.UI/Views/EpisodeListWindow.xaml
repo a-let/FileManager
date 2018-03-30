@@ -1,0 +1,23 @@
+﻿<Window x:Class="FileManager.UI.Views.EpisodeListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileManager.UI.Views"
+        mc:Ignorable="d"
+        Title="EpisodeListWindow" Height="300" Width="300">
+	<Grid>
+		<ListView Margin="10" Name="lvEpisodes" ItemsSource="{Binding EpisodeList}">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Header="Episode Id" Width="auto" DisplayMemberBinding="{Binding EpisodeId}"/>
+					<GridViewColumn Header="Season Id" Width="auto" DisplayMemberBinding="{Binding SeasonId}"/>
+					<GridViewColumn Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}"/>
+					<GridViewColumn Header="Episode Number" Width="auto" DisplayMemberBinding="{Binding EpisodeNumber}"/>
+					<GridViewColumn Header="Format" Width="auto" DisplayMemberBinding="{Binding Format}"/>
+					<GridViewColumn Header="Path" Width="auto" DisplayMemberBinding="{Binding Path}"/>
+				</GridView>
+			</ListView.View>
+		</ListView>
+	</Grid>
+</Window>

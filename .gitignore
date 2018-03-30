@@ -1,0 +1,22 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/FileManager/bin/Debug
+/.vs/FileManager/v14
+/.vs/FileManager/v15/Server/sqlite3
+/.vs/FileManager/v15/.suo
+/FileManager/obj/Debug
+/FileManager/App.config
+/FileManager/Properties/AssemblyInfo.cs
+/FileManager.BusinessLayer/bin/Debug
+/FileManager.BusinessLayer/obj/Debug
+/FileManager.BusinessLayer/Properties
+/FileManager.BusinessLayer/App.config
+/FileManager.BusinessLayer/packages.config
+/FileManager.UI/bin/Debug
+/FileManager.UI/obj/Debug
+/FileManager.UI/Properties
+/FileManager.UI/App.config
+/FileManager.UI/packages.config
+/packages
