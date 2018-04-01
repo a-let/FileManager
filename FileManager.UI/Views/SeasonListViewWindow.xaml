@@ -25,10 +25,10 @@
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</GridViewColumn>
-						<GridViewColumn Header="Episodes" Width="auto">
+						<GridViewColumn Header="Episodes" Width="200">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<ComboBox ItemsSource="{Binding EpisodeList}" DisplayMemberPath="Name" SelectedIndex="0"/>
+									<ComboBox ItemsSource="{Binding EpisodeList}" DisplayMemberPath="Name" SelectedIndex="0" Width="150"/>
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</GridViewColumn>

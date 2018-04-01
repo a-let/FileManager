@@ -1,19 +1,8 @@
-﻿using FileManager.UI.Interfaces;
-using FileManager.UI.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using FileManager.UI.Interfaces;
+using FileManager.UI.ViewModels;
 
 namespace FileManager.UI.Views
 {
@@ -31,57 +20,34 @@ namespace FileManager.UI.Views
             DataContext = new MainWindowViewModel(OpenWindow);
 
             this.Show();
-        }
+        }   
 
         private void OpenWindow(IFileManagerViewModel viewModel)
         {
-            Window window;
+            if (viewModel is EpisodeListWindowViewModel)
+                OpenWindow(viewModel, new EpisodeListWindow(), "Episodes");
+            else if (viewModel is MovieListWindowViewModel)
+                OpenWindow(viewModel, new MovieListWindow(), "Movies");
+            else if (viewModel is SeasonListWindowViewModel)
+                OpenWindow(viewModel, new SeasonListViewWindow(), "Seasons");
+            else if (viewModel is ShowListWindowViewModel)
+                OpenWindow(viewModel, new ShowListViewWindow(), "Shows");
+            else if (viewModel is SeriesListWindowViewModel)
+                OpenWindow(viewModel, new SeriesListViewWindow(), "Series");
+            else
+                throw new NotImplementedException();
+        }
 
-            // TODO: Refactor to case/switch
-            if(viewModel is EpisodeListWindowViewModel)
+        private void OpenWindow(IFileManagerViewModel viewModel, UserControl control, string title)
+        {
+            Window window = new Window()
             {
-                window = new Window()
-                {
-                    DataContext = viewModel,
-                    Content = new EpisodeListWindow(),
-                    Title = "Episodes"
-                };
+                DataContext = viewModel,
+                Content = control,
+                Title = title
+            };
 
-                window.Show();
-            } 
-            else if(viewModel is MovieListWindowViewModel)
-            {
-                window = new Window()
-                {
-                    DataContext = viewModel,
-                    Content = new MovieListWindow(),
-                    Title = "Movies"
-                };
-
-                window.Show();
-            }
-            else if(viewModel is SeasonListWindowViewModel)
-            {
-                window = new Window()
-                {
-                    DataContext = viewModel,
-                    Content = new SeasonListViewWindow(),
-                    Title = "Seasons"
-                };
-
-                window.Show();
-            }
-            else if(viewModel is SeriesListWindowViewModel)
-            {
-                window = new Window()
-                {
-                    DataContext = viewModel,
-                    Content = new SeriesListViewWindow(),
-                    Title = "Series"
-                };
-
-                window.Show();
-            }
+            window.Show();
         }
     }
 }
