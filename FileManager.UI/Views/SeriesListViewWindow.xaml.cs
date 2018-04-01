@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileManager.UI.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,22 +11,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using FileManager.UI.ViewModels;
 
 namespace FileManager.UI.Views
 {
     /// <summary>
-    /// Interaction logic for SeasonListViewWindow.xaml
+    /// Interaction logic for SeriesListWindow.xaml
     /// </summary>
-    public partial class SeasonListViewWindow : UserControl
+    public partial class SeriesListViewWindow : UserControl
     {
-        public SeasonListWindowViewModel ViewModel => DataContext as SeasonListWindowViewModel;
+        public SeriesListWindowViewModel ViewModel => DataContext as SeriesListWindowViewModel;
 
-        public SeasonListViewWindow()
+        public SeriesListViewWindow()
         {
             InitializeComponent();
-            DataContext = new SeasonListWindowViewModel();
+
+            DataContext = new SeriesListWindowViewModel();
         }
     }
 }

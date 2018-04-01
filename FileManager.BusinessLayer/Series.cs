@@ -52,7 +52,7 @@ namespace FileManager.BusinessLayer
                 return series;
         }
 
-        public static Series FindSeries(string name)
+        public static Series GetSeries(string name)
         {
             var series = new Series();
 

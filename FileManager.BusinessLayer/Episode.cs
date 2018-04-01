@@ -76,11 +76,22 @@ namespace FileManager.BusinessLayer
         
         public static IEnumerable<Episode> GetEpisodesBySeasonId(int id)
         {
-            IEnumerable<Episode> episodes = new List<Episode>();
+            var episodes = new List<Episode>();
 
             using (var context = new FileManagerContext())
             {
-                episodes = context.Episode.Where(e => e.SeasonId == id);
+                foreach(var e in context.Episode.Where(e => e.SeasonId == id))
+                {
+                    episodes.Add(new Episode()
+                    {
+                        EpisodeId = e.EpisodeId,
+                        SeasonId = e.SeasonId,
+                        Name = e.Name,
+                        EpisodeNumber = e.EpisodeNumber,
+                        Format = e.Format,
+                        Path = e.Path
+                    });
+                }
             }
 
             return episodes;

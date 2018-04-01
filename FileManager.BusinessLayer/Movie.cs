@@ -63,7 +63,7 @@ namespace FileManager.BusinessLayer
             return movie;
         }
 
-        public static Movie FindMovie(string name)
+        public static Movie GetMovie(string name)
         {
             var movie = new Movie();
 
@@ -74,6 +74,30 @@ namespace FileManager.BusinessLayer
             }
 
             return movie;
+        }
+
+        public static IEnumerable<Movie> GetMoviesBySeriesId(int id)
+        {
+            var movies = new List<Movie>();
+
+            using (var context = new FileManagerContext())
+            {
+                foreach (var m in context.Movie.Where(m => m.IsSeries && m.SeriesId == id))
+                {
+                    movies.Add(new Movie()
+                    {
+                        MovieId = m.MovieId,
+                        SeriesId = m.SeriesId,
+                        Name = m.Name,
+                        IsSeries = m.IsSeries,
+                        Format = m.Format,
+                        Category = m.Category,
+                        Path = m.Path
+                    });
+                }                
+            }
+
+            return movies;
         }
     }
 }

@@ -1,22 +1,47 @@
-﻿<Window x:Class="FileManager.UI.Views.SeasonListViewWindow"
+﻿<UserControl x:Class="FileManager.UI.Views.SeasonListViewWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileManager.UI.Views"
         mc:Ignorable="d"
-        Title="SeasonListViewWindow" Height="300" Width="300">
+        d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
 		<ListView Margin="10" Name="lvEpisodes" ItemsSource="{Binding SeasonList}">
 			<ListView.View>
 				<GridView>
-					<GridViewColumn Header="Season Id" Width="auto" DisplayMemberBinding="{Binding SeasonId}"/>
-					<GridViewColumn Header="Show Id" Width="auto" DisplayMemberBinding="{Binding ShowId}"/>
-					<GridViewColumn Header="Season Number" Width="auto" DisplayMemberBinding="{Binding SeasonNumber}"/>
-					<!--EpisodeList-->
-					<GridViewColumn Header="Path" Width="auto" DisplayMemberBinding="{Binding Path}"/>
+					<GridView.Columns>
+						<GridViewColumn Header="Season Id" Width="auto">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<Label Content="{Binding SeasonId}"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+						<GridViewColumn Header="Season Number" Width="auto">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<Label Content="{Binding SeasonNumber}"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+						<!--<GridViewColumn Header="Episodes" Width="auto">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<ComboBox ItemsSource="{Binding EpisodeList}"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>-->
+						<GridViewColumn Header="Path" Width="auto">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<Label Content="{Binding Path}"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+					</GridView.Columns>					
 				</GridView>
 			</ListView.View>
 		</ListView>
 	</Grid>
-</Window>
+</UserControl>

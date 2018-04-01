@@ -57,7 +57,7 @@ namespace FileManager.BusinessLayer
             return shows;
         }
 
-        public static Show FindShow(string name)
+        public static Show GetShow(string name)
         {
             var show = new Show();
 

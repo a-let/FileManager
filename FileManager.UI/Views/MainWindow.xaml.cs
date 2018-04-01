@@ -40,9 +40,10 @@ namespace FileManager.UI.Views
             // TODO: Refactor to case/switch
             if(viewModel is EpisodeListWindowViewModel)
             {
-                window = new EpisodeListWindow()
+                window = new Window()
                 {
                     DataContext = viewModel,
+                    Content = new EpisodeListWindow(),
                     Title = "Episodes"
                 };
 
@@ -50,9 +51,10 @@ namespace FileManager.UI.Views
             } 
             else if(viewModel is MovieListWindowViewModel)
             {
-                window = new MovieListWindow()
+                window = new Window()
                 {
                     DataContext = viewModel,
+                    Content = new MovieListWindow(),
                     Title = "Movies"
                 };
 
@@ -60,10 +62,22 @@ namespace FileManager.UI.Views
             }
             else if(viewModel is SeasonListWindowViewModel)
             {
-                window = new SeasonListViewWindow()
+                window = new Window()
                 {
                     DataContext = viewModel,
+                    Content = new SeasonListViewWindow(),
                     Title = "Seasons"
+                };
+
+                window.Show();
+            }
+            else if(viewModel is SeriesListWindowViewModel)
+            {
+                window = new Window()
+                {
+                    DataContext = viewModel,
+                    Content = new SeriesListViewWindow(),
+                    Title = "Series"
                 };
 
                 window.Show();

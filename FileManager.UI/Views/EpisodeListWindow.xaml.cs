@@ -18,7 +18,7 @@ namespace FileManager.UI.Views
     /// <summary>
     /// Interaction logic for EpisodeListWindow.xaml
     /// </summary>
-    public partial class EpisodeListWindow : Window
+    public partial class EpisodeListWindow : UserControl
     {
         public EpisodeListWindowViewModel ViewModel => DataContext as EpisodeListWindowViewModel;
 

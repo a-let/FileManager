@@ -9,7 +9,7 @@ namespace FileManager.BusinessLayer
         public int SeasonId { get; set; }
         public int ShowId { get; set; }
         public string SeasonNumber { get; set; }
-        public IEnumerable<Episode> Episodes { get; set; }
+        public IEnumerable<Episode> EpisodeList { get; set; }
         public string Path { get; set; }
 
         private Season() { }
@@ -36,7 +36,6 @@ namespace FileManager.BusinessLayer
             }
         }
 
-        // TODO: Episodes to EpisodeList? Fix Episode.Get call
         public static IEnumerable<Season> GetSeasons()
         {
             var seasons = new List<Season>();
@@ -50,7 +49,7 @@ namespace FileManager.BusinessLayer
                         SeasonId = s.SeasonId,
                         ShowId = s.ShowId,
                         SeasonNumber = s.SeasonNumber,
-                        Episodes = Episode.GetEpisodesBySeasonId(0),
+                        EpisodeList = Episode.GetEpisodesBySeasonId(s.SeasonId),
                         Path = s.Path
                     });
                 }
@@ -59,7 +58,7 @@ namespace FileManager.BusinessLayer
             return seasons;
         }
 
-        public static Season FindSeason(int seasonId)
+        public static Season GetSeason(int seasonId)
         {
             var season = new Season();
 
