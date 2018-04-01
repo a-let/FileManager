@@ -20,3 +20,8 @@
 /FileManager.UI/App.config
 /FileManager.UI/packages.config
 /packages
+/FileManager.UI.Tests/bin/Debug
+/FileManager.UI.Tests/obj/Debug
+/FileManager.UI.Tests/Properties
+/FileManager.UI.Tests/App.config
+/FileManager.UI.Tests/packages.config
