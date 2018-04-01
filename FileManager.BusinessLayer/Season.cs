@@ -12,7 +12,7 @@ namespace FileManager.BusinessLayer
         public IEnumerable<Episode> EpisodeList { get; set; }
         public string Path { get; set; }
 
-        private Season() { }
+        internal Season() { }
 
         public static Season NewSeason()
         {

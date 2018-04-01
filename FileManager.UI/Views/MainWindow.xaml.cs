@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using FileManager.UI.Interfaces;
@@ -17,7 +18,7 @@ namespace FileManager.UI.Views
         {
             InitializeComponent();
 
-            DataContext = new MainWindowViewModel(OpenWindow);
+            DataContext = new MainWindowViewModel(OpenWindow, CloseWindow);
 
             this.Show();
         }   
@@ -26,6 +27,8 @@ namespace FileManager.UI.Views
         {
             if (viewModel is EpisodeListWindowViewModel)
                 OpenWindow(viewModel, new EpisodeListWindow(), "Episodes");
+            else if (viewModel is EpisodeMaintenanceWindowViewModel)
+                OpenWindow(viewModel, new EpisodeMaintenanceWindow(), "Episode Maintenance");
             else if (viewModel is MovieListWindowViewModel)
                 OpenWindow(viewModel, new MovieListWindow(), "Movies");
             else if (viewModel is SeasonListWindowViewModel)
@@ -48,6 +51,14 @@ namespace FileManager.UI.Views
             };
 
             window.Show();
+        }
+
+        private void CloseWindow(string title)
+        {
+            var window = Application.Current.Windows.OfType<Window>()
+                .Single(x => x is Window && x.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
+
+            window.Close();
         }
     }
 }

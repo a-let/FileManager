@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="FileManager.UI.Views.EpisodeMaintenanceWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FileManager.UI.Views"
+             mc:Ignorable="d" x:Name="ucEpisodeMaintenanceWindow"
+             d:DesignHeight="300" d:DesignWidth="300">
+	<StackPanel>
+		<StackPanel>
+			<Label Name="lblEpisodeId" Content="Episode Id" Height="auto" Width="auto"/>
+			<TextBox Name="tbxEpisodeId" Text="{Binding Episode.EpisodeId}" IsEnabled="False"/>
+		</StackPanel>
+
+		<StackPanel>
+			<Label Name="lblSeasonId" Content="Season Id" Height="auto" Width="auto"/>
+			<TextBox Name="tbxSeasonId" Text="{Binding Episode.SeasonId}"/>
+		</StackPanel>
+		
+		<StackPanel>
+			<Label Name="lblName" Content="Name" Height="auto" Width="auto"/>
+			<TextBox Name="tbxName" Text="{Binding Episode.Name}" IsEnabled="True"/>
+		</StackPanel>		
+
+		<StackPanel>
+			<Label Name="lblEpisodeNumber" Content="Episode Number" Height="auto" Width="auto"/>
+			<TextBox Name="tbxEpisodeNumber" Text="{Binding Episode.EpisodeNumber}" IsEnabled="True"/>
+		</StackPanel>		
+
+		<StackPanel>
+			<Label Name="lblFormat" Content="Episode Id" Height="auto" Width="auto"/>
+			<TextBox Name="tbxFormat" Text="{Binding Episode.Format}" IsEnabled="True"/>
+		</StackPanel>		
+
+		<StackPanel>
+			<Label Name="lblPath" Content="Path" Height="auto" Width="auto"/>
+			<Label Name="lblPathContent" Content="{Binding Episode.Path}" IsEnabled="True"
+				   Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+				<Label.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="Copy" 
+								  Command="{Binding Path=PlacementTarget.Tag.DataContext.CopyCommand,
+											RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" 
+								  CommandParameter="{Binding Path=PlacementTarget.Tag.DataContext.Episode.Path,
+											RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"/>
+					</ContextMenu>
+				</Label.ContextMenu>
+			</Label>
+		</StackPanel>
+
+		<StackPanel Height="auto" Width="auto" HorizontalAlignment="Left">
+			<Button Name="btnCancel" Content="Cancel" Command="{Binding CancelCommand}"/>
+		</StackPanel>
+	</StackPanel>
+</UserControl>

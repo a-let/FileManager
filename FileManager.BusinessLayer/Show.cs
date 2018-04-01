@@ -12,7 +12,7 @@ namespace FileManager.BusinessLayer
         public string Category { get; set; }
         public string Path { get; set; }
 
-        private Show() { }
+        internal Show() { }
 
         public static Show NewShow()
         {

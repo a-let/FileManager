@@ -15,7 +15,7 @@ namespace FileManager.BusinessLayer
         public string Category { get; set; }
         public string Path { get; set; }
 
-        private Movie() { }
+        internal Movie() { }
 
         public static Movie NewMovie()
         {

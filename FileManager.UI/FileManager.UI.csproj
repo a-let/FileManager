@@ -79,10 +79,14 @@
     </ApplicationDefinition>
     <Compile Include="Interfaces\IFileManagerViewModel.cs" />
     <Compile Include="ViewModels\EpisodeListWindowViewModel.cs" />
+    <Compile Include="ViewModels\EpisodeMaintenanceWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\SeasonListWindowViewModel.cs" />
     <Compile Include="ViewModels\SeriesListWindowViewModel.cs" />
     <Compile Include="ViewModels\ShowListWindowViewModel.cs" />
+    <Compile Include="Views\EpisodeMaintenanceWindow.xaml.cs">
+      <DependentUpon>EpisodeMaintenanceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MovieListWindow.xaml.cs">
       <DependentUpon>MovieListWindow.xaml</DependentUpon>
     </Compile>
@@ -96,6 +100,10 @@
       <DependentUpon>ShowListViewWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\EpisodeListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EpisodeMaintenanceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

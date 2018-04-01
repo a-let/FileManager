@@ -1,4 +1,5 @@
 ﻿using System;
+using FileManager.BusinessLayer;
 using FileManager.UI.ViewModels;
 using NUnit.Framework;
 
@@ -12,7 +13,57 @@ namespace FileManager.UI.Tests.ViewModels
         {
             //Arrange
             //Act & Assert
-            Assert.DoesNotThrow(() => new EpisodeListWindowViewModel());
+            Assert.DoesNotThrow(() => new EpisodeListWindowViewModel((vm) => { }, (title) => { }));
+        }
+
+        [Test]
+        public void WhenEpisodeListWindowViewModelIsCalled_GivenEpisodeList_ThenEpisodeListIsNotEmpty()
+        {
+            //Arrange
+
+            //Act
+            var viewModel = new EpisodeListWindowViewModel((vm) => { }, (title) => { });
+
+            //Assert
+            CollectionAssert.IsNotEmpty(viewModel.EpisodeList);
+        }
+
+        [Test]
+        public void WhenAddNewEpisodeCommandIsCalled_ThenOpenWindowIsInvoked()
+        {
+            //Arrange
+            var isInvoked = false;
+            var viewModel = new EpisodeListWindowViewModel((vm) => { isInvoked = true; }, (title) => { });
+
+            //Act
+            viewModel.AddNewEpisodeCommand.Execute(new EpisodeMaintenanceWindowViewModel(null, (title) => { }));
+
+            //Assert
+            Assert.IsTrue(isInvoked);
+        }
+
+        [Test]
+        public void WhenDoubleClickEpisodeCommandIsCalled_GivenNullEpisode_ThenDoesNotThrow()
+        {
+            //Arrange
+            var viewModel = new EpisodeListWindowViewModel((vm) => { }, (title) => { });
+
+            //Act & Assert
+            Assert.DoesNotThrow(() => viewModel.DoubleClickEpisodeCommand.Execute(null));
+        }
+
+        [Test]
+        public void WhenDoubleClickEpisodeCommandIsCalled_ThenOpenWindowIsInvoked()
+        {
+            //Arrange
+            var isInvoked = false;
+            var viewModel = new EpisodeListWindowViewModel((vm) => { isInvoked = true; }, (title) => { });
+
+            //Act
+            viewModel.DoubleClickEpisodeCommand.Execute(new Episode());
+
+            //Assert
+            Assert.IsTrue(isInvoked);
         }
     }
 }

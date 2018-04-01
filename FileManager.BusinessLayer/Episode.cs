@@ -14,7 +14,7 @@ namespace FileManager.BusinessLayer
         public string Format { get; set; }
         public string Path { get; set; }
                 
-        private Episode() { }
+        internal Episode() { }
 
         public static Episode NewEpisode()
         {

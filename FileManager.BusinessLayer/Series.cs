@@ -10,7 +10,7 @@ namespace FileManager.BusinessLayer
         public int SeriesId { get; set; }
         public string Name { get; set; }
 
-        private Series() { }
+        internal Series() { }
 
         public static Series NewSeries()
         {

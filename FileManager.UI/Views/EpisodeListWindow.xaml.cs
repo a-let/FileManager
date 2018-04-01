@@ -13,8 +13,6 @@ namespace FileManager.UI.Views
         public EpisodeListWindow()
         {
             InitializeComponent();
-
-            DataContext = new EpisodeListWindowViewModel();
         }
     }
 }
