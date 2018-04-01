@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FileManager.UI.Views"
         mc:Ignorable="d"
         d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+	<Grid>
 		<ListView Margin="10" Name="lvEpisodes" ItemsSource="{Binding SeasonList}">
 			<ListView.View>
 				<GridView>
@@ -25,13 +25,13 @@
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</GridViewColumn>
-						<!--<GridViewColumn Header="Episodes" Width="auto">
+						<GridViewColumn Header="Episodes" Width="auto">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<ComboBox ItemsSource="{Binding EpisodeList}"/>
+									<ComboBox ItemsSource="{Binding EpisodeList}" DisplayMemberPath="Name" SelectedIndex="0"/>
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
-						</GridViewColumn>-->
+						</GridViewColumn>
 						<GridViewColumn Header="Path" Width="auto">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
@@ -39,7 +39,7 @@
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</GridViewColumn>
-					</GridView.Columns>					
+					</GridView.Columns>
 				</GridView>
 			</ListView.View>
 		</ListView>
