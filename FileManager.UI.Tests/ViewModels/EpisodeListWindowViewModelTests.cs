@@ -1,5 +1,4 @@
-﻿using System;
-using FileManager.BusinessLayer;
+﻿using FileManager.BusinessLayer;
 using FileManager.UI.ViewModels;
 using NUnit.Framework;
 
@@ -13,7 +12,7 @@ namespace FileManager.UI.Tests.ViewModels
         {
             //Arrange
             //Act & Assert
-            Assert.DoesNotThrow(() => new EpisodeListWindowViewModel((vm) => { }, (title) => { }));
+            Assert.DoesNotThrow(() => new EpisodeListWindowViewModel((vm) => { }, (title) => { }, (message, caption) => { }));
         }
 
         [Test]
@@ -22,7 +21,7 @@ namespace FileManager.UI.Tests.ViewModels
             //Arrange
 
             //Act
-            var viewModel = new EpisodeListWindowViewModel((vm) => { }, (title) => { });
+            var viewModel = new EpisodeListWindowViewModel((vm) => { }, (title) => { }, (message, caption) => { });
 
             //Assert
             CollectionAssert.IsNotEmpty(viewModel.EpisodeList);
@@ -33,10 +32,10 @@ namespace FileManager.UI.Tests.ViewModels
         {
             //Arrange
             var isInvoked = false;
-            var viewModel = new EpisodeListWindowViewModel((vm) => { isInvoked = true; }, (title) => { });
+            var viewModel = new EpisodeListWindowViewModel((vm) => { isInvoked = true; }, (title) => { }, (message, caption) => { });
 
             //Act
-            viewModel.AddNewEpisodeCommand.Execute(new EpisodeMaintenanceWindowViewModel(null, (title) => { }));
+            viewModel.AddNewEpisodeCommand.Execute(new EpisodeMaintenanceWindowViewModel(null, (title) => { }, ));
 
             //Assert
             Assert.IsTrue(isInvoked);
@@ -46,7 +45,7 @@ namespace FileManager.UI.Tests.ViewModels
         public void WhenDoubleClickEpisodeCommandIsCalled_GivenNullEpisode_ThenDoesNotThrow()
         {
             //Arrange
-            var viewModel = new EpisodeListWindowViewModel((vm) => { }, (title) => { });
+            var viewModel = new EpisodeListWindowViewModel((vm) => { }, (title) => { }, (message, caption) => { });
 
             //Act & Assert
             Assert.DoesNotThrow(() => viewModel.DoubleClickEpisodeCommand.Execute(null));
@@ -57,7 +56,7 @@ namespace FileManager.UI.Tests.ViewModels
         {
             //Arrange
             var isInvoked = false;
-            var viewModel = new EpisodeListWindowViewModel((vm) => { isInvoked = true; }, (title) => { });
+            var viewModel = new EpisodeListWindowViewModel((vm) => { isInvoked = true; }, (title) => { }, (message, caption) => { });
 
             //Act
             viewModel.DoubleClickEpisodeCommand.Execute(new Episode());

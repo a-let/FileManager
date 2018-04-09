@@ -11,6 +11,7 @@ namespace FileManager.UI.ViewModels
     {
         public Action<string> CloseWindow { get; set; }
         public Action<IFileManagerViewModel> OpenWindow { get; set; }
+        public Action<string, string> DisplayMessage { get; set; }
         
         public ICommand EpisodesClickCommand { get; set; }
         public ICommand MoviesClickCommand { get; set; }
@@ -18,16 +19,18 @@ namespace FileManager.UI.ViewModels
         public ICommand SeriesClickCommand { get; set; }
         public ICommand ShowsClickCommand { get; set; }
 
-        public MainWindowViewModel(Action<IFileManagerViewModel> openWindow, Action<string> closeWindow)
+        public MainWindowViewModel(Action<IFileManagerViewModel> openWindow, Action<string> closeWindow, Action<string, string> displayMessage)
         {
             CloseWindow = closeWindow;
             OpenWindow = openWindow;
+            DisplayMessage = displayMessage;
+
             InitCommands();            
         }
 
         private void InitCommands()
         {
-            EpisodesClickCommand = new RelayCommand(() => OpenWindow?.Invoke(new EpisodeListWindowViewModel(OpenWindow, CloseWindow)));
+            EpisodesClickCommand = new RelayCommand(() => OpenWindow?.Invoke(new EpisodeListWindowViewModel(OpenWindow, CloseWindow, DisplayMessage)));
             MoviesClickCommand = new RelayCommand(() => OpenWindow?.Invoke(new MovieListWindowViewModel()));
             SeasonsClickCommand = new RelayCommand(() => OpenWindow?.Invoke(new SeasonListWindowViewModel()));
             SeriesClickCommand = new RelayCommand(() => OpenWindow?.Invoke(new SeriesListWindowViewModel()));

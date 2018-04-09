@@ -18,7 +18,7 @@ namespace FileManager.UI.Views
         {
             InitializeComponent();
 
-            DataContext = new MainWindowViewModel(OpenWindow, CloseWindow);
+            DataContext = new MainWindowViewModel(OpenWindow, CloseWindow, (message, caption) => MessageBox.Show(message, caption));
 
             this.Show();
         }   

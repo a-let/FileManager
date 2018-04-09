@@ -43,6 +43,11 @@
 											RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" 
 								  CommandParameter="{Binding Path=PlacementTarget.Tag.DataContext.Episode.Path,
 											RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"/>
+						<MenuItem Header="Go to location"
+								  Command="{Binding Path=PlacementTarget.Tag.DataContext.OpenFileLocationCommand,
+											RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" 
+								  CommandParameter="{Binding Path=PlacementTarget.Tag.DataContext.Episode.Path,
+											RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"/>
 					</ContextMenu>
 				</Label.ContextMenu>
 			</Label>
