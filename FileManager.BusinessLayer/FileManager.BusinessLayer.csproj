@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="FileManagerContext.cs" />
     <Compile Include="Episode.cs" />
+    <Compile Include="FileManagerObjectBase.cs" />
     <Compile Include="Helpers\FileFormats.cs" />
     <Compile Include="Interfaces\IFileManagerObject.cs" />
     <Compile Include="Interfaces\IVideo.cs" />

@@ -28,7 +28,7 @@
 		</StackPanel>		
 
 		<StackPanel>
-			<Label Name="lblFormat" Content="Episode Id" Height="auto" Width="auto"/>
+			<Label Name="lblFormat" Content="Format" Height="auto" Width="auto"/>
 			<TextBox Name="tbxFormat" Text="{Binding Episode.Format}" IsEnabled="True"/>
 		</StackPanel>		
 
@@ -51,6 +51,10 @@
 					</ContextMenu>
 				</Label.ContextMenu>
 			</Label>
+		</StackPanel>
+
+		<StackPanel>
+			<Label Content="{Binding Episode.IsChanged}" IsEnabled="True"/>
 		</StackPanel>
 
 		<StackPanel Height="auto" Width="auto" HorizontalAlignment="Left">

@@ -5,14 +5,53 @@ using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
 {
-    public class Episode : IFileManagerObject, IVideo
+    public class Episode : FileManagerObjectBase, IFileManagerObject, IVideo
     {
         public int EpisodeId { get; set; }
         public int SeasonId { get; set; }
         public string Name { get; set; }
-        public string EpisodeNumber { get; set; }
-        public string Format { get; set; }
-        public string Path { get; set; }
+
+        private string _episodeNumber;
+        public string EpisodeNumber
+        {
+            get => _episodeNumber;
+            set
+            {
+                if (value != _episodeNumber)
+                {
+                    SetProperty("EpisodeNumber", ref _episodeNumber, value);
+                    _episodeNumber = value;
+                }
+            }
+        }
+
+        private string _format;
+        public string Format
+        {
+            get => _format;
+            set
+            {
+                if(value != _format)
+                {
+                    SetProperty("Format", ref _format, value);
+                    _format = value;                    
+                }
+            }
+        }
+
+        private string _path;
+        public string Path
+        {
+            get => _path;
+            set
+            {
+                if (value != _path)
+                {
+                    SetProperty("Path", ref _path, value);
+                    _path = value;
+                }
+            }
+        }
                 
         internal Episode() { }
 
@@ -53,7 +92,8 @@ namespace FileManager.BusinessLayer
                         Name = e.Name,
                         EpisodeNumber = e.EpisodeNumber,
                         Format = e.Format,
-                        Path = e.Path
+                        Path = e.Path,
+                        IsChanged = false
                     });
                 }
             }
