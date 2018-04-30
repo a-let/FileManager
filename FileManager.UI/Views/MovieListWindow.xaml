@@ -10,7 +10,7 @@
 		<ListView Margin="10" Name="lvMovies" ItemsSource="{Binding MovieList}">
 			<ListView.View>
 				<GridView>
-					<GridViewColumn Header="Movie Id" Width="auto" DisplayMemberBinding="{Binding EpisodeId}"/>
+					<GridViewColumn Header="Movie Id" Width="auto" DisplayMemberBinding="{Binding MovieId}"/>
 					<GridViewColumn Header="Series Id" Width="auto" DisplayMemberBinding="{Binding SeriesId}"/>
 					<GridViewColumn Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}"/>
 					<GridViewColumn Header="IsSeries" Width="auto" DisplayMemberBinding="{Binding IsSeries}"/>
