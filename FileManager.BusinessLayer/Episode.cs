@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
@@ -11,8 +12,8 @@ namespace FileManager.BusinessLayer
         public int SeasonId { get; set; }
         public string Name { get; set; }
 
-        private string _episodeNumber;
-        public string EpisodeNumber
+        private int _episodeNumber;
+        public int EpisodeNumber
         {
             get => _episodeNumber;
             set
@@ -55,25 +56,22 @@ namespace FileManager.BusinessLayer
                 
         internal Episode() { }
 
-        public static Episode NewEpisode()
+        public static Episode NewEpisode() => new Episode();
+
+        public void Save()
         {
-            using (var context = new FileManagerContext())
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var command = new SqlCommand("dbo.EpisodeSave", connection) { CommandType = CommandType.StoredProcedure })
             {
-                var episode = new Episode();
-                episode = context.Episode.Create();
-                return episode;
-            }
-        }
+                connection.Open();
 
-        public async void SaveAsync()
-        {
-            using (var context = new FileManagerContext())
-            {
-                context.Episode.Add(this);
-
-                context.Entry(this).State = this.EpisodeId == 0 ? EntityState.Added : EntityState.Modified;
-
-                await context.SaveChangesAsync();
+                command.Parameters.Add(new SqlParameter("@EpisodeId", this.EpisodeId));
+                command.Parameters.Add(new SqlParameter("@SeasonId", this.SeasonId));
+                command.Parameters.Add(new SqlParameter("@EpisodeName", this.Name));
+                command.Parameters.Add(new SqlParameter("@EpisodeNumber", this.EpisodeNumber));
+                command.Parameters.Add(new SqlParameter("@EpisodeFormat", this.Format));
+                command.Parameters.Add(new SqlParameter("@Path", this.Path));
+                command.ExecuteNonQuery();
             }
         }
 
@@ -81,55 +79,66 @@ namespace FileManager.BusinessLayer
         {
             var episodes = new List<Episode>();
 
-            using (var context = new FileManagerContext())
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var command = new SqlCommand("dbo.EpisodeGetList", connection) { CommandType = CommandType.StoredProcedure })
             {
-                foreach (var e in context.Episode)
+                connection.Open();
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
                 {
-                    episodes.Add(new Episode()
+                    episodes.Add(new Episode
                     {
-                        EpisodeId = e.EpisodeId,
-                        SeasonId = e.SeasonId,
-                        Name = e.Name,
-                        EpisodeNumber = e.EpisodeNumber,
-                        Format = e.Format,
-                        Path = e.Path,
-                        IsChanged = false
+                        EpisodeId = (int)reader["EpisodeId"],
+                        SeasonId = (int)reader["SeasonId"],
+                        Name = (string)reader["EpisodeName"],
+                        EpisodeNumber = (int)reader["EpisodeNumber"],
+                        Format = (string)reader["EpisodeFormat"],
+                        Path = (string)reader["FilePath"]
                     });
                 }
             }
 
             return episodes;
         }
-               
-        public static Episode GetEpisode(string name)
-        {
-            var episode = new Episode();
 
-            using (var context = new FileManagerContext())
-            {
-                episode = context.Episode
-                    .SingleOrDefault(e => e.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
-            }
+        //public static Episode GetEpisode(string name)
+        //{
+        //    var episode = new Episode();
 
-            return episode;
-        }
-        
+        //    using (var context = new FileManagerContext())
+        //    {
+        //        episode = context.Episode
+        //            .SingleOrDefault(e => e.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
+        //    }
+
+        //    return episode;
+        //}
+
         public static IEnumerable<Episode> GetEpisodesBySeasonId(int id)
         {
             var episodes = new List<Episode>();
 
-            using (var context = new FileManagerContext())
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var command = new SqlCommand("dbo.EpisodeGetBySeasonId", connection) { CommandType = CommandType.StoredProcedure })
             {
-                foreach(var e in context.Episode.Where(e => e.SeasonId == id))
+                connection.Open();
+
+                command.Parameters.Add(new SqlParameter("@SeasonId", id));
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
                 {
-                    episodes.Add(new Episode()
+                    episodes.Add(new Episode
                     {
-                        EpisodeId = e.EpisodeId,
-                        SeasonId = e.SeasonId,
-                        Name = e.Name,
-                        EpisodeNumber = e.EpisodeNumber,
-                        Format = e.Format,
-                        Path = e.Path
+                        EpisodeId = (int)reader["EpisodeId"],
+                        SeasonId = (int)reader["SeasonId"],
+                        Name = (string)reader["EpisodeName"],
+                        EpisodeNumber = (int)reader["EpisodeNumber"],
+                        Format = (string)reader["EpisodeFormat"],
+                        Path = (string)reader["FilePath"]
                     });
                 }
             }

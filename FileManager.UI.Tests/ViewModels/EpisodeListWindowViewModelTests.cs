@@ -35,7 +35,7 @@ namespace FileManager.UI.Tests.ViewModels
             var viewModel = new EpisodeListWindowViewModel((vm) => { isInvoked = true; }, (title) => { }, (message, caption) => { });
 
             //Act
-            viewModel.AddNewEpisodeCommand.Execute(new EpisodeMaintenanceWindowViewModel(null, (title) => { }, ));
+            viewModel.AddNewEpisodeCommand.Execute(new EpisodeMaintenanceWindowViewModel(null, (title) => { }, (message, caption) => { }));
 
             //Assert
             Assert.IsTrue(isInvoked);

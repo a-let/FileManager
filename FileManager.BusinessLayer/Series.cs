@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
@@ -9,28 +11,23 @@ namespace FileManager.BusinessLayer
     {
         public int SeriesId { get; set; }
         public string Name { get; set; }
+        public string Path { get; set; }
 
         internal Series() { }
 
-        public static Series NewSeries()
+        public static Series NewSeries() => new Series();
+
+        public void Save()
         {
-            using (var context = new FileManagerContext())
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var command = new SqlCommand("dbo.SeriesSave", connection) { CommandType = CommandType.StoredProcedure })
             {
-                var series = new Series();
-                series = context.Series.Create();
-                return series;
-            }
-        }
+                connection.Open();
 
-        public async void SaveAsync()
-        {
-            using (var context = new FileManagerContext())
-            {
-                context.Series.Add(this);
-
-                context.Entry(this).State = this.SeriesId == 0 ? EntityState.Added : EntityState.Modified;
-
-                await context.SaveChangesAsync();
+                command.Parameters.Add(new SqlParameter("@SeriesId", this.SeriesId));
+                command.Parameters.Add(new SqlParameter("@SeriesName", this.Name));
+                command.Parameters.Add(new SqlParameter("@Path", this.Path));
+                command.ExecuteNonQuery();
             }
         }
 
@@ -38,31 +35,38 @@ namespace FileManager.BusinessLayer
         {
             var series = new List<Series>();
 
-            using (var context = new FileManagerContext())
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var command = new SqlCommand("dbo.SeriesGetList", connection) { CommandType = CommandType.StoredProcedure})
             {
-                foreach (var s in context.Series)
+                connection.Open();
+
+                var reader = command.ExecuteReader();
+
+                while(reader.Read())
                 {
-                    series.Add(new Series()
+                    series.Add(new Series
                     {
-                        SeriesId = s.SeriesId,
-                        Name = s.Name
+                        SeriesId = (int)reader["SeriesId"],
+                        Name = (string)reader["SeriesName"],
+                        Path = (string)reader["FilePath"]
                     });
-                }
-            }
-                return series;
-        }
-
-        public static Series GetSeries(string name)
-        {
-            var series = new Series();
-
-            using (var context = new FileManagerContext())
-            {
-                series = context.Series
-                    .SingleOrDefault(s => s.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
+                }               
             }
 
             return series;
         }
+
+        //public static Series GetSeries(string name)
+        //{
+        //    var series = new Series();
+
+        //    using (var context = new FileManagerContext())
+        //    {
+        //        series = context.Series
+        //            .SingleOrDefault(s => s.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
+        //    }
+
+        //    return series;
+        //}
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
@@ -14,25 +15,20 @@ namespace FileManager.BusinessLayer
 
         internal Show() { }
 
-        public static Show NewShow()
+        public static Show NewShow() => new Show();
+
+        public void Save()
         {
-            using (var context = new FileManagerContext())
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var command = new SqlCommand("dbo.ShowSave", connection) { CommandType = CommandType.StoredProcedure })
             {
-                var show = new Show();
-                show = context.Show.Create();
-                return show;
-            }
-        }
+                connection.Open();
 
-        public async void SaveAsync()
-        {
-            using (var context = new FileManagerContext())
-            {
-                context.Show.Add(this);
-
-                context.Entry(this).State = this.ShowId == 0 ? EntityState.Added : EntityState.Modified;
-
-                await context.SaveChangesAsync();
+                command.Parameters.Add(new SqlParameter("@ShowId", this.ShowId));
+                command.Parameters.Add(new SqlParameter("@Name", this.Name));
+                command.Parameters.Add(new SqlParameter("@Category", this.Category));
+                command.Parameters.Add(new SqlParameter("@Path", this.Path));
+                command.ExecuteNonQuery();
             }
         }
 
@@ -40,16 +36,21 @@ namespace FileManager.BusinessLayer
         {
             var shows = new List<Show>();
 
-            using (var context = new FileManagerContext())
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var command = new SqlCommand("dbo.ShowGetList", connection) { CommandType = CommandType.StoredProcedure })
             {
-                foreach(var s in context.Show)
+                connection.Open();
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
                 {
-                    shows.Add(new Show()
+                    shows.Add(new Show
                     {
-                        ShowId = s.ShowId,
-                        Name = s.Name,
-                        Category = s.Category,
-                        Path = s.Path
+                        ShowId = (int)reader["ShowId"],
+                        Name = (string)reader["ShowName"],
+                        Category = (string)reader["ShowCategory"],
+                        Path = (string)reader["FilePath"]
                     });
                 }
             }
@@ -57,17 +58,17 @@ namespace FileManager.BusinessLayer
             return shows;
         }
 
-        public static Show GetShow(string name)
-        {
-            var show = new Show();
+        //public static Show GetShow(string name)
+        //{
+        //    var show = new Show();
 
-            using (var context = new FileManagerContext())
-            {
-                show = context.Show
-                    .SingleOrDefault(s => s.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
-            }
+        //    using (var context = new FileManagerContext())
+        //    {
+        //        show = context.Show
+        //            .SingleOrDefault(s => s.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
+        //    }
 
-            return show;
-        }
+        //    return show;
+        //}
     }
 }
