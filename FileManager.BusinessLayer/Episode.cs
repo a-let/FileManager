@@ -103,18 +103,65 @@ namespace FileManager.BusinessLayer
             return episodes;
         }
 
-        //public static Episode GetEpisode(string name)
-        //{
-        //    var episode = new Episode();
+        public static Episode GetEpisode(int id)
+        {
+            var episode = new Episode();
 
-        //    using (var context = new FileManagerContext())
-        //    {
-        //        episode = context.Episode
-        //            .SingleOrDefault(e => e.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
-        //    }
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var command = new SqlCommand("dbo.EpisodeGetById", connection) { CommandType = CommandType.StoredProcedure })
+            {
+                connection.Open();
 
-        //    return episode;
-        //}
+                command.Parameters.Add(new SqlParameter("@EpisodeId", id));
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    episode = new Episode
+                    {
+                        EpisodeId = (int)reader["EpisodeId"],
+                        SeasonId = (int)reader["SeasonId"],
+                        Name = (string)reader["EpisodeName"],
+                        EpisodeNumber = (int)reader["EpisodeNumber"],
+                        Format = (string)reader["EpisodeFormat"],
+                        Path = (string)reader["FilePath"]
+                    };
+                }
+            }
+
+            return episode;
+        }
+
+        public static Episode GetEpisode(string name)
+        {
+            var episode = new Episode();
+
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var command = new SqlCommand("dbo.EpisodeGetByName", connection) { CommandType = CommandType.StoredProcedure })
+            {
+                connection.Open();
+
+                command.Parameters.Add(new SqlParameter("@EpisodeName", name));
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    episode = new Episode
+                    {
+                        EpisodeId = (int)reader["EpisodeId"],
+                        SeasonId = (int)reader["SeasonId"],
+                        Name = (string)reader["EpisodeName"],
+                        EpisodeNumber = (int)reader["EpisodeNumber"],
+                        Format = (string)reader["EpisodeFormat"],
+                        Path = (string)reader["FilePath"]
+                    };
+                }
+            }
+
+            return episode;
+        }
 
         public static IEnumerable<Episode> GetEpisodesBySeasonId(int id)
         {
