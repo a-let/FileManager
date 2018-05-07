@@ -1,15 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
 {
     public abstract class FileManagerObjectBase : IChangeTracking, INotifyPropertyChanged
     {
+        private static readonly ServiceProvider _services = Setup.CreateServices();
+
+        internal static readonly IFileManagerDb _fileManagerDb = _services.GetService<IFileManagerDb>();
+
         private bool _isChanged = false;
         public bool IsChanged
         {

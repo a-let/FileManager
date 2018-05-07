@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
@@ -60,7 +60,7 @@ namespace FileManager.BusinessLayer
 
         public void Save()
         {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using(var connection = _fileManagerDb.CreateConnection())
             using (var command = new SqlCommand("dbo.EpisodeSave", connection) { CommandType = CommandType.StoredProcedure })
             {
                 connection.Open();
@@ -79,7 +79,7 @@ namespace FileManager.BusinessLayer
         {
             var episodes = new List<Episode>();
 
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var connection = _fileManagerDb.CreateConnection())
             using (var command = new SqlCommand("dbo.EpisodeGetList", connection) { CommandType = CommandType.StoredProcedure })
             {
                 connection.Open();
@@ -107,7 +107,7 @@ namespace FileManager.BusinessLayer
         {
             var episode = new Episode();
 
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var connection = _fileManagerDb.CreateConnection())
             using (var command = new SqlCommand("dbo.EpisodeGetById", connection) { CommandType = CommandType.StoredProcedure })
             {
                 connection.Open();
@@ -137,7 +137,7 @@ namespace FileManager.BusinessLayer
         {
             var episode = new Episode();
 
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var connection = _fileManagerDb.CreateConnection())
             using (var command = new SqlCommand("dbo.EpisodeGetByName", connection) { CommandType = CommandType.StoredProcedure })
             {
                 connection.Open();
@@ -167,7 +167,7 @@ namespace FileManager.BusinessLayer
         {
             var episodes = new List<Episode>();
 
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var connection = _fileManagerDb.CreateConnection())
             using (var command = new SqlCommand("dbo.EpisodeGetBySeasonId", connection) { CommandType = CommandType.StoredProcedure })
             {
                 connection.Open();

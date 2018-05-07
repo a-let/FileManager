@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
 {
-    public class Movie : IFileManagerObject, IVideo
+    public class Movie : FileManagerObjectBase, IFileManagerObject, IVideo
     {
         public int MovieId { get; set; }
         public int SeriesId { get; set; }
@@ -22,7 +22,7 @@ namespace FileManager.BusinessLayer
 
         public void Save()
         {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var connection = _fileManagerDb.CreateConnection())
             using (var command = new SqlCommand("dbo.MovieSave", connection) { CommandType = CommandType.StoredProcedure })
             {
                 connection.Open();
@@ -42,7 +42,7 @@ namespace FileManager.BusinessLayer
         {
             var movies = new List<Movie>();
 
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
+            using (var connection = _fileManagerDb.CreateConnection())
             using (var command = new SqlCommand("dbo.MovieGetList", connection) { CommandType = CommandType.StoredProcedure })
             {
                 connection.Open();
