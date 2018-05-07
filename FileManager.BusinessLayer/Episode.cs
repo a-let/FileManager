@@ -60,8 +60,9 @@ namespace FileManager.BusinessLayer
 
         public void Save()
         {
-            using(var connection = _fileManagerDb.CreateConnection())
-            using (var command = new SqlCommand("dbo.EpisodeSave", connection) { CommandType = CommandType.StoredProcedure })
+            _commandText = "dbo.EpisodeSave";
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 
@@ -76,11 +77,12 @@ namespace FileManager.BusinessLayer
         }
 
         public static IEnumerable<Episode> GetEpisodes()
-        {
+        {            
             var episodes = new List<Episode>();
 
+            _commandText = "dbo.EpisodeGetList";
             using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = new SqlCommand("dbo.EpisodeGetList", connection) { CommandType = CommandType.StoredProcedure })
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 
@@ -104,11 +106,12 @@ namespace FileManager.BusinessLayer
         }
 
         public static Episode GetEpisode(int id)
-        {
+        {            
             var episode = new Episode();
 
+            _commandText = "dbo.EpisodeGetById";
             using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = new SqlCommand("dbo.EpisodeGetById", connection) { CommandType = CommandType.StoredProcedure })
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 
@@ -135,10 +138,12 @@ namespace FileManager.BusinessLayer
 
         public static Episode GetEpisode(string name)
         {
+            
             var episode = new Episode();
 
+            _commandText = "dbo.EpisodeGetByName";
             using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = new SqlCommand("dbo.EpisodeGetByName", connection) { CommandType = CommandType.StoredProcedure })
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 
@@ -164,11 +169,12 @@ namespace FileManager.BusinessLayer
         }
 
         public static IEnumerable<Episode> GetEpisodesBySeasonId(int id)
-        {
+        {            
             var episodes = new List<Episode>();
 
+            _commandText = "dbo.EpisodeGetBySeasonId";
             using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = new SqlCommand("dbo.EpisodeGetBySeasonId", connection) { CommandType = CommandType.StoredProcedure })
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 

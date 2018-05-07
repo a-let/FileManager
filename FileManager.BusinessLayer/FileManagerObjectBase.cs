@@ -10,7 +10,8 @@ namespace FileManager.BusinessLayer
 {
     public abstract class FileManagerObjectBase : IChangeTracking, INotifyPropertyChanged
     {
-        private static readonly ServiceProvider _services = Setup.CreateServices();
+        internal static string _commandText;
+        private static readonly ServiceProvider _services = Setup.CreateServices(_commandText);
 
         internal static readonly IFileManagerDb _fileManagerDb = _services.GetService<IFileManagerDb>();
 
