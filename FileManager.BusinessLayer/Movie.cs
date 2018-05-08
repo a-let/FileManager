@@ -21,23 +21,18 @@ namespace FileManager.BusinessLayer
         public void Save()
         {
             _commandText = "dbo.MovieSave";
-            using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = _fileManagerDb.CreateCommand(_commandText))
+            var fileManagerDb = GetDb();
+            using (var connection = fileManagerDb.CreateConnection())
+            using (var command = fileManagerDb.CreateCommand())
             {
                 connection.Open();
-
-                _paramDict = new Dictionary<string, object>
-                {
-                    { "@MovieId", this.MovieId },
-                    { "@SeriesId", this.SeriesId },
-                    { "@MovieName", this.Name },
-                    { "@IsSeries", this.IsSeries },
-                    { "@MovieFormat", this.Format },
-                    { "@MovieCategory", this.Category },
-                    { "@Path", this.Path }
-                };
-
-                _fileManagerDb.AddParameters(_paramDict);
+                command.Parameters.AddWithValue("@MovieId", this.MovieId);
+                command.Parameters.AddWithValue("@SeriesId", this.SeriesId);
+                command.Parameters.AddWithValue("@MovieName", this.Name);
+                command.Parameters.AddWithValue("@IsSeries", this.IsSeries);
+                command.Parameters.AddWithValue("@MovieFormat", this.Format);
+                command.Parameters.AddWithValue("@MovieCategory", this.Category);
+                command.Parameters.AddWithValue("@Path", this.Path);
 
                 command.ExecuteNonQuery();
             }
@@ -48,11 +43,11 @@ namespace FileManager.BusinessLayer
             var movies = new List<Movie>();
 
             _commandText = "dbo.MovieGetList";
-            using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = _fileManagerDb.CreateCommand(_commandText))
+            var fileManagerDb = GetDb();
+            using (var connection = fileManagerDb.CreateConnection())
+            using (var command = fileManagerDb.CreateCommand())
             {
                 connection.Open();
-
                 var reader = command.ExecuteReader();
 
                 while (reader.Read())

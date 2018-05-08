@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 
 using FileManager.BusinessLayer.Interfaces;
 
@@ -20,20 +18,15 @@ namespace FileManager.BusinessLayer
         public void Save()
         {
             _commandText = "dbo.ShowSave";
-            using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = _fileManagerDb.CreateCommand(_commandText))
+            var fileManagerDb = GetDb();
+            using (var connection = fileManagerDb.CreateConnection())
+            using (var command = fileManagerDb.CreateCommand())
             {
                 connection.Open();
-
-                _paramDict = new Dictionary<string, object>
-                {
-                    { "@ShowId", this.ShowId },
-                    { "@Name", this.Name },
-                    { "@Category", this.Category },
-                    { "@Path", this.Path }
-                };
-
-                _fileManagerDb.AddParameters(_paramDict);
+                command.Parameters.AddWithValue("@ShowId", this.ShowId);
+                command.Parameters.AddWithValue("@Name", this.Name);
+                command.Parameters.AddWithValue("@Category", this.Category);
+                command.Parameters.AddWithValue("@Path", this.Path);
 
                 command.ExecuteNonQuery();
             }
@@ -44,11 +37,11 @@ namespace FileManager.BusinessLayer
             var shows = new List<Show>();
 
             _commandText = "dbo.ShowGetList";
-            using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = _fileManagerDb.CreateCommand(_commandText))
+            var fileManagerDb = GetDb();
+            using (var connection = fileManagerDb.CreateConnection())
+            using (var command = fileManagerDb.CreateCommand())
             {
                 connection.Open();
-
                 var reader = command.ExecuteReader();
 
                 while (reader.Read())

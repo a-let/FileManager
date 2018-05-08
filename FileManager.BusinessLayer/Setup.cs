@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,9 +11,8 @@ namespace FileManager.BusinessLayer
     public static class Setup
     {
         private static IDbConnection _connection;
-        private static IDbCommand _command;
-
-        public static ServiceProvider CreateServices(string commandText, IDictionary<string, object> paramDict)
+        
+        public static ServiceProvider CreateServices(string commandText)
         {
             var services = new ServiceCollection()
                 .AddSingleton<IDbConnection, SqlConnection>(connection => GetSqlConnection())
@@ -34,10 +31,7 @@ namespace FileManager.BusinessLayer
 
         private static SqlCommand GetSqlCommand(string commandText)
         {
-            _command = new SqlCommand(commandText, (SqlConnection)_connection) { CommandType = CommandType.StoredProcedure };
-            return (SqlCommand)_command;
+            return new SqlCommand(commandText, (SqlConnection)_connection) { CommandType = CommandType.StoredProcedure };
         }
-
-        private static void AddSqlParameters(IDictionary<string, object> paramDict) => paramDict.Select(p => _command.Parameters.Add(new SqlParameter(p.Key, p.Value)));
     }
 }

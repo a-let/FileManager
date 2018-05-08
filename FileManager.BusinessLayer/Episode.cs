@@ -59,22 +59,17 @@ namespace FileManager.BusinessLayer
         public void Save()
         {
             _commandText = "dbo.EpisodeSave";
-            using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = _fileManagerDb.CreateCommand(_commandText))
+            var fileManagerDb = GetDb();
+            using (var connection = fileManagerDb.CreateConnection())
+            using (var command = fileManagerDb.CreateCommand())
             {
                 connection.Open();
-
-                _paramDict = new Dictionary<string, object>
-                {
-                    { "@EpisodeId", this.EpisodeId },
-                    { "@SeasonId", this.SeasonId },
-                    { "@EpisodeName", this.Name },
-                    { "@EpisodeNumber", this.EpisodeNumber },
-                    { "@EpisodeFormat", this.Format },
-                    { "@Path", this.Path }
-                };
-
-                _fileManagerDb.AddParameters(_paramDict);
+                command.Parameters.AddWithValue("@EpisodeId", this.EpisodeId);
+                command.Parameters.AddWithValue("@SeasonId", this.SeasonId);
+                command.Parameters.AddWithValue("@EpisodeName", this.Name);
+                command.Parameters.AddWithValue("@EpisodeNumber", this.EpisodeNumber);
+                command.Parameters.AddWithValue("@EpisodeFormat", this.Format);
+                command.Parameters.AddWithValue("@Path", this.Path);
 
                 command.ExecuteNonQuery();
             }
@@ -85,11 +80,11 @@ namespace FileManager.BusinessLayer
             var episodes = new List<Episode>();
 
             _commandText = "dbo.EpisodeGetList";
-            using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = _fileManagerDb.CreateCommand(_commandText))
+            var fileManagerDb = GetDb();
+            using (var connection = fileManagerDb.CreateConnection())
+            using (var command = fileManagerDb.CreateCommand())
             {
                 connection.Open();
-
                 var reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -114,18 +109,12 @@ namespace FileManager.BusinessLayer
             var episode = new Episode();
 
             _commandText = "dbo.EpisodeGetById";
-            using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = _fileManagerDb.CreateCommand(_commandText))
+            var fileManagerDb = GetDb();
+            using (var connection = fileManagerDb.CreateConnection())
+            using (var command = fileManagerDb.CreateCommand())
             {
                 connection.Open();
-
-                _paramDict = new Dictionary<string, object>
-                {
-                    { "@EpisodeId", id }
-                };
-
-                _fileManagerDb.AddParameters(_paramDict);
-
+                command.Parameters.AddWithValue("@EpisodeId", id);
 
                 var reader = command.ExecuteReader();
 
@@ -152,17 +141,12 @@ namespace FileManager.BusinessLayer
             var episode = new Episode();
 
             _commandText = "dbo.EpisodeGetByName";
-            using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = _fileManagerDb.CreateCommand(_commandText))
+            var fileManagerDb = GetDb();
+            using (var connection = fileManagerDb.CreateConnection())
+            using (var command = fileManagerDb.CreateCommand())
             {
                 connection.Open();
-
-                _paramDict = new Dictionary<string, object>
-                {
-                    { "@EpisodeName", name }
-                };
-
-                _fileManagerDb.AddParameters(_paramDict);
+                command.Parameters.AddWithValue("@EpisodeName", name);
 
                 var reader = command.ExecuteReader();
 
@@ -188,17 +172,12 @@ namespace FileManager.BusinessLayer
             var episodes = new List<Episode>();
 
             _commandText = "dbo.EpisodeGetBySeasonId";
-            using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = _fileManagerDb.CreateCommand(_commandText))
+            var fileManagerDb = GetDb();
+            using (var connection = fileManagerDb.CreateConnection())
+            using (var command = fileManagerDb.CreateCommand())
             {
                 connection.Open();
-
-                _paramDict = new Dictionary<string, object>
-                {
-                    { "@SeasonId", id }
-                };
-
-                _fileManagerDb.AddParameters(_paramDict);
+                command.Parameters.AddWithValue("@SeasonId", id);
 
                 var reader = command.ExecuteReader();
 
