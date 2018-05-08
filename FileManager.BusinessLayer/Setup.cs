@@ -14,11 +14,11 @@ namespace FileManager.BusinessLayer
         private static IDbConnection _connection;
         private static IDbCommand _command;
 
-        public static ServiceProvider CreateServices(string commandName, IDictionary<string, object> paramDict)
+        public static ServiceProvider CreateServices(string commandText, IDictionary<string, object> paramDict)
         {
             var services = new ServiceCollection()
                 .AddSingleton<IDbConnection, SqlConnection>(connection => GetSqlConnection())
-                .AddSingleton<IDbCommand, SqlCommand>(command => GetSqlCommand(commandName))
+                .AddSingleton<IDbCommand, SqlCommand>(command => GetSqlCommand(commandText))
                 .AddSingleton<IFileManagerDb, FileManagerDb>()
                 .BuildServiceProvider();
 
