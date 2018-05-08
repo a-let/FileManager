@@ -1,17 +1,18 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
-{    
+{
     public class FileManagerDb : IFileManagerDb
     {
         private readonly IDbConnection _connection;
         private readonly IDbCommand _command;
 
         public FileManagerDb(IDbConnection connection, IDbCommand command)
-        {            
+        {
             _connection = connection;
             _command = command;
         }
@@ -23,6 +24,19 @@ namespace FileManager.BusinessLayer
             return _createdConnection;
         }
 
-        public SqlCommand CreateCommand(string commandText) => new SqlCommand(commandText, _createdConnection) { CommandType = CommandType.StoredProcedure };
+        private static SqlCommand _createdCommand;
+        public SqlCommand CreateCommand(string commandText)
+        {
+            _createdCommand = new SqlCommand(commandText, _createdConnection) { CommandType = CommandType.StoredProcedure };
+            return _createdCommand;
+        }
+
+        public void AddParameters(IDictionary<string, object> paramsDict)
+        {
+            foreach(var param in paramsDict)
+            {
+                _createdCommand.Parameters.AddWithValue(param.Key, param.Value);
+            }
+        }
     }    
 }

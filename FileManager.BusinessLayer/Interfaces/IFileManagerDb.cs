@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace FileManager.BusinessLayer.Interfaces
 {
@@ -6,5 +7,6 @@ namespace FileManager.BusinessLayer.Interfaces
     {
         SqlConnection CreateConnection();
         SqlCommand CreateCommand(string commandText);
+        void AddParameters(IDictionary<string, object> paramsDict);
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 
 using FileManager.BusinessLayer.Interfaces;
 
@@ -20,15 +18,22 @@ namespace FileManager.BusinessLayer
 
         public void Save()
         {
+            _commandText = "dbo.SeasonSave";
             using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = new SqlCommand("dbo.SeasonSave", connection) { CommandType = CommandType.StoredProcedure })
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 
-                command.Parameters.Add(new SqlParameter("@SeasonId", this.SeasonId));
-                command.Parameters.Add(new SqlParameter("@ShowId", this.ShowId));
-                command.Parameters.Add(new SqlParameter("@SeasonNumber", this.SeasonNumber));
-                command.Parameters.Add(new SqlParameter("@Path", this.Path));
+                _paramDict = new Dictionary<string, object>
+                {
+                    { "@SeasonId", this.SeasonId },
+                    { "@ShowId", this.ShowId },
+                    { "@SeasonNumber", this.SeasonNumber },
+                    { "@Path", this.Path }
+                };
+
+                _fileManagerDb.AddParameters(_paramDict);
+
                 command.ExecuteNonQuery();
             }
         }
@@ -37,8 +42,9 @@ namespace FileManager.BusinessLayer
         {
             var seasons = new List<Season>();
 
+            _commandText = "dbo.SeasonGetList";
             using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = new SqlCommand("dbo.SeasonGetList", connection) { CommandType = CommandType.StoredProcedure })
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 

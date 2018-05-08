@@ -5,14 +5,16 @@ using System.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 
 using FileManager.BusinessLayer.Interfaces;
+using System.Collections.Generic;
 
 namespace FileManager.BusinessLayer
 {
-    public class Setup
+    public static class Setup
     {
-        private static SqlConnection _connection;
+        private static IDbConnection _connection;
+        private static IDbCommand _command;
 
-        public static ServiceProvider CreateServices(string commandName)
+        public static ServiceProvider CreateServices(string commandName, IDictionary<string, object> paramDict)
         {
             var services = new ServiceCollection()
                 .AddSingleton<IDbConnection, SqlConnection>(connection => GetSqlConnection())
@@ -26,10 +28,21 @@ namespace FileManager.BusinessLayer
         private static SqlConnection GetSqlConnection()
         {
             _connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString);
-
-            return _connection;
+            return (SqlConnection)_connection;
         }
 
-        private static SqlCommand GetSqlCommand(string commandText) => new SqlCommand(commandText, _connection) { CommandType = CommandType.StoredProcedure };
+        private static SqlCommand GetSqlCommand(string commandText)
+        {
+            _command = new SqlCommand(commandText, (SqlConnection)_connection) { CommandType = CommandType.StoredProcedure };
+            return (SqlCommand)_command;
+        }
+
+        private static void AddSqlParameters(IDictionary<string, object> paramDict)
+        {
+            foreach(var param in paramDict)
+            {
+                _command.Parameters.Add(new SqlParameter(param.Key, param.Value));
+            }            
+        }
     }
 }

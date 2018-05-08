@@ -5,13 +5,15 @@ using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 
 using FileManager.BusinessLayer.Interfaces;
+using System.Collections.Generic;
 
 namespace FileManager.BusinessLayer
 {
     public abstract class FileManagerObjectBase : IChangeTracking, INotifyPropertyChanged
     {
         internal static string _commandText;
-        private static readonly ServiceProvider _services = Setup.CreateServices(_commandText);
+        internal static IDictionary<string, object> _paramDict;
+        private static readonly ServiceProvider _services = Setup.CreateServices(_commandText, _paramDict);
 
         internal static readonly IFileManagerDb _fileManagerDb = _services.GetService<IFileManagerDb>();
 

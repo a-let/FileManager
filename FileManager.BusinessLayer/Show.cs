@@ -19,15 +19,22 @@ namespace FileManager.BusinessLayer
 
         public void Save()
         {
+            _commandText = "dbo.ShowSave";
             using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = new SqlCommand("dbo.ShowSave", connection) { CommandType = CommandType.StoredProcedure })
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 
-                command.Parameters.Add(new SqlParameter("@ShowId", this.ShowId));
-                command.Parameters.Add(new SqlParameter("@Name", this.Name));
-                command.Parameters.Add(new SqlParameter("@Category", this.Category));
-                command.Parameters.Add(new SqlParameter("@Path", this.Path));
+                _paramDict = new Dictionary<string, object>
+                {
+                    { "@ShowId", this.ShowId },
+                    { "@Name", this.Name },
+                    { "@Category", this.Category },
+                    { "@Path", this.Path }
+                };
+
+                _fileManagerDb.AddParameters(_paramDict);
+
                 command.ExecuteNonQuery();
             }
         }
@@ -36,8 +43,9 @@ namespace FileManager.BusinessLayer
         {
             var shows = new List<Show>();
 
+            _commandText = "dbo.ShowGetList";
             using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = new SqlCommand("dbo.ShowGetList", connection) { CommandType = CommandType.StoredProcedure })
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 
 using FileManager.BusinessLayer.Interfaces;
 
@@ -66,12 +64,18 @@ namespace FileManager.BusinessLayer
             {
                 connection.Open();
 
-                command.Parameters.Add(new SqlParameter("@EpisodeId", this.EpisodeId));
-                command.Parameters.Add(new SqlParameter("@SeasonId", this.SeasonId));
-                command.Parameters.Add(new SqlParameter("@EpisodeName", this.Name));
-                command.Parameters.Add(new SqlParameter("@EpisodeNumber", this.EpisodeNumber));
-                command.Parameters.Add(new SqlParameter("@EpisodeFormat", this.Format));
-                command.Parameters.Add(new SqlParameter("@Path", this.Path));
+                _paramDict = new Dictionary<string, object>
+                {
+                    { "@EpisodeId", this.EpisodeId },
+                    { "@SeasonId", this.SeasonId },
+                    { "@EpisodeName", this.Name },
+                    { "@EpisodeNumber", this.EpisodeNumber },
+                    { "@EpisodeFormat", this.Format },
+                    { "@Path", this.Path }
+                };
+
+                _fileManagerDb.AddParameters(_paramDict);
+
                 command.ExecuteNonQuery();
             }
         }
@@ -115,7 +119,13 @@ namespace FileManager.BusinessLayer
             {
                 connection.Open();
 
-                command.Parameters.Add(new SqlParameter("@EpisodeId", id));
+                _paramDict = new Dictionary<string, object>
+                {
+                    { "@EpisodeId", id }
+                };
+
+                _fileManagerDb.AddParameters(_paramDict);
+
 
                 var reader = command.ExecuteReader();
 
@@ -147,7 +157,12 @@ namespace FileManager.BusinessLayer
             {
                 connection.Open();
 
-                command.Parameters.Add(new SqlParameter("@EpisodeName", name));
+                _paramDict = new Dictionary<string, object>
+                {
+                    { "@EpisodeName", name }
+                };
+
+                _fileManagerDb.AddParameters(_paramDict);
 
                 var reader = command.ExecuteReader();
 
@@ -178,7 +193,12 @@ namespace FileManager.BusinessLayer
             {
                 connection.Open();
 
-                command.Parameters.Add(new SqlParameter("@SeasonId", id));
+                _paramDict = new Dictionary<string, object>
+                {
+                    { "@SeasonId", id }
+                };
+
+                _fileManagerDb.AddParameters(_paramDict);
 
                 var reader = command.ExecuteReader();
 
