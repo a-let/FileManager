@@ -29,9 +29,6 @@ namespace FileManager.BusinessLayer
             return (SqlConnection)_connection;
         }
 
-        private static SqlCommand GetSqlCommand(string commandText)
-        {
-            return new SqlCommand(commandText, (SqlConnection)_connection) { CommandType = CommandType.StoredProcedure };
-        }
+        private static SqlCommand GetSqlCommand(string commandText) => new SqlCommand(commandText, (SqlConnection)_connection) { CommandType = CommandType.StoredProcedure };
     }
 }

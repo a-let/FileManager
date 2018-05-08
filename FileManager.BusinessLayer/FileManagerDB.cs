@@ -13,17 +13,11 @@ namespace FileManager.BusinessLayer
         public FileManagerDb(IDbConnection connection, IDbCommand command)
         {
             _connection = connection;
-            _command = (SqlCommand)command;
+            _command = command;
         }
 
-        public SqlConnection CreateConnection()
-        {
-            return (SqlConnection)_connection;
-        }
+        public SqlConnection CreateConnection() => (SqlConnection)_connection;
 
-        public SqlCommand CreateCommand()
-        {
-            return (SqlCommand)_command;
-        }
+        public SqlCommand CreateCommand() => (SqlCommand)_command;
     }    
 }
