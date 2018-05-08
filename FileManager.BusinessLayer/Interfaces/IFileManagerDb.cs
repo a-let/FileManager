@@ -7,6 +7,6 @@ namespace FileManager.BusinessLayer.Interfaces
     {
         SqlConnection CreateConnection();
         SqlCommand CreateCommand(string commandText);
-        void AddParameters(IDictionary<string, object> paramsDict);
+        void AddParameters(IDictionary<string, object> paramDict);
     }
 }

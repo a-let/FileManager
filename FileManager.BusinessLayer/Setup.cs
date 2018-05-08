@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using FileManager.BusinessLayer.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FileManager.BusinessLayer
 {
@@ -37,12 +38,6 @@ namespace FileManager.BusinessLayer
             return (SqlCommand)_command;
         }
 
-        private static void AddSqlParameters(IDictionary<string, object> paramDict)
-        {
-            foreach(var param in paramDict)
-            {
-                _command.Parameters.Add(new SqlParameter(param.Key, param.Value));
-            }            
-        }
+        private static void AddSqlParameters(IDictionary<string, object> paramDict) => paramDict.Select(p => _command.Parameters.Add(new SqlParameter(p.Key, p.Value)));
     }
 }

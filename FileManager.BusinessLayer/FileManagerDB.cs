@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-
+using System.Linq;
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
@@ -31,12 +31,6 @@ namespace FileManager.BusinessLayer
             return _createdCommand;
         }
 
-        public void AddParameters(IDictionary<string, object> paramsDict)
-        {
-            foreach(var param in paramsDict)
-            {
-                _createdCommand.Parameters.AddWithValue(param.Key, param.Value);
-            }
-        }
+        public void AddParameters(IDictionary<string, object> paramDict) => paramDict.Select(p => _createdCommand.Parameters.AddWithValue(p.Key, p.Value));
     }    
 }
