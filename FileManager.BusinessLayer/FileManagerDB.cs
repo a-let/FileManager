@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 
 using FileManager.BusinessLayer.Interfaces;
 
@@ -18,20 +16,8 @@ namespace FileManager.BusinessLayer
             _command = command;
         }
 
-        private static SqlConnection _createdConnection;
-        public SqlConnection CreateConnection()
-        {
-            _createdConnection = new SqlConnection(_connection.ConnectionString);
-            return _createdConnection;
-        }
+        public SqlConnection CreateConnection() => (SqlConnection)_connection;
 
-        private static SqlCommand _createdCommand;
-        public SqlCommand CreateCommand(string commandText)
-        {
-            _createdCommand = new SqlCommand(commandText, _createdConnection) { CommandType = CommandType.StoredProcedure };
-            return _createdCommand;
-        }
-
-        public void AddParameters(IDictionary<string, object> paramDict) => paramDict.Select(p => _createdCommand.Parameters.AddWithValue(p.Key, p.Value));
+        public SqlCommand CreateCommand() => (SqlCommand)_command;
     }    
 }

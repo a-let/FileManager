@@ -19,20 +19,15 @@ namespace FileManager.BusinessLayer
         public void Save()
         {
             _commandText = "dbo.SeasonSave";
-            using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = _fileManagerDb.CreateCommand(_commandText))
+            var fileManagerDb = GetDb();
+            using (var connection = fileManagerDb.CreateConnection())
+            using (var command = fileManagerDb.CreateCommand())
             {
                 connection.Open();
-
-                _paramDict = new Dictionary<string, object>
-                {
-                    { "@SeasonId", this.SeasonId },
-                    { "@ShowId", this.ShowId },
-                    { "@SeasonNumber", this.SeasonNumber },
-                    { "@Path", this.Path }
-                };
-
-                _fileManagerDb.AddParameters(_paramDict);
+                command.Parameters.AddWithValue("@SeasonId", this.SeasonId);
+                command.Parameters.AddWithValue("@ShowId", this.ShowId);
+                command.Parameters.AddWithValue("@SeasonNumber", this.SeasonNumber);
+                command.Parameters.AddWithValue("@Path", this.Path);
 
                 command.ExecuteNonQuery();
             }
@@ -43,11 +38,11 @@ namespace FileManager.BusinessLayer
             var seasons = new List<Season>();
 
             _commandText = "dbo.SeasonGetList";
-            using (var connection = _fileManagerDb.CreateConnection())
-            using (var command = _fileManagerDb.CreateCommand(_commandText))
+            var fileManagerDb = GetDb();
+            using (var connection = fileManagerDb.CreateConnection())
+            using (var command = fileManagerDb.CreateCommand())
             {
                 connection.Open();
-
                 var reader = command.ExecuteReader();
 
                 while (reader.Read())
