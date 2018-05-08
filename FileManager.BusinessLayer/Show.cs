@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
 {
-    public class Show : IFileManagerObject, IVideo
+    public class Show : FileManagerObjectBase, IFileManagerObject, IVideo
     {
         public int ShowId { get; set; }
         public string Name { get; set; }
@@ -19,15 +19,22 @@ namespace FileManager.BusinessLayer
 
         public void Save()
         {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
-            using (var command = new SqlCommand("dbo.ShowSave", connection) { CommandType = CommandType.StoredProcedure })
+            _commandText = "dbo.ShowSave";
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 
-                command.Parameters.Add(new SqlParameter("@ShowId", this.ShowId));
-                command.Parameters.Add(new SqlParameter("@Name", this.Name));
-                command.Parameters.Add(new SqlParameter("@Category", this.Category));
-                command.Parameters.Add(new SqlParameter("@Path", this.Path));
+                _paramDict = new Dictionary<string, object>
+                {
+                    { "@ShowId", this.ShowId },
+                    { "@Name", this.Name },
+                    { "@Category", this.Category },
+                    { "@Path", this.Path }
+                };
+
+                _fileManagerDb.AddParameters(_paramDict);
+
                 command.ExecuteNonQuery();
             }
         }
@@ -36,8 +43,9 @@ namespace FileManager.BusinessLayer
         {
             var shows = new List<Show>();
 
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
-            using (var command = new SqlCommand("dbo.ShowGetList", connection) { CommandType = CommandType.StoredProcedure })
+            _commandText = "dbo.ShowGetList";
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 

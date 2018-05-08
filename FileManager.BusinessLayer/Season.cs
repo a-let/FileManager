@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
+
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
 {
-    public class Season : IFileManagerObject
+    public class Season : FileManagerObjectBase, IFileManagerObject
     {
         public int SeasonId { get; set; }
         public int ShowId { get; set; }
@@ -20,15 +18,22 @@ namespace FileManager.BusinessLayer
 
         public void Save()
         {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
-            using (var command = new SqlCommand("dbo.SeasonSave", connection) { CommandType = CommandType.StoredProcedure })
+            _commandText = "dbo.SeasonSave";
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 
-                command.Parameters.Add(new SqlParameter("@SeasonId", this.SeasonId));
-                command.Parameters.Add(new SqlParameter("@ShowId", this.ShowId));
-                command.Parameters.Add(new SqlParameter("@SeasonNumber", this.SeasonNumber));
-                command.Parameters.Add(new SqlParameter("@Path", this.Path));
+                _paramDict = new Dictionary<string, object>
+                {
+                    { "@SeasonId", this.SeasonId },
+                    { "@ShowId", this.ShowId },
+                    { "@SeasonNumber", this.SeasonNumber },
+                    { "@Path", this.Path }
+                };
+
+                _fileManagerDb.AddParameters(_paramDict);
+
                 command.ExecuteNonQuery();
             }
         }
@@ -37,8 +42,9 @@ namespace FileManager.BusinessLayer
         {
             var seasons = new List<Season>();
 
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
-            using (var command = new SqlCommand("dbo.SeasonGetList", connection) { CommandType = CommandType.StoredProcedure })
+            _commandText = "dbo.SeasonGetList";
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 

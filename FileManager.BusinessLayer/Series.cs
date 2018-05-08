@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
+﻿using System.Collections.Generic;
+
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
 {
-    public class Series : IFileManagerObject
+    public class Series : FileManagerObjectBase, IFileManagerObject
     {
         public int SeriesId { get; set; }
         public string Name { get; set; }
@@ -19,14 +16,21 @@ namespace FileManager.BusinessLayer
 
         public void Save()
         {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
-            using (var command = new SqlCommand("dbo.SeriesSave", connection) { CommandType = CommandType.StoredProcedure })
+            _commandText = "dbo.SeriesSave";
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 
-                command.Parameters.Add(new SqlParameter("@SeriesId", this.SeriesId));
-                command.Parameters.Add(new SqlParameter("@SeriesName", this.Name));
-                command.Parameters.Add(new SqlParameter("@Path", this.Path));
+                _paramDict = new Dictionary<string, object>
+                {
+                    { "@SeriesId", this.SeriesId },
+                    { "@MovieName", this.Name },
+                    { "@Path", this.Path }
+                };
+
+                _fileManagerDb.AddParameters(_paramDict);
+
                 command.ExecuteNonQuery();
             }
         }
@@ -35,8 +39,9 @@ namespace FileManager.BusinessLayer
         {
             var series = new List<Series>();
 
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
-            using (var command = new SqlCommand("dbo.SeriesGetList", connection) { CommandType = CommandType.StoredProcedure})
+            _commandText = "dbo.SeriesGetList";
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 

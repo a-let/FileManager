@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
+
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
 {
-    public class Movie : IFileManagerObject, IVideo
+    public class Movie : FileManagerObjectBase, IFileManagerObject, IVideo
     {
         public int MovieId { get; set; }
         public int SeriesId { get; set; }
@@ -22,18 +20,25 @@ namespace FileManager.BusinessLayer
 
         public void Save()
         {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
-            using (var command = new SqlCommand("dbo.MovieSave", connection) { CommandType = CommandType.StoredProcedure })
+            _commandText = "dbo.MovieSave";
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 
-                command.Parameters.Add(new SqlParameter("@MovieId", this.MovieId));
-                command.Parameters.Add(new SqlParameter("@SeriesId", this.SeriesId));
-                command.Parameters.Add(new SqlParameter("@MovieName", this.Name));
-                command.Parameters.Add(new SqlParameter("@IsSeries", this.IsSeries));
-                command.Parameters.Add(new SqlParameter("@MovieFormat", this.Format));
-                command.Parameters.Add(new SqlParameter("@MovieCategory", this.Category));
-                command.Parameters.Add(new SqlParameter("@Path", this.Path));
+                _paramDict = new Dictionary<string, object>
+                {
+                    { "@MovieId", this.MovieId },
+                    { "@SeriesId", this.SeriesId },
+                    { "@MovieName", this.Name },
+                    { "@IsSeries", this.IsSeries },
+                    { "@MovieFormat", this.Format },
+                    { "@MovieCategory", this.Category },
+                    { "@Path", this.Path }
+                };
+
+                _fileManagerDb.AddParameters(_paramDict);
+
                 command.ExecuteNonQuery();
             }
         }
@@ -42,8 +47,9 @@ namespace FileManager.BusinessLayer
         {
             var movies = new List<Movie>();
 
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["FileManager"].ConnectionString))
-            using (var command = new SqlCommand("dbo.MovieGetList", connection) { CommandType = CommandType.StoredProcedure })
+            _commandText = "dbo.MovieGetList";
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand(_commandText))
             {
                 connection.Open();
 
