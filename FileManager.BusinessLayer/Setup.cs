@@ -1,12 +1,12 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using FileManager.BusinessLayer.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FileManager.BusinessLayer
 {

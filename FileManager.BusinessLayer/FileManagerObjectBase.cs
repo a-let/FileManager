@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using FileManager.BusinessLayer.Interfaces;
-using System.Collections.Generic;
 
 namespace FileManager.BusinessLayer
 {
