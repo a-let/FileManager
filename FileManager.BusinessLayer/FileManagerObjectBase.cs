@@ -2,8 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.BusinessLayer
@@ -46,15 +44,6 @@ namespace FileManager.BusinessLayer
 
             IsChanged = false;
             return false;
-        }
-
-        internal static string _commandText;
-        private static ServiceProvider _services;
-
-        internal static IFileManagerDb GetDb()
-        {
-            _services = Setup.CreateServices(_commandText);
-            return _services.GetService<IFileManagerDb>();
         }
     }
 }

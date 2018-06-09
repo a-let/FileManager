@@ -2,22 +2,30 @@
 using System.Data.SqlClient;
 
 using FileManager.BusinessLayer.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace FileManager.BusinessLayer
 {
     public class FileManagerDb : IFileManagerDb
     {
-        private readonly IDbConnection _connection;
-        private readonly IDbCommand _command;
 
-        public FileManagerDb(IDbConnection connection, IDbCommand command)
+        private readonly IConfiguration _configuration;
+        private IDbConnection _connection;
+
+        public FileManagerDb(IConfiguration configuration)
         {
-            _connection = connection;
-            _command = command;
+            _configuration = configuration;
         }
 
-        public SqlConnection CreateConnection() => (SqlConnection)_connection;
+        public SqlCommand CreateCommand()
+        {
+            return new SqlCommand() { CommandType = CommandType.StoredProcedure, Connection = (SqlConnection)_connection };
+        }
 
-        public SqlCommand CreateCommand() => (SqlCommand)_command;
-    }    
+        public SqlConnection CreateConnection()
+        {
+            _connection = new SqlConnection(_configuration["FileManagerConnectionString"]);
+            return (SqlConnection)_connection;
+        }
+    }
 }
