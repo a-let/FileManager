@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using FileManager.BusinessLayer;
 using FileManager.Web.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FileManager.Web.Controllers
 {

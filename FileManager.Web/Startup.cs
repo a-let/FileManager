@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
-using FileManager.BusinessLayer;
+﻿using FileManager.BusinessLayer;
+using FileManager.BusinessLayer.Adapters;
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Web.Services;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +25,8 @@ namespace FileManager.Web
                 .AddScoped<IFileManagerDb, FileManagerDb>()
                 .AddScoped<IEpisodeControllerService, EpisodeControllerService>()
                 .AddScoped<IFileManagerObjectAdapter<Episode>, EpisodeAdapter>()
+                .AddScoped<ISeasonControllerService, SeasonControllerService>()
+                .AddScoped<IFileManagerObjectAdapter<Season>, SeasonAdapter>()
                 .AddMvc();
         }
 

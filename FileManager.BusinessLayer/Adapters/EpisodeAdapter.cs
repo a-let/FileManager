@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using FileManager.BusinessLayer.Interfaces;
 
-namespace FileManager.BusinessLayer
+namespace FileManager.BusinessLayer.Adapters
 {
     public class EpisodeAdapter : IFileManagerObjectAdapter<Episode>
     {
