@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using FileManager.BusinessLayer.Interfaces;
-
 namespace FileManager.BusinessLayer
 {
     public class Season : FileManagerObjectBase

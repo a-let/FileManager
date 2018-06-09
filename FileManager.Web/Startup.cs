@@ -27,6 +27,8 @@ namespace FileManager.Web
                 .AddScoped<IFileManagerObjectAdapter<Episode>, EpisodeAdapter>()
                 .AddScoped<ISeasonControllerService, SeasonControllerService>()
                 .AddScoped<IFileManagerObjectAdapter<Season>, SeasonAdapter>()
+                .AddScoped<ISeriesContollerService, SeriesControllerService>()
+                .AddScoped<IFileManagerObjectAdapter<Series>, SeriesAdapter>()
                 .AddMvc();
         }
 
