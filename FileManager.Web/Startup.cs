@@ -31,6 +31,8 @@ namespace FileManager.Web
                 .AddScoped<IFileManagerObjectAdapter<Series>, SeriesAdapter>()
                 .AddScoped<IShowControllerService, ShowControllerService>()
                 .AddScoped<IFileManagerObjectAdapter<Show>, ShowAdapter>()
+                .AddScoped<IMovieControllerService, MovieControllerService>()
+                .AddScoped<IFileManagerObjectAdapter<Movie>, MovieAdapter>()
                 .AddMvc();
         }
 

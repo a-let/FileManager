@@ -1,45 +1,45 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using FileManager.BusinessLayer;
 using FileManager.Web.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FileManager.Web.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Show")]
-    public class ShowController : Controller
+    [Route("api/Movie")]
+    public class MovieController : Controller
     {
-        private readonly IShowControllerService _showControllerService;
+        private readonly IMovieControllerService _movieControllerService;
 
-        public ShowController(IShowControllerService showControllerService)
+        public MovieController(IMovieControllerService movieControllerService)
         {
-            _showControllerService = showControllerService;
+            _movieControllerService = movieControllerService;
         }
 
-        // GET: api/Show
+        // GET: api/Movie
         [HttpGet]
-        public IEnumerable<Show> Get()
+        public IEnumerable<Movie> Get()
         {
-            var shows = _showControllerService.GetShows();
-            return shows;
+            var movies = _movieControllerService.GetMovies();
+            return movies;
         }
 
-        // GET: api/Show/5
+        // GET: api/Movie/5
         [HttpGet("id/{id}")]
         public string Get(int id)
         {
             return "value";
         }
         
-        // POST: api/Show
+        // POST: api/Movie
         [HttpPost]
-        public bool Post([FromBody]Show show)
+        public bool Post([FromBody]Movie movie)
         {
-            var success = _showControllerService.SaveShow(show);
+            var success = _movieControllerService.SaveMovie(movie);
             return success;
         }
         
-        // PUT: api/Show/5
+        // PUT: api/Movie/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
