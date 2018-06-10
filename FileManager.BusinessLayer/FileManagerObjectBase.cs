@@ -2,8 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-using FileManager.BusinessLayer.Interfaces;
-
+[assembly: InternalsVisibleTo("FileManager.Web.Tests")]
 namespace FileManager.BusinessLayer
 {
     public abstract class FileManagerObjectBase : IChangeTracking, INotifyPropertyChanged
