@@ -3,7 +3,7 @@ using FileManager.BusinessLayer;
 
 namespace FileManager.Web.Services
 {
-    public interface ISeriesContollerService
+    public interface ISeriesControllerService
     {
         IEnumerable<Series> GetSeries();
         bool SaveSeries(Series series);

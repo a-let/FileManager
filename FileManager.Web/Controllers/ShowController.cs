@@ -10,40 +10,40 @@ using Microsoft.AspNetCore.Mvc;
 namespace FileManager.Web.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Series")]
-    public class SeriesController : Controller
+    [Route("api/Show")]
+    public class ShowController : Controller
     {
-        private readonly ISeriesControllerService _seriesControllerService;
+        private readonly IShowControllerService _showControllerService;
 
-        public SeriesController(ISeriesControllerService seriesControllerService)
+        public ShowController(IShowControllerService showControllerService)
         {
-            _seriesControllerService = seriesControllerService;
+            _showControllerService = showControllerService;
         }
 
-        // GET: api/Series
+        // GET: api/Show
         [HttpGet]
-        public IEnumerable<Series> Get()
+        public IEnumerable<Show> Get()
         {
-            var series = _seriesControllerService.GetSeries();
-            return series;
+            var shows = _showControllerService.GetShows();
+            return shows;
         }
 
-        // GET: api/Series/5
+        // GET: api/Show/5
         [HttpGet("id/{id}")]
         public string Get(int id)
         {
             return "value";
         }
         
-        // POST: api/Series
+        // POST: api/Show
         [HttpPost]
-        public bool Post([FromBody]Series series)
+        public bool Post([FromBody]Show show)
         {
-            var success = _seriesControllerService.SaveSeries(series);
+            var success = _showControllerService.SaveShow(show);
             return success;
         }
         
-        // PUT: api/Series/5
+        // PUT: api/Show/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {

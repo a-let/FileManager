@@ -5,7 +5,7 @@ using FileManager.BusinessLayer.Interfaces;
 
 namespace FileManager.Web.Services
 {
-    public class SeriesControllerService : ISeriesContollerService
+    public class SeriesControllerService : ISeriesControllerService
     {
         private readonly IFileManagerObjectAdapter<Series> _seriesAdapter;
 
