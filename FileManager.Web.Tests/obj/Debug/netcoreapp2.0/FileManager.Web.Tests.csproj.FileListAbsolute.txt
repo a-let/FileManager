@@ -8,8 +8,8 @@ C:\Users\green_arrow\Source\Repos\FileManager\FileManager.Web.Tests\bin\Debug\ne
 C:\Users\green_arrow\Source\Repos\FileManager\FileManager.Web.Tests\bin\Debug\netcoreapp2.0\FileManager.Web.Tests.pdb
 C:\Users\green_arrow\Source\Repos\FileManager\FileManager.Web.Tests\bin\Debug\netcoreapp2.0\FileManager.BusinessLayer.dll
 C:\Users\green_arrow\Source\Repos\FileManager\FileManager.Web.Tests\bin\Debug\netcoreapp2.0\FileManager.Web.dll
-C:\Users\green_arrow\Source\Repos\FileManager\FileManager.Web.Tests\bin\Debug\netcoreapp2.0\FileManager.Web.pdb
 C:\Users\green_arrow\Source\Repos\FileManager\FileManager.Web.Tests\bin\Debug\netcoreapp2.0\FileManager.BusinessLayer.pdb
+C:\Users\green_arrow\Source\Repos\FileManager\FileManager.Web.Tests\bin\Debug\netcoreapp2.0\FileManager.Web.pdb
 C:\Users\green_arrow\Source\Repos\FileManager\FileManager.Web.Tests\obj\Debug\netcoreapp2.0\FileManager.Web.Tests.csprojAssemblyReference.cache
 C:\Users\green_arrow\Source\Repos\FileManager\FileManager.Web.Tests\obj\Debug\netcoreapp2.0\FileManager.Web.Tests.csproj.CoreCompileInputs.cache
 C:\Users\green_arrow\Source\Repos\FileManager\FileManager.Web.Tests\obj\Debug\netcoreapp2.0\FileManager.Web.Tests.AssemblyInfoInputs.cache
