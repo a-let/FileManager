@@ -2,10 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-using Microsoft.Extensions.DependencyInjection;
-
-using FileManager.BusinessLayer.Interfaces;
-
+[assembly: InternalsVisibleTo("FileManager.Web.Tests")]
 namespace FileManager.BusinessLayer
 {
     public abstract class FileManagerObjectBase : IChangeTracking, INotifyPropertyChanged
@@ -46,15 +43,6 @@ namespace FileManager.BusinessLayer
 
             IsChanged = false;
             return false;
-        }
-
-        internal static string _commandText;
-        private static ServiceProvider _services;
-
-        internal static IFileManagerDb GetDb()
-        {
-            _services = Setup.CreateServices(_commandText);
-            return _services.GetService<IFileManagerDb>();
         }
     }
 }
