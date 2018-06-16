@@ -43,3 +43,4 @@
 /FileManager.Web/appsettings.config
 /FileManager.Models/bin/Debug/netcoreapp2.0
 /FileManager.Models/obj
+/FileManager.BusinessLayer/obj
