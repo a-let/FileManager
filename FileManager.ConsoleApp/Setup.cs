@@ -14,6 +14,7 @@ namespace FileManager.ConsoleApp
                 .AddSingleton<IConfiguration, ConfigurationRoot>(configuration => (ConfigurationRoot)GetConfiguration())
                 .AddSingleton<IEpisodeService, EpisodeService>()
                 .AddSingleton<IMovieService, MovieService>()
+                .AddSingleton<ISeasonService, SeasonService>()
                 .BuildServiceProvider();
 
             return services;
