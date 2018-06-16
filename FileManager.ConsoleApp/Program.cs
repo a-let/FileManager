@@ -2,18 +2,16 @@
 using Microsoft.Extensions.DependencyInjection;
 using FileManager.Services.Interfaces;
 using FileManager.Models;
-using Formats = FileManager.BusinessLayer.Helpers.FileFormats.FileFormatTypes;
+using Formats = FileManager.Models.Helpers.FileFormats.FileFormatTypes;
 
 namespace FileManager.ConsoleApp
 {
     public  class Program
     {
-        private static ServiceProvider _services;
+        private static readonly ServiceProvider _services = Setup.CreateServices();
 
         public static void Main(string[] args)
         {
-            var services = Setup.CreateServices();
-
             EpisodeTest();
             MovieTest();
             SeasonTest();
@@ -22,7 +20,7 @@ namespace FileManager.ConsoleApp
 
             Console.Read();
 
-            services.Dispose();
+            _services.Dispose();
         }
 
         private static void EpisodeTest()
