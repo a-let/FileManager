@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.BusinessLayer",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.Web.Tests", "FileManager.Web.Tests\FileManager.Web.Tests.csproj", "{D38E09F1-0D5F-4CC2-89C9-3D47706EA2B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManager.Services", "FileManager.Services\FileManager.Services.csproj", "{591B7A8C-0407-480C-BF8F-9CCE7ED42A57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.Services", "FileManager.Services\FileManager.Services.csproj", "{591B7A8C-0407-480C-BF8F-9CCE7ED42A57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManager.ConsoleApp", "FileManager.ConsoleApp\FileManager.ConsoleApp.csproj", "{61EE0C84-A993-4DD7-B4A4-DB271BCC2A7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.ConsoleApp", "FileManager.ConsoleApp\FileManager.ConsoleApp.csproj", "{61EE0C84-A993-4DD7-B4A4-DB271BCC2A7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManager.Models", "FileManager.Models\FileManager.Models.csproj", "{105BBBC1-FB51-4E1C-B3A3-C000B49EC2A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{61EE0C84-A993-4DD7-B4A4-DB271BCC2A7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61EE0C84-A993-4DD7-B4A4-DB271BCC2A7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61EE0C84-A993-4DD7-B4A4-DB271BCC2A7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{105BBBC1-FB51-4E1C-B3A3-C000B49EC2A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{105BBBC1-FB51-4E1C-B3A3-C000B49EC2A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{105BBBC1-FB51-4E1C-B3A3-C000B49EC2A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{105BBBC1-FB51-4E1C-B3A3-C000B49EC2A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

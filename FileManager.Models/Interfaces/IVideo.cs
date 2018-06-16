@@ -1,4 +1,4 @@
-﻿namespace FileManager.BusinessLayer.Interfaces
+﻿namespace FileManager.Models.Interfaces
 {
     public interface IVideo
     {

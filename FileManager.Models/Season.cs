@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FileManager.BusinessLayer
+namespace FileManager.Models
 {
     public class Season : FileManagerObjectBase
     {
@@ -9,10 +9,6 @@ namespace FileManager.BusinessLayer
         public int SeasonNumber { get; set; }
         public IEnumerable<Episode> EpisodeList { get; set; }
         public string Path { get; set; }
-
-        internal Season() { }
-
-        public static Season NewSeason() => new Season();
 
         //public static Season GetSeason(int seasonId)
         //{

@@ -1,6 +1,6 @@
-﻿using FileManager.BusinessLayer.Interfaces;
+﻿using FileManager.Models.Interfaces;
 
-namespace FileManager.BusinessLayer
+namespace FileManager.Models
 {
     public class Show : FileManagerObjectBase, IVideo
     {
@@ -8,10 +8,6 @@ namespace FileManager.BusinessLayer
         public string Name { get; set; }
         public string Category { get; set; }
         public string Path { get; set; }
-
-        internal Show() { }
-
-        public static Show NewShow() => new Show();
 
         //public static Show GetShow(string name)
         //{

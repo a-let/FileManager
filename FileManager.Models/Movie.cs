@@ -1,6 +1,6 @@
-﻿using FileManager.BusinessLayer.Interfaces;
+﻿using FileManager.Models.Interfaces;
 
-namespace FileManager.BusinessLayer
+namespace FileManager.Models
 {
     public class Movie : FileManagerObjectBase, IVideo
     {
@@ -11,10 +11,6 @@ namespace FileManager.BusinessLayer
         public string Format { get; set; }
         public string Category { get; set; }
         public string Path { get; set; }
-
-        internal Movie() { }
-
-        public static Movie NewMovie() => new Movie();
 
         //public static Movie GetMovie(string name)
         //{

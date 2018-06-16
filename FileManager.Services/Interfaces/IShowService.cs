@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using FileManager.BusinessLayer;
+using FileManager.Models;
 
 namespace FileManager.Services.Interfaces
 {

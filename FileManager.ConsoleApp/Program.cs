@@ -1,51 +1,48 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using FileManager.Services.Interfaces;
-using FileManager.BusinessLayer;
-using Formats = FileManager.BusinessLayer.Helpers.FileFormats.FileFormatTypes;
+using FileManager.Models;
+using Formats = FileManager.Models.Helpers.FileFormats.FileFormatTypes;
 
 namespace FileManager.ConsoleApp
 {
     public  class Program
     {
-        private static IEpisodeService _episodeService;
-        private static IMovieService _movieService;
-        private static ISeasonService _seasonService;
-        private static ISeriesService _seriesService;
-        private static IShowService _showService;
+        private static readonly ServiceProvider _services = Setup.CreateServices();
 
         public static void Main(string[] args)
         {
-            var services = Setup.CreateServices();
-            _episodeService = services.GetService<IEpisodeService>();
-            _movieService = services.GetService<IMovieService>();
-            _seasonService = services.GetService<ISeasonService>();
-            _seriesService = services.GetService<ISeriesService>();
-            _showService = services.GetService<IShowService>();
-
+            EpisodeTest();
+            MovieTest();
+            SeasonTest();
+            SeriesTest();
             ShowTest();
 
             Console.Read();
 
-            services.Dispose();
+            _services.Dispose();
         }
 
         private static void EpisodeTest()
         {
-            var episodeList = _episodeService.GetEpisodesAsync().Result;
-            var episodeById = _episodeService.GetEpisodeByIdAsync(1002).Result;
-            var episodeByName = _episodeService.GetEpisodeByNameAsync("episode - from program").Result;
+            var episodeService = _services.GetService<IEpisodeService>();
 
-            var newEpisode = Episode.NewEpisode();
-            newEpisode.EpisodeId = 0;
-            newEpisode.SeasonId = 1002;
-            newEpisode.Name = "New episode from console via service";
-            newEpisode.EpisodeNumber = 1;
-            newEpisode.Format = Formats.mp4.ToString();
-            newEpisode.Path = @"C:\Temp";
+            var episodeList = episodeService.GetEpisodesAsync().Result;
+            var episodeById = episodeService.GetEpisodeByIdAsync(1002).Result;
+            var episodeByName = episodeService.GetEpisodeByNameAsync("episode - from program").Result;
 
-            var episodeSaved = _episodeService.SaveEpisodeAsync(newEpisode).Result;
-            var episodesBySeasonId = _episodeService.GetEpisodeBySeasonIdAsync(1002).Result;
+            var newEpisode = new Episode
+            {
+                EpisodeId = 0,
+                SeasonId = 1002,
+                Name = "New episode from console via service",
+                EpisodeNumber = 1,
+                Format = Formats.mp4.ToString(),
+                Path = @"C:\Temp"
+            };    
+            
+            var episodeSaved = episodeService.SaveEpisodeAsync(newEpisode).Result;
+            var episodesBySeasonId = episodeService.GetEpisodeBySeasonIdAsync(1002).Result;
 
             Console.WriteLine("Get episodes...");
             foreach (var episode in episodeList)
@@ -69,18 +66,23 @@ namespace FileManager.ConsoleApp
 
         private static void MovieTest()
         {
-            var movieList = _movieService.GetMoviesAsync().Result;
 
-            var newMovie = Movie.NewMovie();
-            newMovie.MovieId = 0;
-            newMovie.SeriesId = 2;
-            newMovie.Name = "New movie from console via service";
-            newMovie.IsSeries = false;
-            newMovie.Format = Formats.mp4.ToString();
-            newMovie.Category = "Testing";
-            newMovie.Path = @"C:\Temp";
+            var movieService = _services.GetService<IMovieService>();
 
-            var movieSaved = _movieService.SaveMovieAsync(newMovie).Result;
+            var movieList = movieService.GetMoviesAsync().Result;
+
+            var newMovie = new Movie
+            {
+                MovieId = 0,
+                SeriesId = 2,
+                Name = "New movie from console via service",
+                IsSeries = false,
+                Format = Formats.mp4.ToString(),
+                Category = "Testing",
+                Path = @"C:\Temp"
+            };
+          
+            var movieSaved = movieService.SaveMovieAsync(newMovie).Result;
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{movieSaved}");
@@ -94,19 +96,23 @@ namespace FileManager.ConsoleApp
 
         private static void SeasonTest()
         {
-            var newSeason = Season.NewSeason();
-            newSeason.SeasonId = 0;
-            newSeason.ShowId = 1;
-            newSeason.SeasonNumber = 1;
-            newSeason.Path = "New season path from console via service";
+            var seasonService = _services.GetService<ISeasonService>();
 
-            var seasonSaved = _seasonService.SaveSeasonAsync(newSeason).Result;
+            var newSeason = new Season
+            {
+                SeasonId = 0,
+                ShowId = 1,
+                SeasonNumber = 1,
+                Path = "New season path from console via service"
+            };
+
+            var seasonSaved = seasonService.SaveSeasonAsync(newSeason).Result;
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{seasonSaved}");
 
             Console.WriteLine("Get seasons...");
-            foreach (var season in _seasonService.GetSeasonsAsync().Result)
+            foreach (var season in seasonService.GetSeasonsAsync().Result)
             {
                 Console.WriteLine($"{season.SeasonId} - {season.Path}");
             }
@@ -114,18 +120,22 @@ namespace FileManager.ConsoleApp
 
         private static void SeriesTest()
         {
-            var newSeries = Series.NewSeries();
-            newSeries.SeriesId = 0;
-            newSeries.Name = "New series path from console via service";
-            newSeries.Path = @"C:\Temp";
+            var seriesService = _services.GetService<ISeriesService>();
 
-            var seriesSave = _seriesService.SaveSeriesAsync(newSeries).Result;
+            var newSeries = new Series
+            {
+                SeriesId = 0,
+                Name = "New series path from console via service",
+                Path = @"C:\Temp"
+            };
+
+            var seriesSave = seriesService.SaveSeriesAsync(newSeries).Result;
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{seriesSave}");
 
             Console.WriteLine("Get seasons...");
-            foreach (var series in _seriesService.GetSeriesAsync().Result)
+            foreach (var series in seriesService.GetSeriesAsync().Result)
             {
                 Console.WriteLine($"{series.SeriesId} - {series.Name}");
             }
@@ -133,19 +143,23 @@ namespace FileManager.ConsoleApp
 
         private static void ShowTest()
         {
-            var newShow = Show.NewShow();
-            newShow.ShowId = 0;
-            newShow.Name = "New show from console via service";
-            newShow.Category = "Testing";
-            newShow.Path = @"C:\Temp";
+            var showService = _services.GetService<IShowService>();
 
-            var showSaved = _showService.SaveShowAsync(newShow).Result;
+            var newShow = new Show
+            {
+                ShowId = 0,
+                Name = "New show from console via service",
+                Category = "Testing",
+                Path = @"C:\Temp"
+            };
+
+            var showSaved = showService.SaveShowAsync(newShow).Result;
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{showSaved}");
 
             Console.WriteLine("Get seasons...");
-            foreach (var show in _showService.GetShowsAsync().Result)
+            foreach (var show in showService.GetShowsAsync().Result)
             {
                 Console.WriteLine($"{show.ShowId} - {show.Name}");
             }

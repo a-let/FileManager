@@ -1,4 +1,4 @@
-﻿namespace FileManager.BusinessLayer.Helpers
+﻿namespace FileManager.Models.Helpers
 {
     public class FileFormats
     {

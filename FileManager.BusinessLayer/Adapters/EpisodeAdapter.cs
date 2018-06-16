@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FileManager.BusinessLayer.Interfaces;
+using FileManager.Models;
 
 namespace FileManager.BusinessLayer.Adapters
 {
