@@ -34,3 +34,10 @@
 /FileManager.Services/bin/Debug/netcoreapp2.0
 /FileManager.Services/obj/Debug/netcoreapp2.0
 /FileManager.Services/obj
+/FileManager.Web/bin/Debug/netcoreapp2.0
+/FileManager.Web/obj/Debug/netcoreapp2.0
+/FileManager.Web/obj
+/FileManager.Web.Tests/bin/Debug/netcoreapp2.0
+/FileManager.Web.Tests/obj/Debug/netcoreapp2.0
+/FileManager.Web.Tests/obj
+/FileManager.Web/appsettings.config

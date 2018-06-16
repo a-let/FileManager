@@ -6,16 +6,29 @@ using Formats = FileManager.BusinessLayer.Helpers.FileFormats.FileFormatTypes;
 
 namespace FileManager.ConsoleApp
 {
-    class Program
+    public  class Program
     {
-        static void Main(string[] args)
+        private static IEpisodeService _episodeService;
+        private static IMovieService _movieService;
+
+        public static void Main(string[] args)
         {
             var services = Setup.CreateServices();
-            var episodeService = services.GetService<IEpisodeService>();
+            _episodeService = services.GetService<IEpisodeService>();
+            _movieService = services.GetService<IMovieService>();
 
-            var episodeList = episodeService.GetEpisodesAsync().Result;
-            var episodeById = episodeService.GetEpisodeByIdAsync(1002).Result;
-            var episodeByName = episodeService.GetEpisodeByNameAsync("episode - from program").Result;
+            MovieTest();
+
+            Console.Read();
+
+            services.Dispose();
+        }
+
+        private static void EpisodeTest()
+        {
+            var episodeList = _episodeService.GetEpisodesAsync().Result;
+            var episodeById = _episodeService.GetEpisodeByIdAsync(1002).Result;
+            var episodeByName = _episodeService.GetEpisodeByNameAsync("episode - from program").Result;
 
             var newEpisode = Episode.NewEpisode();
             newEpisode.EpisodeId = 0;
@@ -25,11 +38,11 @@ namespace FileManager.ConsoleApp
             newEpisode.Format = Formats.mp4.ToString();
             newEpisode.Path = @"C:\Temp";
 
-            var episodeSaved = episodeService.SaveEpisodeAsync(newEpisode).Result;
-            var episodesBySeasonId = episodeService.GetEpisodeBySeasonIdAsync(1002).Result;
+            var episodeSaved = _episodeService.SaveEpisodeAsync(newEpisode).Result;
+            var episodesBySeasonId = _episodeService.GetEpisodeBySeasonIdAsync(1002).Result;
 
             Console.WriteLine("Get episodes...");
-            foreach(var episode in episodeList)
+            foreach (var episode in episodeList)
             {
                 Console.WriteLine($"{episode.EpisodeId} - {episode.Name}");
             }
@@ -46,10 +59,31 @@ namespace FileManager.ConsoleApp
             {
                 Console.WriteLine($"{episode.EpisodeId} - {episode.Name}");
             }
+        }
 
-            Console.Read();
+        private static void MovieTest()
+        {
+            var movieList = _movieService.GetMoviesAsync().Result;
 
-            services.Dispose();
+            var newMovie = Movie.NewMovie();
+            newMovie.MovieId = 0;
+            newMovie.SeriesId = 2;
+            newMovie.Name = "New movie from console via service";
+            newMovie.IsSeries = false;
+            newMovie.Format = Formats.mp4.ToString();
+            newMovie.Category = "Testing";
+            newMovie.Path = @"C:\Temp";
+
+            var movieSaved = _movieService.SaveMovieAsync(newMovie).Result;
+
+            Console.WriteLine("Saved...");
+            Console.WriteLine($"{movieSaved}");
+
+            Console.WriteLine("Get movies...");
+            foreach (var movie in movieList)
+            {
+                Console.WriteLine($"{movie.MovieId} - {movie.Name}");
+            }
         }
     }
 }

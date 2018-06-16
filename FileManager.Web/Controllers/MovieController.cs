@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using FileManager.BusinessLayer;
 using FileManager.Web.Services;
@@ -28,7 +29,7 @@ namespace FileManager.Web.Controllers
         [HttpGet("id/{id}")]
         public string Get(int id)
         {
-            return "value";
+            throw new NotImplementedException();
         }
         
         // POST: api/Movie
@@ -43,12 +44,14 @@ namespace FileManager.Web.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
+            throw new NotImplementedException();
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            throw new NotImplementedException();
         }
     }
 }
