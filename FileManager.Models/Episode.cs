@@ -49,7 +49,5 @@ namespace FileManager.Models
                 }
             }
         }
-
-        public static Episode NewEpisode() => new Episode();
     }
 }

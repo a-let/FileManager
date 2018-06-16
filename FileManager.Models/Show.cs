@@ -9,8 +9,6 @@ namespace FileManager.Models
         public string Category { get; set; }
         public string Path { get; set; }
 
-        public static Show NewShow() => new Show();
-
         //public static Show GetShow(string name)
         //{
         //    var show = new Show();

@@ -12,8 +12,6 @@ namespace FileManager.Models
         public string Category { get; set; }
         public string Path { get; set; }
 
-        public static Movie NewMovie() => new Movie();
-
         //public static Movie GetMovie(string name)
         //{
         //    var movie = new Movie();

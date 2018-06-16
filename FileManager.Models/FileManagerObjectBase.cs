@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("FileManager.Web.Tests")]
 namespace FileManager.Models
 {
     public abstract class FileManagerObjectBase : IChangeTracking, INotifyPropertyChanged

@@ -10,8 +10,6 @@ namespace FileManager.Models
         public IEnumerable<Episode> EpisodeList { get; set; }
         public string Path { get; set; }
 
-        public static Season NewSeason() => new Season();
-
         //public static Season GetSeason(int seasonId)
         //{
         //    var season = new Season();

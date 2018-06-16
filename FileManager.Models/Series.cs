@@ -6,8 +6,6 @@
         public string Name { get; set; }
         public string Path { get; set; }
 
-        public static Series NewSeries() => new Series();
-
         //public static Series GetSeries(string name)
         //{
         //    var series = new Series();
