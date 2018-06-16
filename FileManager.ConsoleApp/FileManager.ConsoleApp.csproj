@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FileManager.Models\FileManager.Models.csproj" />
     <ProjectReference Include="..\FileManager.Services\FileManager.Services.csproj" />
   </ItemGroup>
 

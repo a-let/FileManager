@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using FileManager.Services.Interfaces;
-using FileManager.BusinessLayer;
+using FileManager.Models;
 using Formats = FileManager.BusinessLayer.Helpers.FileFormats.FileFormatTypes;
 
 namespace FileManager.ConsoleApp

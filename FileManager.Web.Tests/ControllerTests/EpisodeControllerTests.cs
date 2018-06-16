@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Xunit;
 
-using FileManager.BusinessLayer;
+using FileManager.Models;
 using FileManager.Web.Controllers;
 using FileManager.Web.Services;
 using FileManager.BusinessLayer.Helpers;

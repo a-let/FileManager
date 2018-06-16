@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using FileManager.BusinessLayer;
+using FileManager.Models;
 using FileManager.Web.Services;
 
 namespace FileManager.Web.Controllers

@@ -1,6 +1,6 @@
-﻿using FileManager.BusinessLayer.Interfaces;
+﻿using FileManager.Models.Interfaces;
 
-namespace FileManager.BusinessLayer
+namespace FileManager.Models
 {
     public class Episode : FileManagerObjectBase, IVideo
     {
@@ -49,8 +49,6 @@ namespace FileManager.BusinessLayer
                 }
             }
         }
-                
-        internal Episode() { }
 
         public static Episode NewEpisode() => new Episode();
     }
