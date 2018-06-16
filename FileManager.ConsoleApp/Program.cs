@@ -12,6 +12,7 @@ namespace FileManager.ConsoleApp
         private static IMovieService _movieService;
         private static ISeasonService _seasonService;
         private static ISeriesService _seriesService;
+        private static IShowService _showService;
 
         public static void Main(string[] args)
         {
@@ -20,8 +21,9 @@ namespace FileManager.ConsoleApp
             _movieService = services.GetService<IMovieService>();
             _seasonService = services.GetService<ISeasonService>();
             _seriesService = services.GetService<ISeriesService>();
+            _showService = services.GetService<IShowService>();
 
-            SeriesTest();
+            ShowTest();
 
             Console.Read();
 
@@ -126,6 +128,26 @@ namespace FileManager.ConsoleApp
             foreach (var series in _seriesService.GetSeriesAsync().Result)
             {
                 Console.WriteLine($"{series.SeriesId} - {series.Name}");
+            }
+        }
+
+        private static void ShowTest()
+        {
+            var newShow = Show.NewShow();
+            newShow.ShowId = 0;
+            newShow.Name = "New show from console via service";
+            newShow.Category = "Testing";
+            newShow.Path = @"C:\Temp";
+
+            var showSaved = _showService.SaveShowAsync(newShow).Result;
+
+            Console.WriteLine("Saved...");
+            Console.WriteLine($"{showSaved}");
+
+            Console.WriteLine("Get seasons...");
+            foreach (var show in _showService.GetShowsAsync().Result)
+            {
+                Console.WriteLine($"{show.ShowId} - {show.Name}");
             }
         }
     }

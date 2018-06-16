@@ -13,23 +13,23 @@ using FileManager.Services.Interfaces;
 
 namespace FileManager.Services
 {
-    public class SeriesService : ISeriesService
+    public class ShowService : IShowService
     {
-        private readonly string GetSeriessAddress = "api/Series";
-        private readonly string SaveSeriesAddress = "api/Series";
+        private readonly string GetShowsAddress = "api/Show";
+        private readonly string SaveShowAddress = "api/Show";
 
         private readonly IConfiguration _configuration;
 
-        public SeriesService(IConfiguration configuration)
+        public ShowService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<Series>> GetSeriesAsync()
+        public async Task<IEnumerable<Show>> GetShowsAsync()
         {
             try
             {
-                IEnumerable<Series> seriesList = null;
+                IEnumerable<Show> showList = null;
 
                 using (var client = new HttpClient())
                 {
@@ -37,23 +37,23 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync(GetSeriessAddress);
+                    var response = await client.GetAsync(GetShowsAddress);
                     if (response.IsSuccessStatusCode)
                     {
                         var jsonString = await response.Content.ReadAsStringAsync();
-                        seriesList = JsonConvert.DeserializeObject<IEnumerable<Series>>(jsonString);
+                        showList = JsonConvert.DeserializeObject<IEnumerable<Show>>(jsonString);
                     }
                 }
 
-                return seriesList;
+                return showList;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting seriess. {ex.Message}", ex);
+                throw new InvalidOperationException($"Error getting shows. {ex.Message}", ex);
             }
         }
 
-        public async Task<bool> SaveSeriesAsync(Series series)
+        public async Task<bool> SaveShowAsync(Show show)
         {
             try
             {
@@ -65,8 +65,8 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var content = new StringContent(JsonConvert.SerializeObject(series), Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(SaveSeriesAddress, content);
+                    var content = new StringContent(JsonConvert.SerializeObject(show), Encoding.UTF8, "application/json");
+                    var response = await client.PostAsync(SaveShowAddress, content);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -79,7 +79,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error saving series. {ex.Message}", ex);
+                throw new InvalidOperationException($"Error saving show. {ex.Message}", ex);
             }
         }
     }
