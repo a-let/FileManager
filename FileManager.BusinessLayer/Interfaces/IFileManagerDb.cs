@@ -1,10 +1,11 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data;
 
 namespace FileManager.BusinessLayer.Interfaces
 {
     public interface IFileManagerDb
     {
-        SqlConnection CreateConnection();
-        SqlCommand CreateCommand();
+        IDbConnection CreateConnection();
+        IDbCommand CreateCommand();
+        IDbDataParameter CreateParameter(string name, object value);
     }
 }

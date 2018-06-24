@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
 
@@ -64,7 +65,7 @@ namespace FileManager.BusinessLayer.Adapters
             try
             {
                 using (var connection = _fileManagerDb.CreateConnection())
-                using (var command = _fileManagerDb.CreateCommand())
+                using (var command = (System.Data.SqlClient.SqlCommand)_fileManagerDb.CreateCommand())
                 {
                     connection.Open();
                     command.CommandText = "dbo.SeasonSave";

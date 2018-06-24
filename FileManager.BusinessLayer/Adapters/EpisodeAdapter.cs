@@ -22,7 +22,7 @@ namespace FileManager.BusinessLayer.Adapters
             {
                 connection.Open();
                 command.CommandText = "dbo.EpisodeGetById";
-                command.Parameters.AddWithValue("@EpisodeId", id);
+                command.Parameters.Add(_fileManagerDb.CreateParameter("@EpisodeId", id));
 
                 var reader = command.ExecuteReader();
 
@@ -80,7 +80,7 @@ namespace FileManager.BusinessLayer.Adapters
             {
                 connection.Open();
                 command.CommandText = "dbo.EpisodeGetByName";
-                command.Parameters.AddWithValue("@EpisodeName", name);
+                command.Parameters.Add(_fileManagerDb.CreateParameter("@EpisodeName", name));
 
                 var reader = command.ExecuteReader();
 
@@ -110,12 +110,12 @@ namespace FileManager.BusinessLayer.Adapters
                 {
                     connection.Open();
                     command.CommandText = "dbo.EpisodeSave";
-                    command.Parameters.AddWithValue("@EpisodeId", target.EpisodeId);
-                    command.Parameters.AddWithValue("@SeasonId", target.SeasonId);
-                    command.Parameters.AddWithValue("@EpisodeName", target.Name);
-                    command.Parameters.AddWithValue("@EpisodeNumber", target.EpisodeNumber);
-                    command.Parameters.AddWithValue("@EpisodeFormat", target.Format);
-                    command.Parameters.AddWithValue("@Path", target.Path);
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@EpisodeId", target.EpisodeId));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@SeasonId", target.SeasonId));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@EpisodeName", target.Name));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@EpisodeNumber", target.EpisodeNumber));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@EpisodeFormat", target.Format));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@Path", target.Path));
 
                     command.ExecuteNonQuery();
                 }
@@ -138,7 +138,7 @@ namespace FileManager.BusinessLayer.Adapters
             {
                 connection.Open();
                 command.CommandText = "dbo.EpisodeGetBySeasonId";
-                command.Parameters.AddWithValue("@SeasonId", parentId);
+                command.Parameters.Add(_fileManagerDb.CreateParameter("@SeasonId", parentId));
 
                 var reader = command.ExecuteReader();
 
