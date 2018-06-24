@@ -1,12 +1,15 @@
-﻿using FileManager.BusinessLayer;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+using Swashbuckle.AspNetCore.Swagger;
+
+using FileManager.BusinessLayer;
 using FileManager.BusinessLayer.Adapters;
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
 using FileManager.Web.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace FileManager.Web
 {
@@ -35,6 +38,11 @@ namespace FileManager.Web
                 .AddScoped<IMovieControllerService, MovieControllerService>()
                 .AddScoped<IFileManagerObjectAdapter<Movie>, MovieAdapter>()
                 .AddMvc();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +58,8 @@ namespace FileManager.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            EnableSwagger(app);
+
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
@@ -57,6 +67,16 @@ namespace FileManager.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+
+        private void EnableSwagger(IApplicationBuilder app)
+        {
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "FileManger V1");
             });
         }
     }
