@@ -6,9 +6,8 @@ using Xunit;
 using FileManager.Models;
 using FileManager.Web.Controllers;
 using FileManager.Web.Services;
-using FileManager.Models.Helpers;
 
-namespace FileManager.Web.Tests.ControllerTests
+namespace FileManager.Tests.FileMagerWebTests
 {
     public class EpisodeControllerTests
     {
