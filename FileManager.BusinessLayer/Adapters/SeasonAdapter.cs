@@ -65,14 +65,14 @@ namespace FileManager.BusinessLayer.Adapters
             try
             {
                 using (var connection = _fileManagerDb.CreateConnection())
-                using (var command = (System.Data.SqlClient.SqlCommand)_fileManagerDb.CreateCommand())
+                using (var command = _fileManagerDb.CreateCommand())
                 {
                     connection.Open();
                     command.CommandText = "dbo.SeasonSave";
-                    command.Parameters.AddWithValue("@SeasonId", target.SeasonId);
-                    command.Parameters.AddWithValue("@ShowId", target.ShowId);
-                    command.Parameters.AddWithValue("@SeasonNumber", target.SeasonNumber);
-                    command.Parameters.AddWithValue("@Path", target.Path);
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@SeasonId", target.SeasonId));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@ShowId", target.ShowId));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@SeasonNumber", target.SeasonNumber));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@Path", target.Path));
 
                     command.ExecuteNonQuery();
                 }

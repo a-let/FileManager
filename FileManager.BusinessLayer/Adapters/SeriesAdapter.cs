@@ -60,13 +60,13 @@ namespace FileManager.BusinessLayer.Adapters
             try
             {
                 using (var connection = _fileManagerDb.CreateConnection())
-                using (var command = (System.Data.SqlClient.SqlCommand)_fileManagerDb.CreateCommand())
+                using (var command = _fileManagerDb.CreateCommand())
                 {
                     connection.Open();
                     command.CommandText = "dbo.SeriesSave";
-                    command.Parameters.AddWithValue("@SeriesId", target.SeriesId);
-                    command.Parameters.AddWithValue("@SeriesName", target.Name);
-                    command.Parameters.AddWithValue("@Path", target.Path);
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@SeriesId", target.SeriesId));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@SeriesName", target.Name));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@Path", target.Path));
 
                     command.ExecuteNonQuery();
                 }

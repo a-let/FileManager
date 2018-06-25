@@ -61,14 +61,14 @@ namespace FileManager.BusinessLayer.Adapters
             try
             {
                 using (var connection = _fileManagerDb.CreateConnection())
-                using (var command = (System.Data.SqlClient.SqlCommand)_fileManagerDb.CreateCommand())
+                using (var command = _fileManagerDb.CreateCommand())
                 {
                     connection.Open();
                     command.CommandText = "dbo.ShowSave";
-                    command.Parameters.AddWithValue("@ShowId", target.ShowId);
-                    command.Parameters.AddWithValue("@Name", target.Name);
-                    command.Parameters.AddWithValue("@Category", target.Category);
-                    command.Parameters.AddWithValue("@Path", target.Path);
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@ShowId", target.ShowId));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@Name", target.Name));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@Category", target.Category));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@Path", target.Path));
 
                     command.ExecuteNonQuery();
                 }

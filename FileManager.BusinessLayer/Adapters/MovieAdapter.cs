@@ -64,17 +64,17 @@ namespace FileManager.BusinessLayer.Adapters
             try
             {
                 using (var connection = _fileManagerDb.CreateConnection())
-                using (var command = (System.Data.SqlClient.SqlCommand)_fileManagerDb.CreateCommand())
+                using (var command = _fileManagerDb.CreateCommand())
                 {
                     connection.Open();
                     command.CommandText = "dbo.MovieSave";
-                    command.Parameters.AddWithValue("@MovieId", target.MovieId);
-                    command.Parameters.AddWithValue("@SeriesId", target.SeriesId);
-                    command.Parameters.AddWithValue("@MovieName", target.Name);
-                    command.Parameters.AddWithValue("@IsSeries", target.IsSeries);
-                    command.Parameters.AddWithValue("@MovieFormat", target.Format);
-                    command.Parameters.AddWithValue("@MovieCategory", target.Category);
-                    command.Parameters.AddWithValue("@Path", target.Path);
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@MovieId", target.MovieId));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@SeriesId", target.SeriesId));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@MovieName", target.Name));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@IsSeries", target.IsSeries));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@MovieFormat", target.Format));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@MovieCategory", target.Category));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@Path", target.Path));
 
                     command.ExecuteNonQuery();
                 }
