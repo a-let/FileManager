@@ -44,3 +44,5 @@
 /FileManager.Models/bin/Debug/netcoreapp2.0
 /FileManager.Models/obj
 /FileManager.BusinessLayer/obj
+/FileManager.Tests/bin/Debug/netcoreapp2.0
+/FileManager.Tests/obj

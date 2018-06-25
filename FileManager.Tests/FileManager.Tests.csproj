@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileManager.BusinessLayer\FileManager.BusinessLayer.csproj" />
+    <ProjectReference Include="..\FileManager.Models\FileManager.Models.csproj" />
     <ProjectReference Include="..\FileManager.Web\FileManager.Web.csproj" />
   </ItemGroup>
 

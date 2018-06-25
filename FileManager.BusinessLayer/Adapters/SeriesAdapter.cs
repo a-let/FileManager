@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
 
@@ -63,9 +64,9 @@ namespace FileManager.BusinessLayer.Adapters
                 {
                     connection.Open();
                     command.CommandText = "dbo.SeriesSave";
-                    command.Parameters.AddWithValue("@SeriesId", target.SeriesId);
-                    command.Parameters.AddWithValue("@SeriesName", target.Name);
-                    command.Parameters.AddWithValue("@Path", target.Path);
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@SeriesId", target.SeriesId));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@SeriesName", target.Name));
+                    command.Parameters.Add(_fileManagerDb.CreateParameter("@Path", target.Path));
 
                     command.ExecuteNonQuery();
                 }

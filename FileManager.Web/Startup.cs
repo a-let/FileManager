@@ -37,12 +37,8 @@ namespace FileManager.Web
                 .AddScoped<IFileManagerObjectAdapter<Show>, ShowAdapter>()
                 .AddScoped<IMovieControllerService, MovieControllerService>()
                 .AddScoped<IFileManagerObjectAdapter<Movie>, MovieAdapter>()
+                .AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" }))
                 .AddMvc();
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
