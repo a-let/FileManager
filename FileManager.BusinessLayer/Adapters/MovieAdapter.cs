@@ -116,7 +116,7 @@ namespace FileManager.BusinessLayer.Adapters
             {
                 connection.Open();
                 command.CommandText = "dbo.MovieGetBySeriesId";
-                command.Parameters.Add(_fileManagerDb.CreateParameter("@MovieId", parentId));
+                command.Parameters.Add(_fileManagerDb.CreateParameter("@SeriesId", parentId));
 
                 using (var reader = command.ExecuteReader())
                 {

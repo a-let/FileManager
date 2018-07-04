@@ -25,11 +25,20 @@ namespace FileManager.Web.Controllers
             return movies;
         }
 
-        // GET: api/Movie/5
+        // GET: api/Movie/id/5
         [HttpGet("id/{id}")]
-        public string Get(int id)
+        public Movie Get(int id)
         {
-            throw new NotImplementedException();
+            var movie = _movieControllerService.GetMovieById(id);
+            return movie;
+        }
+
+        // GET: api/Movie/name/Name
+        [HttpGet("name/{name}")]
+        public Movie Get(string name)
+        {
+            var movie = _movieControllerService.GetMovieByName(name);
+            return movie;
         }
         
         // POST: api/Movie
@@ -38,6 +47,14 @@ namespace FileManager.Web.Controllers
         {
             var success = _movieControllerService.SaveMovie(movie);
             return success;
+        }
+
+        // GET: api/Movie/seriesId/5
+        [HttpGet("seriesId/seriesId")]
+        public IEnumerable<Movie> GetBySeriesId(int seriesId)
+        {
+            var movies = _movieControllerService.GetMoviesBySeriesId(seriesId);
+            return movies;
         }
         
         // PUT: api/Movie/5
