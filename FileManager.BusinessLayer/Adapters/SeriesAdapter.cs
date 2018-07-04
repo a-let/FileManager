@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Data;
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
 
@@ -28,12 +28,7 @@ namespace FileManager.BusinessLayer.Adapters
 
                 while (reader.Read())
                 {
-                    series.Add(new Series
-                    {
-                        SeriesId = (int)reader["SeriesId"],
-                        Name = (string)reader["SeriesName"],
-                        Path = (string)reader["FilePath"]
-                    });
+                    series.Add(CreateFromReader(reader));
                 }
             }
 
@@ -42,12 +37,48 @@ namespace FileManager.BusinessLayer.Adapters
 
         public Series GetById(int id)
         {
-            throw new NotImplementedException();
+            Series series = null;
+
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand())
+            {
+                connection.Open();
+                command.CommandText = "dbo.SeriesGetById";
+                command.Parameters.Add(_fileManagerDb.CreateParameter("@SeriesId", id));
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        series = CreateFromReader(reader);
+                    }
+                }
+            }
+
+            return series;
         }
 
         public Series GetByName(string name)
         {
-            throw new NotImplementedException();
+            Series series = null;
+
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand())
+            {
+                connection.Open();
+                command.CommandText = "dbo.SeriesGetByName";
+                command.Parameters.Add(_fileManagerDb.CreateParameter("@SeriesName", name));
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        series = CreateFromReader(reader);
+                    }
+                }
+            }
+
+            return series;
         }
 
         public IEnumerable<Series> GetByParentId(int parentId)
@@ -79,5 +110,12 @@ namespace FileManager.BusinessLayer.Adapters
             }
             
         }
+
+        private Series CreateFromReader(IDataReader reader) => new Series
+        {
+            SeriesId = (int)reader["SeriesId"],
+            Name = (string)reader["SeriesName"],
+            Path = (string)reader["FilePath"]
+        };
     }
 }

@@ -8,18 +8,5 @@ namespace FileManager.Models
         public string Name { get; set; }
         public string Category { get; set; }
         public string Path { get; set; }
-
-        //public static Show GetShow(string name)
-        //{
-        //    var show = new Show();
-
-        //    using (var context = new FileManagerContext())
-        //    {
-        //        show = context.Show
-        //            .SingleOrDefault(s => s.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
-        //    }
-
-        //    return show;
-        //}
     }
 }
