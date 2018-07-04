@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FileManager.Models;
 using FileManager.BusinessLayer.Interfaces;
-using System;
 
 namespace FileManager.Web.Services
 {
