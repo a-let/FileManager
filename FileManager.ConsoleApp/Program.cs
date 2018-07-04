@@ -120,12 +120,23 @@ namespace FileManager.ConsoleApp
             };
 
             var seasonSaved = seasonService.SaveSeasonAsync(newSeason).Result;
+            var seasonById = seasonService.GetSeasonByIdAsync(1002).Result;
+            var seasonByShowId = seasonService.GetSeasonsByShowIdAsync(1).Result;
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{seasonSaved}");
 
+            Console.WriteLine("Get by id...");
+            Console.WriteLine($"{seasonById.SeasonId} - {seasonById.Path}");
+
             Console.WriteLine("Get seasons...");
             foreach (var season in seasonService.GetSeasonsAsync().Result)
+            {
+                Console.WriteLine($"{season.SeasonId} - {season.Path}");
+            }
+
+            Console.WriteLine("Get seasons by show id...");
+            foreach (var season in seasonByShowId)
             {
                 Console.WriteLine($"{season.SeasonId} - {season.Path}");
             }
