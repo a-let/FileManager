@@ -16,12 +16,12 @@ namespace FileManager.Services
     public class MovieService : IMovieService
     {        
         private readonly IConfiguration _configuration;
-        private readonly IConfigurationSection _episodeAddresses;
+        private readonly IConfigurationSection _movieAddresses;
 
         public MovieService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _episodeAddresses = _configuration.GetSection("MovieAddresses");
+            _movieAddresses = _configuration.GetSection("MovieAddresses");
         }
 
         public async Task<Movie> GetMovieByIdAsync(int id)
@@ -36,7 +36,7 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync($"{_episodeAddresses["GetMovieByIdAddress"]}/{id}");
+                    var response = await client.GetAsync($"{_movieAddresses["GetMovieByIdAddress"]}/{id}");
                     if (response.IsSuccessStatusCode)
                     {
                         var jsonString = await response.Content.ReadAsStringAsync();
@@ -64,7 +64,7 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync($"{_episodeAddresses["GetMovieByNameAddress"]}/{name}");
+                    var response = await client.GetAsync($"{_movieAddresses["GetMovieByNameAddress"]}/{name}");
                     if (response.IsSuccessStatusCode)
                     {
                         var jsonString = await response.Content.ReadAsStringAsync();
@@ -92,7 +92,7 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync(_episodeAddresses["GetMoviesAddress"]);
+                    var response = await client.GetAsync(_movieAddresses["GetMoviesAddress"]);
                     if(response.IsSuccessStatusCode)
                     {
                         var jsonString = await response.Content.ReadAsStringAsync();
@@ -120,7 +120,7 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync($"{_episodeAddresses["GetMoviesBySeriesIdAddress"]}/{seriesId}");
+                    var response = await client.GetAsync($"{_movieAddresses["GetMoviesBySeriesIdAddress"]}/{seriesId}");
                     if (response.IsSuccessStatusCode)
                     {
                         var jsonString = await response.Content.ReadAsStringAsync();
@@ -149,7 +149,7 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     var content = new StringContent(JsonConvert.SerializeObject(movie), Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(_episodeAddresses["SaveMovieAddress"], content);
+                    var response = await client.PostAsync(_movieAddresses["SaveMovieAddress"], content);
 
                     if (response.IsSuccessStatusCode)
                     {
