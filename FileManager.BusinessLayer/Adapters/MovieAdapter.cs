@@ -23,20 +23,22 @@ namespace FileManager.BusinessLayer.Adapters
             {
                 connection.Open();
                 command.CommandText = "dbo.MovieGetList";
-                var reader = command.ExecuteReader();
 
-                while (reader.Read())
+                using (var reader = command.ExecuteReader())
                 {
-                    movies.Add(new Movie
+                    while (reader.Read())
                     {
-                        MovieId = (int)reader["MovieId"],
-                        SeriesId = (int)reader["SeriesId"],
-                        Name = (string)reader["MovieName"],
-                        IsSeries = (bool)reader["IsSeries"],
-                        Format = (string)reader["MovieFormat"],
-                        Category = (string)reader["MovieCategory"],
-                        Path = (string)reader["FilePath"]
-                    });
+                        movies.Add(new Movie
+                        {
+                            MovieId = (int)reader["MovieId"],
+                            SeriesId = (int)reader["SeriesId"],
+                            Name = (string)reader["MovieName"],
+                            IsSeries = (bool)reader["IsSeries"],
+                            Format = (string)reader["MovieFormat"],
+                            Category = (string)reader["MovieCategory"],
+                            Path = (string)reader["FilePath"]
+                        });
+                    }
                 }
             }
 

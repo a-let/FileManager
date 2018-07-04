@@ -26,19 +26,20 @@ namespace FileManager.BusinessLayer.Adapters
             {
                 connection.Open();
                 command.CommandText = "dbo.SeasonGetList";
-                var reader = command.ExecuteReader();
 
-                while (reader.Read())
+                using (var reader = command.ExecuteReader())
                 {
-                    seasons.Add(new Season
+                    while (reader.Read())
                     {
-                        SeasonId = (int)reader["SeasonId"],
-                        ShowId = (int)reader["ShowId"],
-                        SeasonNumber = (int)reader["SeasonNumber"],
-                        //EpisodeList = Episode.GetEpisodesBySeasonId((int)reader["SeasonId"]),
-                        EpisodeList = _episodeAdapter.GetByParentId((int)reader["SeasonId"]),
-                        Path = (string)reader["FilePath"]
-                    });
+                        seasons.Add(new Season
+                        {
+                            SeasonId = (int)reader["SeasonId"],
+                            ShowId = (int)reader["ShowId"],
+                            SeasonNumber = (int)reader["SeasonNumber"],
+                            EpisodeList = _episodeAdapter.GetByParentId((int)reader["SeasonId"]),
+                            Path = (string)reader["FilePath"]
+                        });
+                    }
                 }
             }
 
