@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Xunit;
 
 using FileManager.Models;
+using FileManager.Tests.Mocks;
 using FileManager.Web.Controllers;
-using FileManager.Web.Services;
 
-namespace FileManager.Tests.FileMagerWebTests
+namespace FileManager.Tests.FileManagerWebTests
 {
     public class EpisodeControllerTests
     {
@@ -50,39 +49,40 @@ namespace FileManager.Tests.FileMagerWebTests
             //Assert
             Assert.Equal(name, episode.Name);
         }
-    }
 
-    public class MockEpisodeContollerService : IEpisodeControllerService
-    {
-        public Episode GetEpisodeById(int id)
+
+        [Fact]
+        public void Get_GivenSeasonId_ThenReturnsListOfEpisodes()
         {
-            return id != 1 ? null : new Episode
+            //Arrange
+            var seasonId = 1;
+
+            //Act
+            var episodes = _episodeController.GetBySeasonId(seasonId);
+
+            //Assert
+            Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
+        }
+
+        [Fact]
+        public void Save_GivenValidEpisode_ThenReturnsTrue()
+        {
+            //Arrange
+            var episode = new Episode
             {
-                EpisodeId = 1
+                EpisodeId = 1,
+                SeasonId = 1,
+                Name = "Test",
+                EpisodeNumber = 1,
+                Format = "Test",
+                Path = "Test"
             };
-        }
 
-        public Episode GetEpisodeByName(string name)
-        {
-            return string.IsNullOrWhiteSpace(name) ? null : new Episode
-            {
-                Name = "Test Episode"
-            };
-        }
+            //Act
+            var success = _episodeController.Post(episode);
 
-        public IEnumerable<Episode> GetEpisodes()
-        {
-            return new List<Episode>();
-        }
-
-        public IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SaveEpisode(Episode episode)
-        {
-            throw new NotImplementedException();
+            //Assert
+            Assert.True(success);
         }
     }
 }
