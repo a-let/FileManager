@@ -16,7 +16,7 @@ namespace FileManager.BusinessLayer.Adapters
 
         public Episode GetById(int id)
         {
-            var episode = new Episode();
+            Episode episode = null;
 
             using (var connection = _fileManagerDb.CreateConnection())
             using (var command = _fileManagerDb.CreateCommand())
@@ -74,7 +74,7 @@ namespace FileManager.BusinessLayer.Adapters
 
         public Episode GetByName(string name)
         {
-            var episode = new Episode();
+            Episode episode = null;
 
             using (var connection = _fileManagerDb.CreateConnection())
             using (var command = _fileManagerDb.CreateCommand())
