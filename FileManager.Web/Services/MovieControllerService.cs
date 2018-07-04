@@ -16,7 +16,7 @@ namespace FileManager.Web.Services
 
         public Movie GetMovieById(int id)
         {
-            if (id < 0)
+            if (id <= 0)
                 throw new ArgumentException("Invalid MovieId");
 
             return _movieAdapter.GetById(id);
