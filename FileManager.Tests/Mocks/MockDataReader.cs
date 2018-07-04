@@ -29,6 +29,9 @@ namespace FileManager.Tests.Mocks
                 if (propertyType == typeof(string))
                     return "Test";
 
+                if (propertyType == typeof(bool))
+                    return true;
+
                 return null;
             }
         }

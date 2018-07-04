@@ -25,7 +25,7 @@ namespace FileManager.Tests.Mocks
 
         public IDbDataParameter CreateParameter(string name, object value)
         {
-            return new MockDbDataParameter();
+            return value != null ? new MockDbDataParameter() : throw new Exception();
         }
     }
 }
