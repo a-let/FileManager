@@ -42,7 +42,7 @@ namespace FileManager.ConsoleApp
             };    
             
             var episodeSaved = episodeService.SaveEpisodeAsync(newEpisode).Result;
-            var episodesBySeasonId = episodeService.GetEpisodeBySeasonIdAsync(1002).Result;
+            var episodesBySeasonId = episodeService.GetEpisodesBySeasonIdAsync(1002).Result;
 
             Console.WriteLine("Get episodes...");
             foreach (var episode in episodeList)
@@ -67,9 +67,7 @@ namespace FileManager.ConsoleApp
         private static void MovieTest()
         {
 
-            var movieService = _services.GetService<IMovieService>();
-
-            var movieList = movieService.GetMoviesAsync().Result;
+            var movieService = _services.GetService<IMovieService>();    
 
             var newMovie = new Movie
             {
@@ -83,12 +81,27 @@ namespace FileManager.ConsoleApp
             };
           
             var movieSaved = movieService.SaveMovieAsync(newMovie).Result;
+            var movieList = movieService.GetMoviesAsync().Result;
+            var movieById = movieService.GetMovieByIdAsync(1007).Result;
+            var movieByName = movieService.GetMovieByNameAsync("New movie from console via service").Result;
+            var moviesBySeriesId = movieService.GetMoviesBySeriesId(1).Result;
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{movieSaved}");
 
             Console.WriteLine("Get movies...");
             foreach (var movie in movieList)
+            {
+                Console.WriteLine($"{movie.MovieId} - {movie.Name}");
+            }
+
+            Console.WriteLine("Get by id...");
+            Console.WriteLine($"{movieById.MovieId} - {movieById.Name}");
+            Console.WriteLine("Get by name...");
+            Console.WriteLine($"{movieByName.MovieId} - {movieByName.Name}");
+
+            Console.WriteLine("Get by series id...");
+            foreach (var movie in moviesBySeriesId)
             {
                 Console.WriteLine($"{movie.MovieId} - {movie.Name}");
             }

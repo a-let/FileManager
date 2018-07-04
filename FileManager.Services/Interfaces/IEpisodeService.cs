@@ -10,6 +10,6 @@ namespace FileManager.Services.Interfaces
         Task<Episode> GetEpisodeByIdAsync(int id);
         Task<Episode> GetEpisodeByNameAsync(string name);
         Task<bool> SaveEpisodeAsync(Episode episode);
-        Task<IEnumerable<Episode>> GetEpisodeBySeasonIdAsync(int seasonId);
+        Task<IEnumerable<Episode>> GetEpisodesBySeasonIdAsync(int seasonId);
     }
 }

@@ -50,7 +50,7 @@ namespace FileManager.Web.Controllers
         }
 
         // GET: api/Movie/seriesId/5
-        [HttpGet("seriesId/seriesId")]
+        [HttpGet("seriesId/{seriesId}")]
         public IEnumerable<Movie> GetBySeriesId(int seriesId)
         {
             var movies = _movieControllerService.GetMoviesBySeriesId(seriesId);

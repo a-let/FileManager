@@ -80,7 +80,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting episodes. {ex.Message}", ex);
+                throw new InvalidOperationException($"Error getting episode. {ex.Message}", ex);
             }
         }
 
@@ -143,7 +143,7 @@ namespace FileManager.Services
             
         }
 
-        public async Task<IEnumerable<Episode>> GetEpisodeBySeasonIdAsync(int seasonId)
+        public async Task<IEnumerable<Episode>> GetEpisodesBySeasonIdAsync(int seasonId)
         {
             try
             {
