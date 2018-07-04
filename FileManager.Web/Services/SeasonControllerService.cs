@@ -14,9 +14,25 @@ namespace FileManager.Web.Services
             _seasonAdapter = seasonAdapter;
         }
 
+        public Season GetSeasonById(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Invalid SeasonId");
+
+            return _seasonAdapter.GetById(id);
+        }
+
         public IEnumerable<Season> GetSeasons()
         {
             return _seasonAdapter.Get();
+        }
+
+        public IEnumerable<Season> GetSeasonsByShowId(int showId)
+        {
+            if (showId <= 0)
+                throw new ArgumentException("Invalid ShowId");
+
+            return _seasonAdapter.GetByParentId(showId);
         }
 
         public bool SaveSeason(Season season)

@@ -5,7 +5,7 @@ using FileManager.Web.Services;
 
 namespace FileManager.Tests.Mocks
 {
-    public class MockEpisodeContollerService : IEpisodeControllerService
+    public class MockEpisodeControllerService : IEpisodeControllerService
     {
         public Episode GetEpisodeById(int id)
         {

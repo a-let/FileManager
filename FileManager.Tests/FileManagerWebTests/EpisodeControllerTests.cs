@@ -10,7 +10,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class EpisodeControllerTests
     {
-        private readonly EpisodeController _episodeController = new EpisodeController(new MockEpisodeContollerService());
+        private readonly EpisodeController _episodeController = new EpisodeController(new MockEpisodeControllerService());
 
         [Fact]
         public void Get_GivenNoParameter_ThenReturnsListOfEpisodes()
@@ -49,8 +49,7 @@ namespace FileManager.Tests.FileManagerWebTests
             //Assert
             Assert.Equal(name, episode.Name);
         }
-
-
+        
         [Fact]
         public void Get_GivenSeasonId_ThenReturnsListOfEpisodes()
         {
