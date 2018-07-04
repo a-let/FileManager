@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
@@ -31,14 +32,7 @@ namespace FileManager.BusinessLayer.Adapters
                 {
                     while (reader.Read())
                     {
-                        seasons.Add(new Season
-                        {
-                            SeasonId = (int)reader["SeasonId"],
-                            ShowId = (int)reader["ShowId"],
-                            SeasonNumber = (int)reader["SeasonNumber"],
-                            EpisodeList = _episodeAdapter.GetByParentId((int)reader["SeasonId"]),
-                            Path = (string)reader["FilePath"]
-                        });
+                        seasons.Add(CreateFromReader(reader));
                     }
                 }
             }
@@ -48,7 +42,25 @@ namespace FileManager.BusinessLayer.Adapters
 
         public Season GetById(int id)
         {
-            throw new NotImplementedException();
+            Season season = null;
+
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand())
+            {
+                connection.Open();
+                command.CommandText = "dbo.SeasonGetById";
+                command.Parameters.Add(_fileManagerDb.CreateParameter("@SeasonId", id));
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        season = CreateFromReader(reader);
+                    }
+                }
+            }
+
+            return season;
         }
 
         public Season GetByName(string name)
@@ -58,7 +70,25 @@ namespace FileManager.BusinessLayer.Adapters
 
         public IEnumerable<Season> GetByParentId(int parentId)
         {
-            throw new NotImplementedException();
+            var seasons = new List<Season>();
+
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand())
+            {
+                connection.Open();
+                command.CommandText = "dbo.SeasonGetByShowId";
+                command.Parameters.Add(_fileManagerDb.CreateParameter(@"ShowId", parentId));
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        seasons.Add(CreateFromReader(reader));
+                    }
+                }
+
+                return seasons;
+            }
         }
 
         public bool Save(Season target)
@@ -85,5 +115,14 @@ namespace FileManager.BusinessLayer.Adapters
                 return false;
             }
         }
+
+        private Season CreateFromReader(IDataReader reader) => new Season
+        {
+            SeasonId = (int)reader["SeasonId"],
+            ShowId = (int)reader["ShowId"],
+            SeasonNumber = (int)reader["SeasonNumber"],
+            EpisodeList = _episodeAdapter.GetByParentId((int)reader["SeasonId"]),
+            Path = (string)reader["FilePath"]
+        };
     }
 }

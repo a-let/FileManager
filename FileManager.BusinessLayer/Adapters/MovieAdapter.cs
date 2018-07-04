@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
@@ -28,16 +29,7 @@ namespace FileManager.BusinessLayer.Adapters
                 {
                     while (reader.Read())
                     {
-                        movies.Add(new Movie
-                        {
-                            MovieId = (int)reader["MovieId"],
-                            SeriesId = (int)reader["SeriesId"],
-                            Name = (string)reader["MovieName"],
-                            IsSeries = (bool)reader["IsSeries"],
-                            Format = (string)reader["MovieFormat"],
-                            Category = (string)reader["MovieCategory"],
-                            Path = (string)reader["FilePath"]
-                        });
+                        movies.Add(CreateFromReader(reader));
                     }
                 }
             }
@@ -60,16 +52,7 @@ namespace FileManager.BusinessLayer.Adapters
                 {
                     while (reader.Read())
                     {
-                        movie = new Movie
-                        {
-                            MovieId = (int)reader["MovieId"],
-                            SeriesId = (int)reader["SeriesId"],
-                            Name = (string)reader["MovieName"],
-                            IsSeries = (bool)reader["IsSeries"],
-                            Format = (string)reader["MovieFormat"],
-                            Category = (string)reader["MovieCategory"],
-                            Path = (string)reader["FilePath"]
-                        };
+                        movie = CreateFromReader(reader);
                     }
                 }                
             }
@@ -92,16 +75,7 @@ namespace FileManager.BusinessLayer.Adapters
                 {
                     while (reader.Read())
                     {
-                        movie = new Movie
-                        {
-                            MovieId = (int)reader["MovieId"],
-                            SeriesId = (int)reader["SeriesId"],
-                            Name = (string)reader["MovieName"],
-                            IsSeries = (bool)reader["IsSeries"],
-                            Format = (string)reader["MovieFormat"],
-                            Category = (string)reader["MovieCategory"],
-                            Path = (string)reader["FilePath"]
-                        };
+                        movie = CreateFromReader(reader);
                     }
                 }
             }
@@ -124,16 +98,7 @@ namespace FileManager.BusinessLayer.Adapters
                 {
                     while (reader.Read())
                     {
-                        movies.Add(new Movie
-                        {
-                            MovieId = (int)reader["MovieId"],
-                            SeriesId = (int)reader["SeriesId"],
-                            Name = (string)reader["MovieName"],
-                            IsSeries = (bool)reader["IsSeries"],
-                            Format = (string)reader["MovieFormat"],
-                            Category = (string)reader["MovieCategory"],
-                            Path = (string)reader["FilePath"]
-                        });
+                        movies.Add(CreateFromReader(reader));
                     }
                 }
             }
@@ -169,5 +134,16 @@ namespace FileManager.BusinessLayer.Adapters
             }
             
         }
+
+        private Movie CreateFromReader(IDataReader reader) => new Movie
+        {
+            MovieId = (int)reader["MovieId"],
+            SeriesId = (int)reader["SeriesId"],
+            Name = (string)reader["MovieName"],
+            IsSeries = (bool)reader["IsSeries"],
+            Format = (string)reader["MovieFormat"],
+            Category = (string)reader["MovieCategory"],
+            Path = (string)reader["FilePath"]
+        };
     }
 }

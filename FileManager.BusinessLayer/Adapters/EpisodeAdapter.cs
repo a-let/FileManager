@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
@@ -29,15 +30,7 @@ namespace FileManager.BusinessLayer.Adapters
                 {
                     while (reader.Read())
                     {
-                        episode = new Episode
-                        {
-                            EpisodeId = (int)reader["EpisodeId"],
-                            SeasonId = (int)reader["SeasonId"],
-                            Name = (string)reader["EpisodeName"],
-                            EpisodeNumber = (int)reader["EpisodeNumber"],
-                            Format = (string)reader["EpisodeFormat"],
-                            Path = (string)reader["FilePath"]
-                        };
+                        episode = CreateFromReader(reader);
                     }
                 }
             }
@@ -59,15 +52,7 @@ namespace FileManager.BusinessLayer.Adapters
                 {
                     while (reader.Read())
                     {
-                        episodes.Add(new Episode
-                        {
-                            EpisodeId = (int)reader["EpisodeId"],
-                            SeasonId = (int)reader["SeasonId"],
-                            Name = (string)reader["EpisodeName"],
-                            EpisodeNumber = (int)reader["EpisodeNumber"],
-                            Format = (string)reader["EpisodeFormat"],
-                            Path = (string)reader["FilePath"]
-                        });
+                        episodes.Add(CreateFromReader(reader));
                     }
                 }
             }
@@ -90,15 +75,7 @@ namespace FileManager.BusinessLayer.Adapters
                 {
                     while (reader.Read())
                     {
-                        episode = new Episode
-                        {
-                            EpisodeId = (int)reader["EpisodeId"],
-                            SeasonId = (int)reader["SeasonId"],
-                            Name = (string)reader["EpisodeName"],
-                            EpisodeNumber = (int)reader["EpisodeNumber"],
-                            Format = (string)reader["EpisodeFormat"],
-                            Path = (string)reader["FilePath"]
-                        };
+                        episode = CreateFromReader(reader);
                     }
                 }
             }
@@ -149,20 +126,22 @@ namespace FileManager.BusinessLayer.Adapters
                 {
                     while (reader.Read())
                     {
-                        episodes.Add(new Episode
-                        {
-                            EpisodeId = (int)reader["EpisodeId"],
-                            SeasonId = (int)reader["SeasonId"],
-                            Name = (string)reader["EpisodeName"],
-                            EpisodeNumber = (int)reader["EpisodeNumber"],
-                            Format = (string)reader["EpisodeFormat"],
-                            Path = (string)reader["FilePath"]
-                        });
+                        episodes.Add(CreateFromReader(reader));
                     }
                 }
             }
 
             return episodes;
         }
+
+        private Episode CreateFromReader(IDataReader reader) => new Episode
+        {
+            EpisodeId = (int)reader["EpisodeId"],
+            SeasonId = (int)reader["SeasonId"],
+            Name = (string)reader["EpisodeName"],
+            EpisodeNumber = (int)reader["EpisodeNumber"],
+            Format = (string)reader["EpisodeFormat"],
+            Path = (string)reader["FilePath"]
+        };
     }
 }
