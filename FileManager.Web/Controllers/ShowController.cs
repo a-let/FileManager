@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FileManager.Models;
 using FileManager.Web.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +27,18 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Show/5
         [HttpGet("id/{id}")]
-        public string Get(int id)
+        public Show Get(int id)
         {
-            return "value";
+            var show = _showControllerService.GetShowById(id);
+            return show;
+        }
+
+        // GET: api/Show/name/Name
+        [HttpGet("name/{name}")]
+        public Show Get(string name)
+        {
+            var show = _showControllerService.GetShowByName(name);
+            return show;
         }
         
         // POST: api/Show
@@ -43,12 +53,14 @@ namespace FileManager.Web.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
+            throw new NotImplementedException();
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            throw new NotImplementedException();
         }
     }
 }

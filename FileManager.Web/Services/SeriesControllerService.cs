@@ -19,6 +19,22 @@ namespace FileManager.Web.Services
             return _seriesAdapter.Get();
         }
 
+        public Series GetSeriesById(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Invalid SeriesId");
+
+            return _seriesAdapter.GetById(id);
+        }
+
+        public Series GetSeriesByName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+
+            return _seriesAdapter.GetByName(name);
+        }
+
         public bool SaveSeries(Series series)
         {
             if (series == null)
