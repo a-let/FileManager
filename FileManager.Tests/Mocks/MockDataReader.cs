@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FileManager.Models;
+using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace FileManager.Tests.Mocks
@@ -28,6 +30,12 @@ namespace FileManager.Tests.Mocks
                 
                 if (propertyType == typeof(string))
                     return "Test";
+
+                if (propertyType == typeof(bool))
+                    return true;
+
+                if (propertyType == typeof(IEnumerable<Episode>))
+                    return 1;
 
                 return null;
             }

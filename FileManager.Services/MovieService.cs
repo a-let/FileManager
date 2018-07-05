@@ -14,15 +14,70 @@ using System.Text;
 namespace FileManager.Services
 {
     public class MovieService : IMovieService
-    {
-        private readonly string GetMoviesAddress = "api/Movie";
-        private readonly string SaveMovieAddress = "api/Movie";
-
+    {        
         private readonly IConfiguration _configuration;
+        private readonly IConfigurationSection _movieAddresses;
 
         public MovieService(IConfiguration configuration)
         {
             _configuration = configuration;
+            _movieAddresses = _configuration.GetSection("MovieAddresses");
+        }
+
+        public async Task<Movie> GetMovieByIdAsync(int id)
+        {
+            try
+            {
+                Movie movie = null;
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var response = await client.GetAsync($"{_movieAddresses["GetMovieByIdAddress"]}/{id}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonString = await response.Content.ReadAsStringAsync();
+                        movie = JsonConvert.DeserializeObject<Movie>(jsonString);
+                    }
+                }
+
+                return movie;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+            }
+        }
+
+        public async Task<Movie> GetMovieByNameAsync(string name)
+        {
+            try
+            {
+                Movie movie = null;
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var response = await client.GetAsync($"{_movieAddresses["GetMovieByNameAddress"]}/{name}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonString = await response.Content.ReadAsStringAsync();
+                        movie = JsonConvert.DeserializeObject<Movie>(jsonString);
+                    }
+                }
+
+                return movie;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+            }
         }
 
         public async Task<IEnumerable<Movie>> GetMoviesAsync()
@@ -37,7 +92,7 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync(GetMoviesAddress);
+                    var response = await client.GetAsync(_movieAddresses["GetMoviesAddress"]);
                     if(response.IsSuccessStatusCode)
                     {
                         var jsonString = await response.Content.ReadAsStringAsync();
@@ -50,6 +105,34 @@ namespace FileManager.Services
             catch(Exception ex)
             {
                 throw new InvalidOperationException($"Error getting movies. {ex.Message}", ex);
+            }
+        }
+
+        public async Task<IEnumerable<Movie>> GetMoviesBySeriesId(int seriesId)
+        {
+            try
+            {
+                IEnumerable<Movie> movieList = null;
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var response = await client.GetAsync($"{_movieAddresses["GetMoviesBySeriesIdAddress"]}/{seriesId}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonString = await response.Content.ReadAsStringAsync();
+                        movieList = JsonConvert.DeserializeObject<IEnumerable<Movie>>(jsonString);
+                    }
+                }
+
+                return movieList;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
             }
         }
 
@@ -66,7 +149,7 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     var content = new StringContent(JsonConvert.SerializeObject(movie), Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(SaveMovieAddress, content);
+                    var response = await client.PostAsync(_movieAddresses["SaveMovieAddress"], content);
 
                     if (response.IsSuccessStatusCode)
                     {

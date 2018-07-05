@@ -15,14 +15,13 @@ namespace FileManager.Services
 {
     public class SeriesService : ISeriesService
     {
-        private readonly string GetSeriessAddress = "api/Series";
-        private readonly string SaveSeriesAddress = "api/Series";
-
         private readonly IConfiguration _configuration;
+        private readonly IConfigurationSection _seriesAddresses;
 
         public SeriesService(IConfiguration configuration)
         {
             _configuration = configuration;
+            _seriesAddresses = _configuration.GetSection("SeriesAddresses");
         }
 
         public async Task<IEnumerable<Series>> GetSeriesAsync()
@@ -37,7 +36,7 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync(GetSeriessAddress);
+                    var response = await client.GetAsync(_seriesAddresses["GetSeriesAddress"]);
                     if (response.IsSuccessStatusCode)
                     {
                         var jsonString = await response.Content.ReadAsStringAsync();
@@ -50,6 +49,62 @@ namespace FileManager.Services
             catch (Exception ex)
             {
                 throw new InvalidOperationException($"Error getting seriess. {ex.Message}", ex);
+            }
+        }
+
+        public async Task<Series> GetSeriesByIdAsync(int id)
+        {
+            try
+            {
+                Series series = null;
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var response = await client.GetAsync($"{_seriesAddresses["GetSeriesByIdAddress"]}/{id}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonString = await response.Content.ReadAsStringAsync();
+                        series = JsonConvert.DeserializeObject<Series>(jsonString);
+                    }
+                }
+
+                return series;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error getting series. {ex.Message}", ex);
+            }
+        }
+
+        public async Task<Series> GetSeriesByName(string name)
+        {
+            try
+            {
+                Series series = null;
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var response = await client.GetAsync($"{_seriesAddresses["GetSeriesByNameAddress"]}/{name}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonString = await response.Content.ReadAsStringAsync();
+                        series = JsonConvert.DeserializeObject<Series>(jsonString);
+                    }
+                }
+
+                return series;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error getting series. {ex.Message}", ex);
             }
         }
 
@@ -66,7 +121,7 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     var content = new StringContent(JsonConvert.SerializeObject(series), Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(SaveSeriesAddress, content);
+                    var response = await client.PostAsync(_seriesAddresses["SaveSeriesAddress"], content);
 
                     if (response.IsSuccessStatusCode)
                     {

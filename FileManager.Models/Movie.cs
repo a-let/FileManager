@@ -11,18 +11,5 @@ namespace FileManager.Models
         public string Format { get; set; }
         public string Category { get; set; }
         public string Path { get; set; }
-
-        //public static Movie GetMovie(string name)
-        //{
-        //    var movie = new Movie();
-
-        //    using (var context = new FileManagerContext())
-        //    {
-        //        movie = context.Movie
-        //            .SingleOrDefault(e => e.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
-        //    }
-
-        //    return movie;
-        //}
     }
 }

@@ -15,14 +15,69 @@ namespace FileManager.Services
 {
     public class ShowService : IShowService
     {
-        private readonly string GetShowsAddress = "api/Show";
-        private readonly string SaveShowAddress = "api/Show";
-
         private readonly IConfiguration _configuration;
+        private readonly IConfigurationSection _showAddresses;
 
         public ShowService(IConfiguration configuration)
         {
             _configuration = configuration;
+            _showAddresses = _configuration.GetSection("ShowAddresses");
+        }
+
+        public async Task<Show> GetShowByIdAsync(int id)
+        {
+            try
+            {
+                Show show = null;
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var response = await client.GetAsync($"{_showAddresses["GetShowByIdAddress"]}/{id}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonString = await response.Content.ReadAsStringAsync();
+                        show = JsonConvert.DeserializeObject<Show>(jsonString);
+                    }
+                }
+
+                return show;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+            }
+        }
+
+        public async Task<Show> GetShowByNameAsync(string name)
+        {
+            try
+            {
+                Show show = null;
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var response = await client.GetAsync($"{_showAddresses["GetShowByNameAddress"]}/{name}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonString = await response.Content.ReadAsStringAsync();
+                        show = JsonConvert.DeserializeObject<Show>(jsonString);
+                    }
+                }
+
+                return show;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+            }
         }
 
         public async Task<IEnumerable<Show>> GetShowsAsync()
@@ -37,7 +92,7 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync(GetShowsAddress);
+                    var response = await client.GetAsync(_showAddresses["GetShowsAddress"]);
                     if (response.IsSuccessStatusCode)
                     {
                         var jsonString = await response.Content.ReadAsStringAsync();
@@ -66,7 +121,7 @@ namespace FileManager.Services
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     var content = new StringContent(JsonConvert.SerializeObject(show), Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(SaveShowAddress, content);
+                    var response = await client.PostAsync(_showAddresses["SaveShowAddress"], content);
 
                     if (response.IsSuccessStatusCode)
                     {

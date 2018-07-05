@@ -28,7 +28,8 @@ namespace FileManager.Web.Controllers
         [HttpGet("id/{id}")]
         public Season Get(int id)
         {
-            throw new System.NotImplementedException();
+            var season = _seasonControllerService.GetSeasonById(id);
+            return season;
         }
         
         // POST: api/Season
@@ -37,6 +38,14 @@ namespace FileManager.Web.Controllers
         {
             var success = _seasonControllerService.SaveSeason(season);
             return success;
+        }
+
+        // Get: api/Season/showId/5
+        [HttpGet("showId/{showId}")]
+        public IEnumerable<Season> GetByShowId(int showId)
+        {
+            var seasons = _seasonControllerService.GetSeasonsByShowId(showId);
+            return seasons;
         }
         
         // PUT: api/Season/5

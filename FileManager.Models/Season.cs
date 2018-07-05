@@ -9,17 +9,5 @@ namespace FileManager.Models
         public int SeasonNumber { get; set; }
         public IEnumerable<Episode> EpisodeList { get; set; }
         public string Path { get; set; }
-
-        //public static Season GetSeason(int seasonId)
-        //{
-        //    var season = new Season();
-
-        //    using (var context = new FileManagerContext())
-        //    {
-        //        season = context.Season.Find(seasonId);
-        //    }
-
-        //    return season;
-        //}
     }
 }

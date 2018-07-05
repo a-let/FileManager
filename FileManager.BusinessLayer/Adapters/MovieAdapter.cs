@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data;
 
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
@@ -24,20 +24,13 @@ namespace FileManager.BusinessLayer.Adapters
             {
                 connection.Open();
                 command.CommandText = "dbo.MovieGetList";
-                var reader = command.ExecuteReader();
 
-                while (reader.Read())
+                using (var reader = command.ExecuteReader())
                 {
-                    movies.Add(new Movie
+                    while (reader.Read())
                     {
-                        MovieId = (int)reader["MovieId"],
-                        SeriesId = (int)reader["SeriesId"],
-                        Name = (string)reader["MovieName"],
-                        IsSeries = (bool)reader["IsSeries"],
-                        Format = (string)reader["MovieFormat"],
-                        Category = (string)reader["MovieCategory"],
-                        Path = (string)reader["FilePath"]
-                    });
+                        movies.Add(CreateFromReader(reader));
+                    }
                 }
             }
 
@@ -46,17 +39,71 @@ namespace FileManager.BusinessLayer.Adapters
 
         public Movie GetById(int id)
         {
-            throw new NotImplementedException();
+            Movie movie = null;
+
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand())
+            {
+                connection.Open();
+                command.CommandText = "dbo.MovieGetById";
+                command.Parameters.Add(_fileManagerDb.CreateParameter("@MovieId", id));
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        movie = CreateFromReader(reader);
+                    }
+                }                
+            }
+
+            return movie;
         }
 
         public Movie GetByName(string name)
         {
-            throw new NotImplementedException();
+            Movie movie = null;
+
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand())
+            {
+                connection.Open();
+                command.CommandText = "dbo.MovieGetByName";
+                command.Parameters.Add(_fileManagerDb.CreateParameter("@MovieName", name));
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        movie = CreateFromReader(reader);
+                    }
+                }
+            }
+
+            return movie;
         }
 
         public IEnumerable<Movie> GetByParentId(int parentId)
         {
-            throw new NotImplementedException();
+            var movies = new List<Movie>();
+
+            using (var connection = _fileManagerDb.CreateConnection())
+            using (var command = _fileManagerDb.CreateCommand())
+            {
+                connection.Open();
+                command.CommandText = "dbo.MovieGetBySeriesId";
+                command.Parameters.Add(_fileManagerDb.CreateParameter("@SeriesId", parentId));
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        movies.Add(CreateFromReader(reader));
+                    }
+                }
+            }
+
+            return movies;
         }
 
         public bool Save(Movie target)
@@ -87,5 +134,16 @@ namespace FileManager.BusinessLayer.Adapters
             }
             
         }
+
+        private Movie CreateFromReader(IDataReader reader) => new Movie
+        {
+            MovieId = (int)reader["MovieId"],
+            SeriesId = (int)reader["SeriesId"],
+            Name = (string)reader["MovieName"],
+            IsSeries = (bool)reader["IsSeries"],
+            Format = (string)reader["MovieFormat"],
+            Category = (string)reader["MovieCategory"],
+            Path = (string)reader["FilePath"]
+        };
     }
 }

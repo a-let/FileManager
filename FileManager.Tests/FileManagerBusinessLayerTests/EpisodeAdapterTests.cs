@@ -9,7 +9,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
 {
     public class EpisodeAdapterTests
     {
-        private IFileManagerObjectAdapter<Episode> _episodeAdapter = new EpisodeAdapter(new MockFileManagerDb(typeof(Episode)));
+        private readonly IFileManagerObjectAdapter<Episode> _episodeAdapter = new EpisodeAdapter(new MockFileManagerDb(typeof(Episode)));
 
         [Fact]
         public void GetById_GivenValidId_ThenEpisodeIsNotNull()
@@ -27,8 +27,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
         [Fact]
         public void Get_ThenEpisodeListIsNotEmpty()
         {
-            //Arrange
-            //Act
+            //Arrange, Act
             var episodeList = _episodeAdapter.Get();
 
             //Assert
@@ -67,6 +66,24 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
 
             //Assert
             Assert.True(success);
+        }
+
+        [Fact]
+        public void Save_GivenInvalidEpisode_ThenReturnsFalse()
+        {
+            //Arrange
+            var episode = new Episode
+            {
+                EpisodeNumber = 1,
+                Format = "Test",
+                Path = "Test"
+            };
+
+            //Act
+            var success = _episodeAdapter.Save(episode);
+
+            //Assert
+            Assert.False(success);
         }
 
         [Fact]

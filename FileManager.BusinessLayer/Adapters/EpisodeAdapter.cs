@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
@@ -16,7 +17,7 @@ namespace FileManager.BusinessLayer.Adapters
 
         public Episode GetById(int id)
         {
-            var episode = new Episode();
+            Episode episode = null;
 
             using (var connection = _fileManagerDb.CreateConnection())
             using (var command = _fileManagerDb.CreateCommand())
@@ -25,19 +26,12 @@ namespace FileManager.BusinessLayer.Adapters
                 command.CommandText = "dbo.EpisodeGetById";
                 command.Parameters.Add(_fileManagerDb.CreateParameter("@EpisodeId", id));
 
-                var reader = command.ExecuteReader();
-
-                while (reader.Read())
+                using (var reader = command.ExecuteReader())
                 {
-                    episode = new Episode
+                    while (reader.Read())
                     {
-                        EpisodeId = (int)reader["EpisodeId"],
-                        SeasonId = (int)reader["SeasonId"],
-                        Name = (string)reader["EpisodeName"],
-                        EpisodeNumber = (int)reader["EpisodeNumber"],
-                        Format = (string)reader["EpisodeFormat"],
-                        Path = (string)reader["FilePath"]
-                    };
+                        episode = CreateFromReader(reader);
+                    }
                 }
             }
 
@@ -53,19 +47,13 @@ namespace FileManager.BusinessLayer.Adapters
             {
                 connection.Open();
                 command.CommandText = "dbo.EpisodeGetList";
-                var reader = command.ExecuteReader();
 
-                while (reader.Read())
+                using (var reader = command.ExecuteReader())
                 {
-                    episodes.Add(new Episode
+                    while (reader.Read())
                     {
-                        EpisodeId = (int)reader["EpisodeId"],
-                        SeasonId = (int)reader["SeasonId"],
-                        Name = (string)reader["EpisodeName"],
-                        EpisodeNumber = (int)reader["EpisodeNumber"],
-                        Format = (string)reader["EpisodeFormat"],
-                        Path = (string)reader["FilePath"]
-                    });
+                        episodes.Add(CreateFromReader(reader));
+                    }
                 }
             }
 
@@ -74,7 +62,7 @@ namespace FileManager.BusinessLayer.Adapters
 
         public Episode GetByName(string name)
         {
-            var episode = new Episode();
+            Episode episode = null;
 
             using (var connection = _fileManagerDb.CreateConnection())
             using (var command = _fileManagerDb.CreateCommand())
@@ -83,19 +71,12 @@ namespace FileManager.BusinessLayer.Adapters
                 command.CommandText = "dbo.EpisodeGetByName";
                 command.Parameters.Add(_fileManagerDb.CreateParameter("@EpisodeName", name));
 
-                var reader = command.ExecuteReader();
-
-                while (reader.Read())
+                using (var reader = command.ExecuteReader())
                 {
-                    episode = new Episode
+                    while (reader.Read())
                     {
-                        EpisodeId = (int)reader["EpisodeId"],
-                        SeasonId = (int)reader["SeasonId"],
-                        Name = (string)reader["EpisodeName"],
-                        EpisodeNumber = (int)reader["EpisodeNumber"],
-                        Format = (string)reader["EpisodeFormat"],
-                        Path = (string)reader["FilePath"]
-                    };
+                        episode = CreateFromReader(reader);
+                    }
                 }
             }
 
@@ -141,23 +122,26 @@ namespace FileManager.BusinessLayer.Adapters
                 command.CommandText = "dbo.EpisodeGetBySeasonId";
                 command.Parameters.Add(_fileManagerDb.CreateParameter("@SeasonId", parentId));
 
-                var reader = command.ExecuteReader();
-
-                while (reader.Read())
+                using (var reader = command.ExecuteReader())
                 {
-                    episodes.Add(new Episode
+                    while (reader.Read())
                     {
-                        EpisodeId = (int)reader["EpisodeId"],
-                        SeasonId = (int)reader["SeasonId"],
-                        Name = (string)reader["EpisodeName"],
-                        EpisodeNumber = (int)reader["EpisodeNumber"],
-                        Format = (string)reader["EpisodeFormat"],
-                        Path = (string)reader["FilePath"]
-                    });
+                        episodes.Add(CreateFromReader(reader));
+                    }
                 }
             }
 
             return episodes;
         }
+
+        private Episode CreateFromReader(IDataReader reader) => new Episode
+        {
+            EpisodeId = (int)reader["EpisodeId"],
+            SeasonId = (int)reader["SeasonId"],
+            Name = (string)reader["EpisodeName"],
+            EpisodeNumber = (int)reader["EpisodeNumber"],
+            Format = (string)reader["EpisodeFormat"],
+            Path = (string)reader["FilePath"]
+        };
     }
 }

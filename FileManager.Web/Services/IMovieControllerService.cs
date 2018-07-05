@@ -5,7 +5,10 @@ namespace FileManager.Web.Services
 {
     public interface IMovieControllerService
     {
+        Movie GetMovieById(int id);
         IEnumerable<Movie> GetMovies();
+        Movie GetMovieByName(string name);        
         bool SaveMovie(Movie movie);
+        IEnumerable<Movie> GetMoviesBySeriesId(int seriesId);
     }
 }
