@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Text;
 
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 using FileManager.Models;
 using FileManager.Services.Interfaces;
@@ -24,29 +19,17 @@ namespace FileManager.Services
             _configuration = configuration;
             _episodeAddresses = _configuration.GetSection("EpisodeAddresses");
             _httpClient = httpClient;
+            _httpClient.BaseAddress = _configuration["FileManagerBaseAddress"];
         }
 
         public IEnumerable<Episode> GetEpisodes()
-        {            
+        {
             try
             {
                 IEnumerable<Episode> episodeList = null;
 
-                episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(GetAsync(_episodeAddresses["GetEpisodesAddress"]).Result);
-
-                //using (var client = _httpClient.Client)
-                //{
-                //    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                //    client.DefaultRequestHeaders.Clear();
-                //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //    var response = await client.GetAsync(_episodeAddresses["GetEpisodesAddress"]);
-                //    if (response.IsSuccessStatusCode)
-                //    {
-                //        var jsonString = await response.Content.ReadAsStringAsync();
-                //        episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(jsonString);
-                //    }
-                //}
+                var jsonString = _httpClient.GetAsync(_episodeAddresses["GetEpisodesAddress"]).Result;
+                episodeList = _httpClient.DeserializeObject<IEnumerable<Episode>>(jsonString);
 
                 return episodeList;
             }
@@ -56,46 +39,17 @@ namespace FileManager.Services
             }
         }
 
-        private async Task<string> GetAsync(string requestUri)
-        {
-            string jsonString = null;
-
-            using (var client = _httpClient.Client)
-            {
-                client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var response = await client.GetAsync(requestUri);
-                if (response.IsSuccessStatusCode)
-                {
-                    jsonString = await response.Content.ReadAsStringAsync();
-                }
-            }
-
-            return jsonString;
-        }
-
         public Episode GetEpisodeById(int id)
         {
             try
             {
+                if (id <= 0)
+                    throw new ArgumentOutOfRangeException("EpisodeId cannot be less than 1");
+
                 Episode episode = null;
 
-                episode = JsonConvert.DeserializeObject<Episode>(GetAsync($"{_episodeAddresses["GetEpisodeByIdAddress"]}/{id}").Result);
-                //using (var client = _httpClient.Client)
-                //{
-                //    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                //    client.DefaultRequestHeaders.Clear();
-                //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //    var response = await client.GetAsync($"{_episodeAddresses["GetEpisodeByIdAddress"]}/{id}");
-                //    if (response.IsSuccessStatusCode)
-                //    {
-                //        var jsonString = await response.Content.ReadAsStringAsync();
-                //        episode = JsonConvert.DeserializeObject<Episode>(jsonString);
-                //    }
-                //}
+                var jsonString = _httpClient.GetAsync($"{_episodeAddresses["GetEpisodeByIdAddress"]}/{id}").Result;
+                episode = _httpClient.DeserializeObject<Episode>(jsonString);
 
                 return episode;
             }
@@ -109,23 +63,13 @@ namespace FileManager.Services
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(name))
+                    throw new ArgumentNullException(nameof(name));
+
                 Episode episode = null;
 
-                episode = JsonConvert.DeserializeObject<Episode>(GetAsync($"{_episodeAddresses["GetEpisodeByNameAddress"]}/{name}").Result);
-
-                //using (var client = _httpClient.Client)
-                //{
-                //    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                //    client.DefaultRequestHeaders.Clear();
-                //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //    var response = await client.GetAsync($"{_episodeAddresses["GetEpisodeByNameAddress"]}/{name}");
-                //    if (response.IsSuccessStatusCode)
-                //    {
-                //        var jsonString = await response.Content.ReadAsStringAsync();
-                //        episode = JsonConvert.DeserializeObject<Episode>(jsonString);
-                //    }
-                //}
+                var jsonString = _httpClient.GetAsync($"{_episodeAddresses["GetEpisodeByNameAddress"]}/{name}").Result;
+                episode = _httpClient.DeserializeObject<Episode>(jsonString);
 
                 return episode;
             }
@@ -135,27 +79,17 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<bool> SaveEpisodeAsync(Episode episode)
+        public bool SaveEpisode(Episode episode)
         {
             try
             {
+                if (episode == null)
+                    throw new ArgumentNullException(nameof(episode));
+
                 var success = false;
 
-                using (var client = _httpClient.Client)
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var content = new StringContent(JsonConvert.SerializeObject(episode), Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(_episodeAddresses["SaveEpisodeAddress"], content);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        success = JsonConvert.DeserializeObject<bool>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.PostAsync(episode, _episodeAddresses["SaveEpisodeAddress"]).Result;
+                success = _httpClient.DeserializeObject<bool>(jsonString);
 
                 return success;
             }
@@ -170,22 +104,13 @@ namespace FileManager.Services
         {
             try
             {
+                if (seasonId <= 0)
+                    throw new ArgumentOutOfRangeException("SeasonId cannot be less than 1");
+
                 IEnumerable<Episode> episodeList = null;
 
-                episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(GetAsync($"{_episodeAddresses["GetEpisodeBySeasonIdAddress"]}/{seasonId}").Result);
-                //using (var client = _httpClient.Client)
-                //{
-                //    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                //    client.DefaultRequestHeaders.Clear();
-                //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //    var response = await client.GetAsync($"{_episodeAddresses["GetEpisodeBySeasonIdAddress"]}/{seasonId}");
-                //    if (response.IsSuccessStatusCode)
-                //    {
-                //        var jsonString = await response.Content.ReadAsStringAsync();
-                //        episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(jsonString);
-                //    }
-                //}
+                var jsonString = _httpClient.GetAsync($"{_episodeAddresses["GetEpisodeBySeasonIdAddress"]}/{seasonId}").Result;
+                episodeList = _httpClient.DeserializeObject<IEnumerable<Episode>>(jsonString);
 
                 return episodeList;
             }

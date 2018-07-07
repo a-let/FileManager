@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using FileManager.Models;
 
 namespace FileManager.Services.Interfaces
@@ -9,7 +8,7 @@ namespace FileManager.Services.Interfaces
         IEnumerable<Episode> GetEpisodes();
         Episode GetEpisodeById(int id);
         Episode GetEpisodeByName(string name);
-        Task<bool> SaveEpisodeAsync(Episode episode);
+        bool SaveEpisode(Episode episode);
         IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId);
     }
 }

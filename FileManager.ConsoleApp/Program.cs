@@ -13,10 +13,10 @@ namespace FileManager.ConsoleApp
         public static void Main(string[] args)
         {
             EpisodeTest();
-            //MovieTest();
-            //SeasonTest();
-            //SeriesTest();
-            //ShowTest();
+            MovieTest();
+            SeasonTest();
+            SeriesTest();
+            ShowTest();
 
             Console.Read();
 
@@ -40,8 +40,16 @@ namespace FileManager.ConsoleApp
                 Path = @"C:\Temp"
             };    
             
-            var episodeSaved = episodeService.SaveEpisodeAsync(newEpisode).Result;
+            var episodeSaved = episodeService.SaveEpisode(newEpisode);
             var episodesBySeasonId = episodeService.GetEpisodesBySeasonId(1002);
+            
+            Console.WriteLine("Get by id...");
+            Console.WriteLine($"{episodeById.EpisodeId} - {episodeById.Name}");
+            Console.WriteLine("Get by name...");
+            Console.WriteLine($"{episodeByName.EpisodeId} - {episodeByName.Name}");
+            Console.WriteLine("Saved...");
+            Console.WriteLine($"{episodeSaved}");
+
             var episodeList = episodeService.GetEpisodes();
 
             Console.WriteLine("Get episodes...");
@@ -49,13 +57,6 @@ namespace FileManager.ConsoleApp
             {
                 Console.WriteLine($"{episode.EpisodeId} - {episode.Name}");
             }
-
-            Console.WriteLine("Get by id...");
-            Console.WriteLine($"{episodeById.EpisodeId} - {episodeById.Name}");
-            Console.WriteLine("Get by name...");
-            Console.WriteLine($"{episodeByName.EpisodeId} - {episodeByName.Name}");
-            Console.WriteLine("Saved...");
-            Console.WriteLine($"{episodeSaved}");
 
             Console.WriteLine("Get by season id...");
             foreach (var episode in episodesBySeasonId)
