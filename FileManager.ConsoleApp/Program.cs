@@ -80,11 +80,11 @@ namespace FileManager.ConsoleApp
                 Path = @"C:\Temp"
             };
           
-            var movieSaved = movieService.SaveMovieAsync(newMovie).Result;
-            var movieList = movieService.GetMoviesAsync().Result;
-            var movieById = movieService.GetMovieByIdAsync(1007).Result;
-            var movieByName = movieService.GetMovieByNameAsync("New movie from console via service").Result;
-            var moviesBySeriesId = movieService.GetMoviesBySeriesId(1).Result;
+            var movieSaved = movieService.SaveMovie(newMovie);
+            var movieList = movieService.GetMovies();
+            var movieById = movieService.GetMovieById(1007);
+            var movieByName = movieService.GetMovieByName("New movie from console via service");
+            var moviesBySeriesId = movieService.GetMoviesBySeriesId(1);
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{movieSaved}");
