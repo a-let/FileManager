@@ -17,32 +17,36 @@ namespace FileManager.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _episodeAddresses;
+        private readonly IHttpClientFactory _httpClient;
 
-        public EpisodeService(IConfiguration configuration)
+        public EpisodeService(IConfiguration configuration, IHttpClientFactory httpClient)
         {
             _configuration = configuration;
             _episodeAddresses = _configuration.GetSection("EpisodeAddresses");
+            _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<Episode>> GetEpisodesAsync()
+        public IEnumerable<Episode> GetEpisodes()
         {            
             try
             {
                 IEnumerable<Episode> episodeList = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(GetAsync(_episodeAddresses["GetEpisodesAddress"]).Result);
 
-                    var response = await client.GetAsync(_episodeAddresses["GetEpisodesAddress"]);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(jsonString);
-                    }
-                }
+                //using (var client = _httpClient.Client)
+                //{
+                //    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                //    client.DefaultRequestHeaders.Clear();
+                //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //    var response = await client.GetAsync(_episodeAddresses["GetEpisodesAddress"]);
+                //    if (response.IsSuccessStatusCode)
+                //    {
+                //        var jsonString = await response.Content.ReadAsStringAsync();
+                //        episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(jsonString);
+                //    }
+                //}
 
                 return episodeList;
             }
@@ -52,25 +56,46 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<Episode> GetEpisodeByIdAsync(int id)
+        private async Task<string> GetAsync(string requestUri)
+        {
+            string jsonString = null;
+
+            using (var client = _httpClient.Client)
+            {
+                client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var response = await client.GetAsync(requestUri);
+                if (response.IsSuccessStatusCode)
+                {
+                    jsonString = await response.Content.ReadAsStringAsync();
+                }
+            }
+
+            return jsonString;
+        }
+
+        public Episode GetEpisodeById(int id)
         {
             try
             {
                 Episode episode = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                episode = JsonConvert.DeserializeObject<Episode>(GetAsync($"{_episodeAddresses["GetEpisodeByIdAddress"]}/{id}").Result);
+                //using (var client = _httpClient.Client)
+                //{
+                //    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                //    client.DefaultRequestHeaders.Clear();
+                //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync($"{_episodeAddresses["GetEpisodeByIdAddress"]}/{id}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        episode = JsonConvert.DeserializeObject<Episode>(jsonString);
-                    }
-                }
+                //    var response = await client.GetAsync($"{_episodeAddresses["GetEpisodeByIdAddress"]}/{id}");
+                //    if (response.IsSuccessStatusCode)
+                //    {
+                //        var jsonString = await response.Content.ReadAsStringAsync();
+                //        episode = JsonConvert.DeserializeObject<Episode>(jsonString);
+                //    }
+                //}
 
                 return episode;
             }
@@ -80,25 +105,27 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<Episode> GetEpisodeByNameAsync(string name)
+        public Episode GetEpisodeByName(string name)
         {
             try
             {
                 Episode episode = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                episode = JsonConvert.DeserializeObject<Episode>(GetAsync($"{_episodeAddresses["GetEpisodeByNameAddress"]}/{name}").Result);
 
-                    var response = await client.GetAsync($"{_episodeAddresses["GetEpisodeByNameAddress"]}/{name}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        episode = JsonConvert.DeserializeObject<Episode>(jsonString);
-                    }
-                }
+                //using (var client = _httpClient.Client)
+                //{
+                //    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                //    client.DefaultRequestHeaders.Clear();
+                //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //    var response = await client.GetAsync($"{_episodeAddresses["GetEpisodeByNameAddress"]}/{name}");
+                //    if (response.IsSuccessStatusCode)
+                //    {
+                //        var jsonString = await response.Content.ReadAsStringAsync();
+                //        episode = JsonConvert.DeserializeObject<Episode>(jsonString);
+                //    }
+                //}
 
                 return episode;
             }
@@ -114,7 +141,7 @@ namespace FileManager.Services
             {
                 var success = false;
 
-                using (var client = new HttpClient())
+                using (var client = _httpClient.Client)
                 {
                     client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
                     client.DefaultRequestHeaders.Clear();
@@ -139,25 +166,26 @@ namespace FileManager.Services
             
         }
 
-        public async Task<IEnumerable<Episode>> GetEpisodesBySeasonIdAsync(int seasonId)
+        public IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId)
         {
             try
             {
                 IEnumerable<Episode> episodeList = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(GetAsync($"{_episodeAddresses["GetEpisodeBySeasonIdAddress"]}/{seasonId}").Result);
+                //using (var client = _httpClient.Client)
+                //{
+                //    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
+                //    client.DefaultRequestHeaders.Clear();
+                //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.GetAsync($"{_episodeAddresses["GetEpisodeBySeasonIdAddress"]}/{seasonId}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(jsonString);
-                    }
-                }
+                //    var response = await client.GetAsync($"{_episodeAddresses["GetEpisodeBySeasonIdAddress"]}/{seasonId}");
+                //    if (response.IsSuccessStatusCode)
+                //    {
+                //        var jsonString = await response.Content.ReadAsStringAsync();
+                //        episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(jsonString);
+                //    }
+                //}
 
                 return episodeList;
             }

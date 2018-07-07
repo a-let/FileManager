@@ -13,10 +13,10 @@ namespace FileManager.ConsoleApp
         public static void Main(string[] args)
         {
             EpisodeTest();
-            MovieTest();
-            SeasonTest();
-            SeriesTest();
-            ShowTest();
+            //MovieTest();
+            //SeasonTest();
+            //SeriesTest();
+            //ShowTest();
 
             Console.Read();
 
@@ -26,10 +26,9 @@ namespace FileManager.ConsoleApp
         private static void EpisodeTest()
         {
             var episodeService = _services.GetService<IEpisodeService>();
-
-            var episodeList = episodeService.GetEpisodesAsync().Result;
-            var episodeById = episodeService.GetEpisodeByIdAsync(1002).Result;
-            var episodeByName = episodeService.GetEpisodeByNameAsync("episode - from program").Result;
+                        
+            var episodeById = episodeService.GetEpisodeById(1002);
+            var episodeByName = episodeService.GetEpisodeByName("episode - from program");
 
             var newEpisode = new Episode
             {
@@ -42,7 +41,8 @@ namespace FileManager.ConsoleApp
             };    
             
             var episodeSaved = episodeService.SaveEpisodeAsync(newEpisode).Result;
-            var episodesBySeasonId = episodeService.GetEpisodesBySeasonIdAsync(1002).Result;
+            var episodesBySeasonId = episodeService.GetEpisodesBySeasonId(1002);
+            var episodeList = episodeService.GetEpisodes();
 
             Console.WriteLine("Get episodes...");
             foreach (var episode in episodeList)
