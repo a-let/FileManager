@@ -17,6 +17,7 @@ namespace FileManager.ConsoleApp
                 .AddSingleton<ISeasonService, SeasonService>()
                 .AddSingleton<ISeriesService, SeriesService>()
                 .AddSingleton<IShowService, ShowService>()
+                .AddSingleton<IHttpClientFactory, HttpClientFactory>()
                 .BuildServiceProvider();
 
             return services;

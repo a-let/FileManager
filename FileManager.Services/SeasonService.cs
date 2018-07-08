@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 using FileManager.Models;
 using FileManager.Services.Interfaces;
@@ -15,37 +10,30 @@ namespace FileManager.Services
 {
     public class SeasonService : ISeasonService
     {
-        //private readonly string GetSeasonsAddress = "api/Season";
-        //private readonly string SaveSeasonAddress = "api/Season";
-
         private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _seasonAddresses;
+        private readonly IHttpClientFactory _httpClient;
 
-        public SeasonService(IConfiguration configuration)
+        public SeasonService(IConfiguration configuration, IHttpClientFactory httpClient)
         {
             _configuration = configuration;
             _seasonAddresses = configuration.GetSection("SeasonAddresses");
+
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = _configuration["FileManagerBaseAddress"];
         }
 
-        public async Task<Season> GetSeasonByIdAsync(int id)
+        public Season GetSeasonById(int id)
         {
             try
             {
+                if (id <= 0)
+                    throw new ArgumentOutOfRangeException("SeasonId cannot be less than 1");
+
                 Season season = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var response = await client.GetAsync($"{_seasonAddresses["GetSeasonByIdAddress"]}/{id}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        season = JsonConvert.DeserializeObject<Season>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.GetAsync($"{_seasonAddresses["GetSeasonByIdAddress"]}/{id}").Result;
+                season = _httpClient.DeserializeObject<Season>(jsonString);
 
                 return season;
             }
@@ -55,25 +43,14 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<IEnumerable<Season>> GetSeasonsAsync()
+        public IEnumerable<Season> GetSeasons()
         {
             try
             {
                 IEnumerable<Season> seasonList = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FIleManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var response = await client.GetAsync(_seasonAddresses["GetSeasonsAddress"]);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        seasonList = JsonConvert.DeserializeObject<IEnumerable<Season>>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.GetAsync(_seasonAddresses["GetSeasonsAddress"]).Result;
+                seasonList = _httpClient.DeserializeObject<IEnumerable<Season>>(jsonString);
 
                 return seasonList;
             }
@@ -83,25 +60,17 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<IEnumerable<Season>> GetSeasonsByShowIdAsync(int showId)
+        public IEnumerable<Season> GetSeasonsByShowId(int showId)
         {
             try
             {
+                if (showId <= 0)
+                    throw new ArgumentOutOfRangeException("SeasonId cannot be less than 1");
+
                 IEnumerable<Season> seasonList = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FIleManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var response = await client.GetAsync($"{_seasonAddresses["GetSeasonsByShowIdAddress"]}/{showId}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        seasonList = JsonConvert.DeserializeObject<IEnumerable<Season>>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.GetAsync($"{_seasonAddresses["GetSeasonsByShowIdAddress"]}/{showId}").Result;
+                seasonList = _httpClient.DeserializeObject<IEnumerable<Season>>(jsonString);
 
                 return seasonList;
             }
@@ -111,27 +80,17 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<bool> SaveSeasonAsync(Season season)
+        public bool SaveSeason(Season season)
         {
             try
             {
+                if (season == null)
+                    throw new ArgumentNullException(nameof(season));
+
                 bool success = false;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var content = new StringContent(JsonConvert.SerializeObject(season), Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(_seasonAddresses["SaveSeasonAddress"], content);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        success = JsonConvert.DeserializeObject<bool>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.PostAsync(season, _seasonAddresses["SaveSeasonAddress"]).Result;
+                success = _httpClient.DeserializeObject<bool>(jsonString);
 
                 return success;
             }
