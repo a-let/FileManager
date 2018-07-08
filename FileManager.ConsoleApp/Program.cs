@@ -153,9 +153,9 @@ namespace FileManager.ConsoleApp
                 Path = @"C:\Temp"
             };
 
-            var seriesSave = seriesService.SaveSeriesAsync(newSeries).Result;
-            var seriesById = seriesService.GetSeriesByIdAsync(1002).Result;
-            var seriesByName = seriesService.GetSeriesByName("Test Series from swagger").Result;
+            var seriesSave = seriesService.SaveSeries(newSeries);
+            var seriesById = seriesService.GetSeriesById(1002);
+            var seriesByName = seriesService.GetSeriesByName("Test Series from swagger");
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{seriesSave}");
@@ -166,7 +166,7 @@ namespace FileManager.ConsoleApp
             Console.WriteLine($"{seriesByName.SeriesId} - {seriesByName.Name}");
 
             Console.WriteLine("Get seasons...");
-            foreach (var series in seriesService.GetSeriesAsync().Result)
+            foreach (var series in seriesService.GetSeries())
             {
                 Console.WriteLine($"{series.SeriesId} - {series.Name}");
             }
@@ -184,9 +184,9 @@ namespace FileManager.ConsoleApp
                 Path = @"C:\Temp"
             };
 
-            var showSaved = showService.SaveShowAsync(newShow).Result;
-            var showById = showService.GetShowByIdAsync(1).Result;
-            var showByName = showService.GetShowByNameAsync("Testing Show - from program").Result;
+            var showSaved = showService.SaveShow(newShow);
+            var showById = showService.GetShowById(1);
+            var showByName = showService.GetShowByName("Testing Show - from program");
 
             Console.WriteLine("Get by id...");
             Console.WriteLine($"{showById.ShowId} - {showById.Name}");
@@ -197,7 +197,7 @@ namespace FileManager.ConsoleApp
             Console.WriteLine($"{showSaved}");
 
             Console.WriteLine("Get seasons...");
-            foreach (var show in showService.GetShowsAsync().Result)
+            foreach (var show in showService.GetShows())
             {
                 Console.WriteLine($"{show.ShowId} - {show.Name}");
             }

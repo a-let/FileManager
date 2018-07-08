@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 using FileManager.Models;
 using FileManager.Services.Interfaces;
@@ -17,32 +12,28 @@ namespace FileManager.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _showAddresses;
+        private readonly IHttpClientFactory _httpClient;
 
-        public ShowService(IConfiguration configuration)
+        public ShowService(IConfiguration configuration, IHttpClientFactory httpClient)
         {
             _configuration = configuration;
             _showAddresses = _configuration.GetSection("ShowAddresses");
+
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = _configuration["FileManagerBaseAddress"];
         }
 
-        public async Task<Show> GetShowByIdAsync(int id)
+        public Show GetShowById(int id)
         {
             try
             {
+                if (id <= 0)
+                    throw new ArgumentOutOfRangeException("ShowId cannot be less than 1");
+
                 Show show = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var response = await client.GetAsync($"{_showAddresses["GetShowByIdAddress"]}/{id}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        show = JsonConvert.DeserializeObject<Show>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.GetAsync($"{_showAddresses["GetShowByIdAddress"]}/{id}").Result;
+                show = _httpClient.DeserializeObject<Show>(jsonString);
 
                 return show;
             }
@@ -52,25 +43,17 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<Show> GetShowByNameAsync(string name)
+        public Show GetShowByName(string name)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(name))
+                    throw new ArgumentNullException(nameof(name));
+
                 Show show = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var response = await client.GetAsync($"{_showAddresses["GetShowByNameAddress"]}/{name}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        show = JsonConvert.DeserializeObject<Show>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.GetAsync($"{_showAddresses["GetShowByNameAddress"]}/{name}").Result;
+                show = _httpClient.DeserializeObject<Show>(jsonString);
 
                 return show;
             }
@@ -80,25 +63,14 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<IEnumerable<Show>> GetShowsAsync()
+        public IEnumerable<Show> GetShows()
         {
             try
             {
                 IEnumerable<Show> showList = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FIleManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var response = await client.GetAsync(_showAddresses["GetShowsAddress"]);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        showList = JsonConvert.DeserializeObject<IEnumerable<Show>>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.GetAsync(_showAddresses["GetShowsAddress"]).Result;
+                showList = _httpClient.DeserializeObject<IEnumerable<Show>>(jsonString);
 
                 return showList;
             }
@@ -108,27 +80,17 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<bool> SaveShowAsync(Show show)
+        public bool SaveShow(Show show)
         {
             try
             {
+                if (show == null)
+                    throw new ArgumentNullException(nameof(show));
+
                 bool success = false;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var content = new StringContent(JsonConvert.SerializeObject(show), Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(_showAddresses["SaveShowAddress"], content);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        success = JsonConvert.DeserializeObject<bool>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.PostAsync(show, _showAddresses["SaveShowAddress"]).Result;
+                success = _httpClient.DeserializeObject<bool>(jsonString);
 
                 return success;
             }
