@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 using FileManager.Models;
 using FileManager.Services.Interfaces;
@@ -17,32 +12,25 @@ namespace FileManager.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _seriesAddresses;
+        private readonly IHttpClientFactory _httpClient;
 
-        public SeriesService(IConfiguration configuration)
+        public SeriesService(IConfiguration configuration, IHttpClientFactory httpClient)
         {
             _configuration = configuration;
             _seriesAddresses = _configuration.GetSection("SeriesAddresses");
+
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = _configuration["FIleManagerBaseAddress"];
         }
 
-        public async Task<IEnumerable<Series>> GetSeriesAsync()
+        public IEnumerable<Series> GetSeries()
         {
             try
             {
                 IEnumerable<Series> seriesList = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FIleManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var response = await client.GetAsync(_seriesAddresses["GetSeriesAddress"]);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        seriesList = JsonConvert.DeserializeObject<IEnumerable<Series>>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.GetAsync(_seriesAddresses["GetSeriesAddress"]).Result;
+                seriesList = _httpClient.DeserializeObject<IEnumerable<Series>>(jsonString);
 
                 return seriesList;
             }
@@ -52,25 +40,17 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<Series> GetSeriesByIdAsync(int id)
+        public Series GetSeriesById(int id)
         {
             try
             {
+                if (id <= 0)
+                    throw new ArgumentOutOfRangeException("SeriesId cannot by less than 1");
+
                 Series series = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var response = await client.GetAsync($"{_seriesAddresses["GetSeriesByIdAddress"]}/{id}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        series = JsonConvert.DeserializeObject<Series>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.GetAsync($"{_seriesAddresses["GetSeriesByIdAddress"]}/{id}").Result;
+                series = _httpClient.DeserializeObject<Series>(jsonString);
 
                 return series;
             }
@@ -80,25 +60,17 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<Series> GetSeriesByName(string name)
+        public Series GetSeriesByName(string name)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(name))
+                    throw new ArgumentNullException(nameof(name));
+
                 Series series = null;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var response = await client.GetAsync($"{_seriesAddresses["GetSeriesByNameAddress"]}/{name}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        series = JsonConvert.DeserializeObject<Series>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.GetAsync($"{_seriesAddresses["GetSeriesByNameAddress"]}/{name}").Result;
+                series = _httpClient.DeserializeObject<Series>(jsonString);
 
                 return series;
             }
@@ -108,27 +80,17 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<bool> SaveSeriesAsync(Series series)
+        public bool SaveSeries(Series series)
         {
             try
             {
+                if (series == null)
+                    throw new ArgumentNullException(nameof(series));
+
                 bool success = false;
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(_configuration["FileManagerBaseAddress"]);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    var content = new StringContent(JsonConvert.SerializeObject(series), Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(_seriesAddresses["SaveSeriesAddress"], content);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        success = JsonConvert.DeserializeObject<bool>(jsonString);
-                    }
-                }
+                var jsonString = _httpClient.PostAsync(series, _seriesAddresses["SaveSeriesAddress"]).Result;
+                success = _httpClient.DeserializeObject<bool>(jsonString);
 
                 return success;
             }
