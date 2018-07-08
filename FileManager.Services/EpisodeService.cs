@@ -18,6 +18,7 @@ namespace FileManager.Services
         {
             _configuration = configuration;
             _episodeAddresses = _configuration.GetSection("EpisodeAddresses");
+
             _httpClient = httpClient;
             _httpClient.BaseAddress = _configuration["FileManagerBaseAddress"];
         }

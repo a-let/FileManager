@@ -119,9 +119,9 @@ namespace FileManager.ConsoleApp
                 Path = "New season path from console via service"
             };
 
-            var seasonSaved = seasonService.SaveSeasonAsync(newSeason).Result;
-            var seasonById = seasonService.GetSeasonByIdAsync(1002).Result;
-            var seasonByShowId = seasonService.GetSeasonsByShowIdAsync(1).Result;
+            var seasonSaved = seasonService.SaveSeason(newSeason);
+            var seasonById = seasonService.GetSeasonById(1002);
+            var seasonByShowId = seasonService.GetSeasonsByShowId(1);
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{seasonSaved}");
@@ -130,7 +130,7 @@ namespace FileManager.ConsoleApp
             Console.WriteLine($"{seasonById.SeasonId} - {seasonById.Path}");
 
             Console.WriteLine("Get seasons...");
-            foreach (var season in seasonService.GetSeasonsAsync().Result)
+            foreach (var season in seasonService.GetSeasons())
             {
                 Console.WriteLine($"{season.SeasonId} - {season.Path}");
             }

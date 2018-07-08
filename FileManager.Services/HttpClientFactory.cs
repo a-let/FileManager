@@ -3,8 +3,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using FileManager.Services.Interfaces;
+
 using Newtonsoft.Json;
+
+using FileManager.Services.Interfaces;
 
 namespace FileManager.Services
 {
@@ -12,10 +14,7 @@ namespace FileManager.Services
     {
         public string BaseAddress { get; set; }
 
-        public T DeserializeObject<T>(string value)
-        {
-            return JsonConvert.DeserializeObject<T>(value);
-        }
+        public T DeserializeObject<T>(string value) => JsonConvert.DeserializeObject<T>(value);
 
         public async Task<string> GetAsync(string requestUri)
         {
