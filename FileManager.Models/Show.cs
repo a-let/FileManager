@@ -1,8 +1,6 @@
-﻿using FileManager.Models.Interfaces;
-
-namespace FileManager.Models
+﻿namespace FileManager.Models
 {
-    public class Show : FileManagerObjectBase, IVideo
+    public class Show : FileManagerObjectBase
     {
         public int ShowId { get; set; }
         public string Name { get; set; }
