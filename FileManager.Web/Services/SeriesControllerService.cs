@@ -7,16 +7,16 @@ namespace FileManager.Web.Services
 {
     public class SeriesControllerService : ISeriesControllerService
     {
-        private readonly IFileManagerObjectAdapter<Series> _seriesAdapter;
+        private readonly IFileManagerObjectRepository<Series> _seriesRepository;
 
-        public SeriesControllerService(IFileManagerObjectAdapter<Series> seriesAdapter)
+        public SeriesControllerService(IFileManagerObjectRepository<Series> seriesRepository)
         {
-            _seriesAdapter = seriesAdapter;
+            _seriesRepository = seriesRepository;
         }
 
         public IEnumerable<Series> GetSeries()
         {
-            return _seriesAdapter.Get();
+            return _seriesRepository.Get();
         }
 
         public Series GetSeriesById(int id)
@@ -24,7 +24,7 @@ namespace FileManager.Web.Services
             if (id <= 0)
                 throw new ArgumentException("Invalid SeriesId");
 
-            return _seriesAdapter.GetById(id);
+            return _seriesRepository.GetById(id);
         }
 
         public Series GetSeriesByName(string name)
@@ -32,7 +32,7 @@ namespace FileManager.Web.Services
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            return _seriesAdapter.GetByName(name);
+            return _seriesRepository.GetByName(name);
         }
 
         public bool SaveSeries(Series series)
@@ -40,7 +40,7 @@ namespace FileManager.Web.Services
             if (series == null)
                 throw new ArgumentNullException(nameof(series));
 
-            return _seriesAdapter.Save(series);
+            return _seriesRepository.Save(series);
         }
     }
 }

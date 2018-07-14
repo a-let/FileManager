@@ -4,7 +4,7 @@ using FileManager.Models;
 
 namespace FileManager.Tests.Mocks
 {
-    public class MockShowAdapter : IFileManagerObjectAdapter<Show>
+    public class MockShowRepository : IFileManagerObjectRepository<Show>
     {
         public IEnumerable<Show> Get()
         {

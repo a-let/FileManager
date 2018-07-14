@@ -1,21 +1,20 @@
 ﻿using Xunit;
 
-using FileManager.BusinessLayer.Adapters;
-using FileManager.BusinessLayer.Interfaces;
+using FileManager.BusinessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Tests.Mocks;
 
 namespace FileManager.Tests.FileManagerBusinessLayerTests
 {
-    public class MovieAdapterTests
+    public class MovieRepositoryTests
     {
-        private readonly IFileManagerObjectAdapter<Movie> _movieAdapter = new MovieAdapter(new MockFileManagerDb(typeof(Movie)));
+        private readonly MovieRepository _movieRepository = new MovieRepository(new MockFileManagerDb(typeof(Movie)));
 
         [Fact]
         public void Get_ThenMovieListIsNotEmpty()
         {
             //Arrange, Act
-            var movies = _movieAdapter.Get();
+            var movies = _movieRepository.Get();
 
             //Assert
             Assert.NotEmpty(movies);
@@ -28,7 +27,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var id = 1;
 
             //Act
-            var movie = _movieAdapter.GetById(id);
+            var movie = _movieRepository.GetById(id);
 
             //Assert
             Assert.NotNull(movie);
@@ -41,7 +40,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var name = "Test Movie Name";
 
             //Act
-            var movie = _movieAdapter.GetByName(name);
+            var movie = _movieRepository.GetByName(name);
 
             //Assert
             Assert.NotNull(movie);
@@ -54,7 +53,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var id = 1;
 
             //Act
-            var movies = _movieAdapter.GetByParentId(id);
+            var movies = _movieRepository.GetByParentId(id);
 
             //Assert
             Assert.NotEmpty(movies);
@@ -76,7 +75,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             };
 
             //Act
-            var success = _movieAdapter.Save(movie);
+            var success = _movieRepository.Save(movie);
 
             //Assert
             Assert.True(success);
@@ -93,7 +92,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             };
 
             //Act
-            var success = _movieAdapter.Save(movie);
+            var success = _movieRepository.Save(movie);
 
             //Assert
             Assert.False(success);

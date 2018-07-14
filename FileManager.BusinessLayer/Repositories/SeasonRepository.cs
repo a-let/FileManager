@@ -5,17 +5,17 @@ using System.Data;
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
 
-namespace FileManager.BusinessLayer.Adapters
+namespace FileManager.BusinessLayer.Repositories
 {
-    public class SeasonAdapter : IFileManagerObjectAdapter<Season>
+    public class SeasonRepository : IFileManagerObjectRepository<Season>
     {
         private readonly IFileManagerDb _fileManagerDb;
-        private readonly IFileManagerObjectAdapter<Episode> _episodeAdapter;
+        private readonly IFileManagerObjectRepository<Episode> _episodeRepository;
 
-        public SeasonAdapter(IFileManagerDb fileManagerDb, IFileManagerObjectAdapter<Episode> episodeAdapter)
+        public SeasonRepository(IFileManagerDb fileManagerDb, IFileManagerObjectRepository<Episode> episodeRepository)
         {
             _fileManagerDb = fileManagerDb;
-            _episodeAdapter = episodeAdapter;
+            _episodeRepository = episodeRepository;
         }
 
         public IEnumerable<Season> Get()
@@ -121,7 +121,7 @@ namespace FileManager.BusinessLayer.Adapters
             SeasonId = (int)reader["SeasonId"],
             ShowId = (int)reader["ShowId"],
             SeasonNumber = (int)reader["SeasonNumber"],
-            EpisodeList = _episodeAdapter.GetByParentId((int)reader["SeasonId"]),
+            EpisodeList = _episodeRepository.GetByParentId((int)reader["SeasonId"]),
             Path = (string)reader["FilePath"]
         };
     }

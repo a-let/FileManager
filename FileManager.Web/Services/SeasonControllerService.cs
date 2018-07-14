@@ -7,11 +7,11 @@ namespace FileManager.Web.Services
 {
     public class SeasonControllerService : ISeasonControllerService
     {
-        private readonly IFileManagerObjectAdapter<Season> _seasonAdapter;
+        private readonly IFileManagerObjectRepository<Season> _seasonRepository;
 
-        public SeasonControllerService(IFileManagerObjectAdapter<Season> seasonAdapter)
+        public SeasonControllerService(IFileManagerObjectRepository<Season> seasonRepository)
         {
-            _seasonAdapter = seasonAdapter;
+            _seasonRepository = seasonRepository;
         }
 
         public Season GetSeasonById(int id)
@@ -19,12 +19,12 @@ namespace FileManager.Web.Services
             if (id <= 0)
                 throw new ArgumentException("Invalid SeasonId");
 
-            return _seasonAdapter.GetById(id);
+            return _seasonRepository.GetById(id);
         }
 
         public IEnumerable<Season> GetSeasons()
         {
-            return _seasonAdapter.Get();
+            return _seasonRepository.Get();
         }
 
         public IEnumerable<Season> GetSeasonsByShowId(int showId)
@@ -32,7 +32,7 @@ namespace FileManager.Web.Services
             if (showId <= 0)
                 throw new ArgumentException("Invalid ShowId");
 
-            return _seasonAdapter.GetByParentId(showId);
+            return _seasonRepository.GetByParentId(showId);
         }
 
         public bool SaveSeason(Season season)
@@ -40,7 +40,7 @@ namespace FileManager.Web.Services
             if (season == null)
                 throw new ArgumentNullException(nameof(season));
 
-            return _seasonAdapter.Save(season);
+            return _seasonRepository.Save(season);
         }
     }
 }

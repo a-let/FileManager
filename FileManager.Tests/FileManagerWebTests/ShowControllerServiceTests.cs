@@ -11,7 +11,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class ShowControllerServiceTests
     {
-        private readonly ShowControllerService _showControllerService = new ShowControllerService(new MockShowAdapter());
+        private readonly ShowControllerService _showControllerService = new ShowControllerService(new MockShowRepository());
 
         [Fact]
         public void GetShowById_GivenInvalidId_ThenThrowsArgumentException()

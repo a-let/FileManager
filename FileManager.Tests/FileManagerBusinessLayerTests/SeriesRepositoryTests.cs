@@ -1,15 +1,14 @@
 ﻿using Xunit;
 
-using FileManager.BusinessLayer.Adapters;
-using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
 using FileManager.Tests.Mocks;
+using FileManager.BusinessLayer.Repositories;
 
 namespace FileManager.Tests.FileManagerBusinessLayerTests
 {
-    public class SeriesAdapterTests
+    public class SeriesRepositoryTests
     {
-        private readonly IFileManagerObjectAdapter<Series> _seriesAdapter = new SeriesAdapter(new MockFileManagerDb(typeof(Series)));
+        private readonly SeriesRepository _seriesRepository = new SeriesRepository(new MockFileManagerDb(typeof(Series)));
 
         [Fact]
         public void GetById_GivenValidId_ThenSeriesIsNotNull()
@@ -18,7 +17,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var id = 1;
 
             //Act
-            var series = _seriesAdapter.GetById(id);
+            var series = _seriesRepository.GetById(id);
 
             //Assert
             Assert.NotNull(series);
@@ -28,7 +27,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
         public void Get_ThenSeriesListIsNotEmpty()
         {
             //Arrange, Act
-            var seriesList = _seriesAdapter.Get();
+            var seriesList = _seriesRepository.Get();
 
             //Assert
             Assert.NotEmpty(seriesList);
@@ -41,7 +40,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var name = "Test Name";
 
             //Act
-            var series = _seriesAdapter.GetByName(name);
+            var series = _seriesRepository.GetByName(name);
 
             //Assert
             Assert.NotNull(series);
@@ -59,7 +58,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             };
 
             //Act
-            var success = _seriesAdapter.Save(series);
+            var success = _seriesRepository.Save(series);
 
             //Assert
             Assert.True(success);
@@ -72,7 +71,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var series = new Series();
 
             //Act
-            var success = _seriesAdapter.Save(series);
+            var success = _seriesRepository.Save(series);
 
             //Assert
             Assert.False(success);

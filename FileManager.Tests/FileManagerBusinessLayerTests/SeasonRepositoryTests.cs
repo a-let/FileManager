@@ -1,15 +1,14 @@
 ﻿using Xunit;
 
-using FileManager.BusinessLayer.Adapters;
-using FileManager.BusinessLayer.Interfaces;
+using FileManager.BusinessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Tests.Mocks;
 
 namespace FileManager.Tests.FileManagerBusinessLayerTests
 {
-    public class SeasonAdapterTests
+    public class SeasonRepositoryTests
     {
-        private readonly IFileManagerObjectAdapter<Season> _seasonAdapter = new SeasonAdapter(new MockFileManagerDb(typeof(Season)), new EpisodeAdapter(new MockFileManagerDb(typeof(Episode))));
+        private readonly SeasonRepository _seasonRepository = new SeasonRepository(new MockFileManagerDb(typeof(Season)), new EpisodeRepository(new MockFileManagerDb(typeof(Episode))));
 
         [Fact]
         public void GetById_GivenValidId_ThenSeasonIsNotNull()
@@ -18,7 +17,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var id = 1;
 
             //Act
-            var season = _seasonAdapter.GetById(id);
+            var season = _seasonRepository.GetById(id);
 
             //Assert
             Assert.NotNull(season);
@@ -28,7 +27,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
         public void Get_ThenSeasonListIsNotEmpty()
         {
             //Arrange, Act
-            var seasonList = _seasonAdapter.Get();
+            var seasonList = _seasonRepository.Get();
 
             //Assert
             Assert.NotEmpty(seasonList);
@@ -47,7 +46,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             };
 
             //Act
-            var success = _seasonAdapter.Save(season);
+            var success = _seasonRepository.Save(season);
 
             //Assert
             Assert.True(success);
@@ -60,7 +59,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var season = new Season();
 
             //Act
-            var success = _seasonAdapter.Save(season);
+            var success = _seasonRepository.Save(season);
 
             //Assert
             Assert.False(success);
@@ -73,7 +72,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var id = 1;
 
             //Act
-            var seasonList = _seasonAdapter.GetByParentId(id);
+            var seasonList = _seasonRepository.GetByParentId(id);
 
             //Assert
             Assert.NotEmpty(seasonList);

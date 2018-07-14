@@ -1,15 +1,14 @@
 ﻿using Xunit;
 
-using FileManager.BusinessLayer.Adapters;
-using FileManager.BusinessLayer.Interfaces;
+using FileManager.BusinessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Tests.Mocks;
 
 namespace FileManager.Tests.FileManagerBusinessLayerTests
 {
-    public class ShowAdapterTests
+    public class ShowRepositoryTests
     {
-        private readonly IFileManagerObjectAdapter<Show> _showAdapter = new ShowAdapter(new MockFileManagerDb(typeof(Show)));
+        private readonly ShowRepository _showRepository = new ShowRepository(new MockFileManagerDb(typeof(Show)));
 
         [Fact]
         public void GetById_GivenValidId_ThenShowIsNotNull()
@@ -18,7 +17,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var id = 1;
 
             //Act
-            var show = _showAdapter.GetById(id);
+            var show = _showRepository.GetById(id);
 
             //Assert
             Assert.NotNull(show);
@@ -28,7 +27,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
         public void Get_ThenShowListIsNotEmpty()
         {
             //Arrange, Act
-            var showList = _showAdapter.Get();
+            var showList = _showRepository.Get();
 
             //Assert
             Assert.NotEmpty(showList);
@@ -41,7 +40,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var name = "Test Name";
 
             //Act
-            var show = _showAdapter.GetByName(name);
+            var show = _showRepository.GetByName(name);
 
             //Assert
             Assert.NotNull(show);
@@ -60,7 +59,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             };
 
             //Act
-            var success = _showAdapter.Save(show);
+            var success = _showRepository.Save(show);
 
             //Assert
             Assert.True(success);
@@ -73,7 +72,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var show = new Show();
 
             //Act
-            var success = _showAdapter.Save(show);
+            var success = _showRepository.Save(show);
 
             //Assert
             Assert.False(success);
