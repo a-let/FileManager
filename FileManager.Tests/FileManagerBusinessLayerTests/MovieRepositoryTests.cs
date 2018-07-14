@@ -1,15 +1,14 @@
 ﻿using Xunit;
 
-using FileManager.BusinessLayer.Interfaces;
 using FileManager.BusinessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Tests.Mocks;
 
 namespace FileManager.Tests.FileManagerBusinessLayerTests
 {
-    public class MovieAdapterTests
+    public class MovieRepositoryTests
     {
-        private readonly IFileManagerObjectRepository<Movie> _movieRepository = new MovieRepository(new MockFileManagerDb(typeof(Movie)));
+        private readonly MovieRepository _movieRepository = new MovieRepository(new MockFileManagerDb(typeof(Movie)));
 
         [Fact]
         public void Get_ThenMovieListIsNotEmpty()

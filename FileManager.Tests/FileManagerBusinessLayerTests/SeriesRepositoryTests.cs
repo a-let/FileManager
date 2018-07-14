@@ -1,15 +1,14 @@
 ﻿using Xunit;
 
-using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
 using FileManager.Tests.Mocks;
 using FileManager.BusinessLayer.Repositories;
 
 namespace FileManager.Tests.FileManagerBusinessLayerTests
 {
-    public class SeriesAdapterTests
+    public class SeriesRepositoryTests
     {
-        private readonly IFileManagerObjectRepository<Series> _seriesRepository = new SeriesRepository(new MockFileManagerDb(typeof(Series)));
+        private readonly SeriesRepository _seriesRepository = new SeriesRepository(new MockFileManagerDb(typeof(Series)));
 
         [Fact]
         public void GetById_GivenValidId_ThenSeriesIsNotNull()

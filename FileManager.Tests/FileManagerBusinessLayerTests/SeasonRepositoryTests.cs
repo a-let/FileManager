@@ -1,15 +1,14 @@
 ﻿using Xunit;
 
-using FileManager.BusinessLayer.Interfaces;
 using FileManager.BusinessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Tests.Mocks;
 
 namespace FileManager.Tests.FileManagerBusinessLayerTests
 {
-    public class SeasonAdapterTests
+    public class SeasonRepositoryTests
     {
-        private readonly IFileManagerObjectRepository<Season> _seasonRepository = new SeasonRepository(new MockFileManagerDb(typeof(Season)), new EpisodeRepository(new MockFileManagerDb(typeof(Episode))));
+        private readonly SeasonRepository _seasonRepository = new SeasonRepository(new MockFileManagerDb(typeof(Season)), new EpisodeRepository(new MockFileManagerDb(typeof(Episode))));
 
         [Fact]
         public void GetById_GivenValidId_ThenSeasonIsNotNull()
