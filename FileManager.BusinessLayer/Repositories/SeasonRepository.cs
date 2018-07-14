@@ -10,12 +10,12 @@ namespace FileManager.BusinessLayer.Repositories
     public class SeasonRepository : IFileManagerObjectRepository<Season>
     {
         private readonly IFileManagerDb _fileManagerDb;
-        private readonly IFileManagerObjectRepository<Episode> _episodeAdapter;
+        private readonly IFileManagerObjectRepository<Episode> _episodeRepository;
 
-        public SeasonRepository(IFileManagerDb fileManagerDb, IFileManagerObjectRepository<Episode> episodeAdapter)
+        public SeasonRepository(IFileManagerDb fileManagerDb, IFileManagerObjectRepository<Episode> episodeRepository)
         {
             _fileManagerDb = fileManagerDb;
-            _episodeAdapter = episodeAdapter;
+            _episodeRepository = episodeRepository;
         }
 
         public IEnumerable<Season> Get()
@@ -121,7 +121,7 @@ namespace FileManager.BusinessLayer.Repositories
             SeasonId = (int)reader["SeasonId"],
             ShowId = (int)reader["ShowId"],
             SeasonNumber = (int)reader["SeasonNumber"],
-            EpisodeList = _episodeAdapter.GetByParentId((int)reader["SeasonId"]),
+            EpisodeList = _episodeRepository.GetByParentId((int)reader["SeasonId"]),
             Path = (string)reader["FilePath"]
         };
     }

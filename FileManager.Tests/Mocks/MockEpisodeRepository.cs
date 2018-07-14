@@ -4,7 +4,7 @@ using FileManager.Models;
 
 namespace FileManager.Tests.Mocks
 {
-    public class MockEpisodeAdapter : IFileManagerObjectRepository<Episode>
+    public class MockEpisodeRepository : IFileManagerObjectRepository<Episode>
     {
         public IEnumerable<Episode> Get()
         {

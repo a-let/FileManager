@@ -11,7 +11,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class MovieControllerServiceTests
     {
-        private readonly MovieControllerService _movieControllerService = new MovieControllerService(new MockMovieAdapter());
+        private readonly MovieControllerService _movieControllerService = new MovieControllerService(new MockMovieRepository());
 
         [Fact]
         public void GetMovieById_GivenInvalidId_ThenThrowsArgumentException()

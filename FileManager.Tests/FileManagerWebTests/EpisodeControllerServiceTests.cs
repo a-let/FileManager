@@ -11,7 +11,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class EpisodeControllerServiceTests
     {
-        private readonly EpisodeControllerService _episodeControllerService = new EpisodeControllerService(new MockEpisodeAdapter());
+        private readonly EpisodeControllerService _episodeControllerService = new EpisodeControllerService(new MockEpisodeRepository());
 
         [Fact]
         public void GetEpisodeById_GivenInvalidId_ThenThrowsArgumentException()

@@ -11,7 +11,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class SeasonControllerServiceTests
     {
-        private readonly SeasonControllerService _seasonControllerService = new SeasonControllerService(new MockSeasonAdapter());
+        private readonly SeasonControllerService _seasonControllerService = new SeasonControllerService(new MockSeasonRepository());
 
         [Fact]
         public void GetSeasonById_GivenInvalidId_ThenThrowsArgumentException()

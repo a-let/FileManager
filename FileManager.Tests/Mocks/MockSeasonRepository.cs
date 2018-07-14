@@ -4,7 +4,7 @@ using FileManager.Models;
 
 namespace FileManager.Tests.Mocks
 {
-    public class MockSeasonAdapter : IFileManagerObjectRepository<Season>
+    public class MockSeasonRepository : IFileManagerObjectRepository<Season>
     {
         public IEnumerable<Season> Get()
         {

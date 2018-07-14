@@ -11,7 +11,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class SeriesControllerServiceTests
     {
-        private readonly SeriesControllerService _seriesControllerService = new SeriesControllerService(new MockSeriesAdapter());
+        private readonly SeriesControllerService _seriesControllerService = new SeriesControllerService(new MockSeriesRepository());
 
         [Fact]
         public void GetSeriesById_GivenInvalidId_ThenThrowsArgumentException()
