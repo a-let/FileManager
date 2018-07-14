@@ -1,7 +1,7 @@
 ﻿using Xunit;
 
-using FileManager.BusinessLayer.Adapters;
 using FileManager.BusinessLayer.Interfaces;
+using FileManager.BusinessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Tests.Mocks;
 
@@ -9,7 +9,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
 {
     public class EpisodeAdapterTests
     {
-        private readonly IFileManagerObjectAdapter<Episode> _episodeAdapter = new EpisodeAdapter(new MockFileManagerDb(typeof(Episode)));
+        private readonly IFileManagerObjectRepository<Episode> _episodeRepository = new EpisodeRepository(new MockFileManagerDb(typeof(Episode)));
 
         [Fact]
         public void GetById_GivenValidId_ThenEpisodeIsNotNull()
@@ -18,7 +18,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var id = 1;
 
             //Act
-            var episode = _episodeAdapter.GetById(id);
+            var episode = _episodeRepository.GetById(id);
 
             //Assert
             Assert.NotNull(episode);
@@ -28,7 +28,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
         public void Get_ThenEpisodeListIsNotEmpty()
         {
             //Arrange, Act
-            var episodeList = _episodeAdapter.Get();
+            var episodeList = _episodeRepository.Get();
 
             //Assert
             Assert.NotEmpty(episodeList);
@@ -41,7 +41,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var name = "Test Name";
 
             //Act
-            var episode = _episodeAdapter.GetByName(name);
+            var episode = _episodeRepository.GetByName(name);
 
             //Assert
             Assert.NotNull(episode);
@@ -62,7 +62,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             };
 
             //Act
-            var success = _episodeAdapter.Save(episode);
+            var success = _episodeRepository.Save(episode);
 
             //Assert
             Assert.True(success);
@@ -80,7 +80,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             };
 
             //Act
-            var success = _episodeAdapter.Save(episode);
+            var success = _episodeRepository.Save(episode);
 
             //Assert
             Assert.False(success);
@@ -93,7 +93,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var id = 1;
 
             //Act
-            var episodeList = _episodeAdapter.GetByParentId(id);
+            var episodeList = _episodeRepository.GetByParentId(id);
 
             //Assert
             Assert.NotEmpty(episodeList);

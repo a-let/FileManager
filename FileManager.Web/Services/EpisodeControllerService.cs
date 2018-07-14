@@ -7,11 +7,11 @@ namespace FileManager.Web.Services
 {
     public class EpisodeControllerService : IEpisodeControllerService
     {
-        private readonly IFileManagerObjectAdapter<Episode> _episodeAdapter;
+        private readonly IFileManagerObjectRepository<Episode> _episodeRepository;
 
-        public EpisodeControllerService(IFileManagerObjectAdapter<Episode> episodeAdapter)
+        public EpisodeControllerService(IFileManagerObjectRepository<Episode> episodeRepository)
         {
-            _episodeAdapter = episodeAdapter;
+            _episodeRepository = episodeRepository;
         }
 
         public Episode GetEpisodeById(int id)
@@ -19,12 +19,12 @@ namespace FileManager.Web.Services
             if (id <= 0)
                 throw new ArgumentException("Invalid EpisodeId");
 
-            return _episodeAdapter.GetById(id);
+            return _episodeRepository.GetById(id);
         }
 
         public IEnumerable<Episode> GetEpisodes()
         {
-            return _episodeAdapter.Get();
+            return _episodeRepository.Get();
         }
 
         public Episode GetEpisodeByName(string name)
@@ -32,7 +32,7 @@ namespace FileManager.Web.Services
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException();
 
-            return _episodeAdapter.GetByName(name);
+            return _episodeRepository.GetByName(name);
         }
 
         public bool SaveEpisode(Episode episode)
@@ -40,7 +40,7 @@ namespace FileManager.Web.Services
             if (episode == null)
                 throw new ArgumentNullException(nameof(episode));
 
-            return _episodeAdapter.Save(episode);
+            return _episodeRepository.Save(episode);
         }
 
         public IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId)
@@ -48,7 +48,7 @@ namespace FileManager.Web.Services
             if (seasonId <= 0)
                 throw new ArgumentException("Invalid SeasonId");
 
-            return _episodeAdapter.GetByParentId(seasonId);
+            return _episodeRepository.GetByParentId(seasonId);
         }
     }
 }

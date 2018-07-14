@@ -7,11 +7,11 @@ namespace FileManager.Web.Services
 {
     public class ShowControllerService : IShowControllerService
     {
-        private readonly IFileManagerObjectAdapter<Show> _showAdapter;
+        private readonly IFileManagerObjectRepository<Show> _showRepository;
 
-        public ShowControllerService(IFileManagerObjectAdapter<Show> showAdapter)
+        public ShowControllerService(IFileManagerObjectRepository<Show> showRepository)
         {
-            _showAdapter = showAdapter;
+            _showRepository = showRepository;
         }
 
         public Show GetShowById(int id)
@@ -19,7 +19,7 @@ namespace FileManager.Web.Services
             if (id <= 0)
                 throw new ArgumentException("Invalid ShowId");
 
-            return _showAdapter.GetById(id);
+            return _showRepository.GetById(id);
         }
 
         public Show GetShowByName(string name)
@@ -27,12 +27,12 @@ namespace FileManager.Web.Services
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            return _showAdapter.GetByName(name);
+            return _showRepository.GetByName(name);
         }
 
         public IEnumerable<Show> GetShows()
         {
-            return _showAdapter.Get();
+            return _showRepository.Get();
         }
 
         public bool SaveShow(Show show)
@@ -40,7 +40,7 @@ namespace FileManager.Web.Services
             if (show == null)
                 throw new ArgumentNullException(nameof(show));
 
-            return _showAdapter.Save(show);
+            return _showRepository.Save(show);
         }
     }
 }

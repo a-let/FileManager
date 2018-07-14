@@ -7,11 +7,11 @@ namespace FileManager.Web.Services
 {
     public class MovieControllerService : IMovieControllerService
     {
-        private readonly IFileManagerObjectAdapter<Movie> _movieAdapter;
+        private readonly IFileManagerObjectRepository<Movie> _movieRepository;
 
-        public MovieControllerService(IFileManagerObjectAdapter<Movie> movieAdapter)
+        public MovieControllerService(IFileManagerObjectRepository<Movie> movieRepository)
         {
-            _movieAdapter = movieAdapter;
+            _movieRepository = movieRepository;
         }
 
         public Movie GetMovieById(int id)
@@ -19,7 +19,7 @@ namespace FileManager.Web.Services
             if (id <= 0)
                 throw new ArgumentException("Invalid MovieId");
 
-            return _movieAdapter.GetById(id);
+            return _movieRepository.GetById(id);
         }
 
         public Movie GetMovieByName(string name)
@@ -27,12 +27,12 @@ namespace FileManager.Web.Services
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            return _movieAdapter.GetByName(name);
+            return _movieRepository.GetByName(name);
         }
 
         public IEnumerable<Movie> GetMovies()
         {
-            return _movieAdapter.Get();
+            return _movieRepository.Get();
         }
 
         public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId)
@@ -40,7 +40,7 @@ namespace FileManager.Web.Services
             if (seriesId < 0)
                 throw new ArgumentException("Invalid SeriesId");
 
-            return _movieAdapter.GetByParentId(seriesId);
+            return _movieRepository.GetByParentId(seriesId);
         }
 
         public bool SaveMovie(Movie movie)
@@ -48,7 +48,7 @@ namespace FileManager.Web.Services
             if (movie == null)
                 throw new ArgumentNullException(nameof(movie));
 
-            return _movieAdapter.Save(movie);
+            return _movieRepository.Save(movie);
         }
     }
 }

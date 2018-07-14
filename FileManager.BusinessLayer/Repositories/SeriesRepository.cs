@@ -4,13 +4,13 @@ using System.Data;
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
 
-namespace FileManager.BusinessLayer.Adapters
+namespace FileManager.BusinessLayer.Repositories
 {
-    public class SeriesAdapter : IFileManagerObjectAdapter<Series>
+    public class SeriesRepository : IFileManagerObjectRepository<Series>
     {
         private readonly IFileManagerDb _fileManagerDb;
 
-        public SeriesAdapter(IFileManagerDb fileManagerDb)
+        public SeriesRepository(IFileManagerDb fileManagerDb)
         {
             _fileManagerDb = fileManagerDb;
         }

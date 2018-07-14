@@ -4,13 +4,13 @@ using System.Data;
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
 
-namespace FileManager.BusinessLayer.Adapters
+namespace FileManager.BusinessLayer.Repositories
 {
-    public class MovieAdapter : IFileManagerObjectAdapter<Movie>
+    public class MovieRepository : IFileManagerObjectRepository<Movie>
     {
         private readonly IFileManagerDb _fileManagerDb;
 
-        public MovieAdapter(IFileManagerDb fileManagerDb)
+        public MovieRepository(IFileManagerDb fileManagerDb)
         {
             _fileManagerDb = fileManagerDb;
         }

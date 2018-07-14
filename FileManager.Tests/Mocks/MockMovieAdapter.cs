@@ -4,7 +4,7 @@ using FileManager.Models;
 
 namespace FileManager.Tests.Mocks
 {
-    public class MockMovieAdapter : IFileManagerObjectAdapter<Movie>
+    public class MockMovieAdapter : IFileManagerObjectRepository<Movie>
     {
         public IEnumerable<Movie> Get()
         {

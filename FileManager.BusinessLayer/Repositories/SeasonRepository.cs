@@ -5,14 +5,14 @@ using System.Data;
 using FileManager.BusinessLayer.Interfaces;
 using FileManager.Models;
 
-namespace FileManager.BusinessLayer.Adapters
+namespace FileManager.BusinessLayer.Repositories
 {
-    public class SeasonAdapter : IFileManagerObjectAdapter<Season>
+    public class SeasonRepository : IFileManagerObjectRepository<Season>
     {
         private readonly IFileManagerDb _fileManagerDb;
-        private readonly IFileManagerObjectAdapter<Episode> _episodeAdapter;
+        private readonly IFileManagerObjectRepository<Episode> _episodeAdapter;
 
-        public SeasonAdapter(IFileManagerDb fileManagerDb, IFileManagerObjectAdapter<Episode> episodeAdapter)
+        public SeasonRepository(IFileManagerDb fileManagerDb, IFileManagerObjectRepository<Episode> episodeAdapter)
         {
             _fileManagerDb = fileManagerDb;
             _episodeAdapter = episodeAdapter;

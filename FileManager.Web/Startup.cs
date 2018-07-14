@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 
 using FileManager.BusinessLayer;
-using FileManager.BusinessLayer.Adapters;
 using FileManager.BusinessLayer.Interfaces;
+using FileManager.BusinessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Web.Services;
 
@@ -28,15 +28,15 @@ namespace FileManager.Web
             services
                 .AddScoped<IFileManagerDb, FileManagerDb>()
                 .AddScoped<IEpisodeControllerService, EpisodeControllerService>()
-                .AddScoped<IFileManagerObjectAdapter<Episode>, EpisodeAdapter>()
+                .AddScoped<IFileManagerObjectRepository<Episode>, EpisodeRepository>()
                 .AddScoped<ISeasonControllerService, SeasonControllerService>()
-                .AddScoped<IFileManagerObjectAdapter<Season>, SeasonAdapter>()
+                .AddScoped<IFileManagerObjectRepository<Season>, SeasonRepository>()
                 .AddScoped<ISeriesControllerService, SeriesControllerService>()
-                .AddScoped<IFileManagerObjectAdapter<Series>, SeriesAdapter>()
+                .AddScoped<IFileManagerObjectRepository<Series>, SeriesRepository>()
                 .AddScoped<IShowControllerService, ShowControllerService>()
-                .AddScoped<IFileManagerObjectAdapter<Show>, ShowAdapter>()
+                .AddScoped<IFileManagerObjectRepository<Show>, ShowRepository>()
                 .AddScoped<IMovieControllerService, MovieControllerService>()
-                .AddScoped<IFileManagerObjectAdapter<Movie>, MovieAdapter>()
+                .AddScoped<IFileManagerObjectRepository<Movie>, MovieRepository>()
                 .AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" }))
                 .AddMvc();
         }

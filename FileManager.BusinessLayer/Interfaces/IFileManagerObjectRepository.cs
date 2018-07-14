@@ -2,7 +2,7 @@
 
 namespace FileManager.BusinessLayer.Interfaces
 {
-    public interface IFileManagerObjectAdapter<T>
+    public interface IFileManagerObjectRepository<T>
     {
         T GetById(int id);
         IEnumerable<T> Get();
