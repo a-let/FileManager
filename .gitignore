@@ -51,3 +51,5 @@
 /FileManager.Services/bin/Debug/netcoreapp2.1
 /FileManager.Tests/bin/Debug/netcoreapp2.1
 /FileManager.Web/bin/Debug/netcoreapp2.1
+/.vs/ProjectSettings.json
+/.vs/slnx.sqlite
