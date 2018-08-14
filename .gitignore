@@ -53,3 +53,5 @@
 /FileManager.Web/bin/Debug/netcoreapp2.1
 /.vs/ProjectSettings.json
 /.vs/slnx.sqlite
+/FileManager.DataAccessLayer/obj
+/.vs/VSWorkspaceState.json
