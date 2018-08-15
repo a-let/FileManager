@@ -55,3 +55,4 @@
 /.vs/slnx.sqlite
 /FileManager.DataAccessLayer/obj
 /.vs/VSWorkspaceState.json
+/FileManager.DataAccessLayer/bin/Debug/netcoreapp2.1

@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FileManager.DataAccessLayer
 {
@@ -6,7 +7,7 @@ namespace FileManager.DataAccessLayer
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var services = Setup.CreateServices();
         }
     }
 }
