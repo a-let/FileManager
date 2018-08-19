@@ -10,6 +10,8 @@ using FileManager.BusinessLayer.Interfaces;
 using FileManager.BusinessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Web.Services;
+using FileManager.DataAccessLayer;
+using Microsoft.EntityFrameworkCore;
 
 namespace FileManager.Web
 {
@@ -38,6 +40,7 @@ namespace FileManager.Web
                 .AddScoped<IMovieControllerService, MovieControllerService>()
                 .AddScoped<IFileManagerObjectRepository<Movie>, MovieRepository>()
                 .AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" }))
+                .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b=> b.MigrationsAssembly("FileManager.DataAccessLayer")))
                 .AddMvc();
         }
 

@@ -9,9 +9,10 @@ namespace FileManager.DataAccessLayer
 {
     public class FileManagerContext : DbContext
     {
-        public FileManagerContext(DbContextOptions<FileManagerContext> options) 
+        public FileManagerContext(DbContextOptions<FileManagerContext> options)
             : base(options) { }
 
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Series> Series { get; set; }
+    }
 }

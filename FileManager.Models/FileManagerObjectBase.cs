@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 
 namespace FileManager.Models
@@ -7,6 +8,7 @@ namespace FileManager.Models
     public abstract class FileManagerObjectBase : IChangeTracking, INotifyPropertyChanged
     {        
         private bool _isChanged = false;
+        [NotMapped]
         public bool IsChanged
         {
             get => _isChanged;
