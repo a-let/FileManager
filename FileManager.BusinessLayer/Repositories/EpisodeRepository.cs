@@ -140,7 +140,7 @@ namespace FileManager.BusinessLayer.Repositories
             SeasonId = (int)reader["SeasonId"],
             Name = (string)reader["EpisodeName"],
             EpisodeNumber = (int)reader["EpisodeNumber"],
-            Format = (string)reader["EpisodeFormat"],
+            //Format = (string)reader["EpisodeFormat"],
             Path = (string)reader["FilePath"]
         };
     }

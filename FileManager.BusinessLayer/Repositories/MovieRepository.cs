@@ -141,7 +141,7 @@ namespace FileManager.BusinessLayer.Repositories
             SeriesId = (int)reader["SeriesId"],
             Name = (string)reader["MovieName"],
             IsSeries = (bool)reader["IsSeries"],
-            Format = (string)reader["MovieFormat"],
+            //Format = (string)reader["MovieFormat"],
             Category = (string)reader["MovieCategory"],
             Path = (string)reader["FilePath"]
         };

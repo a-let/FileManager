@@ -1,9 +1,5 @@
 ﻿using FileManager.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FileManager.DataAccessLayer
 {
@@ -12,6 +8,9 @@ namespace FileManager.DataAccessLayer
         public FileManagerContext(DbContextOptions<FileManagerContext> options)
             : base(options) { }
 
+        public DbSet<Episode> Episodes { get; set; }
+        public DbSet<Season> Seasons { get; set; }
+        public DbSet<Show> Shows { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Series> Series { get; set; }
     }

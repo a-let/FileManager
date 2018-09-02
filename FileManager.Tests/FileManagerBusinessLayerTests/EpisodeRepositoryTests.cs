@@ -3,6 +3,7 @@
 using FileManager.BusinessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Tests.Mocks;
+using FileManager.Models.Constants;
 
 namespace FileManager.Tests.FileManagerBusinessLayerTests
 {
@@ -56,7 +57,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
                 SeasonId = 1,
                 Name = "Test",
                 EpisodeNumber = 1,
-                Format = "Test",
+                Format = FileFormatTypes.MP4,
                 Path = "Test"
             };
 
@@ -74,7 +75,7 @@ namespace FileManager.Tests.FileManagerBusinessLayerTests
             var episode = new Episode
             {
                 EpisodeNumber = 1,
-                Format = "Test",
+                Format = FileFormatTypes.MP4,
                 Path = "Test"
             };
 
