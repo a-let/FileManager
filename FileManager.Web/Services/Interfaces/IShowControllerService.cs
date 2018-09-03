@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using FileManager.Models;
 
-namespace FileManager.Web.Services
+namespace FileManager.Web.Services.Interfaces
 {
     public interface IShowControllerService
     {

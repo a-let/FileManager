@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FileManager.Models;
+using FileManager.Web.Services.Interfaces;
+
 using Microsoft.AspNetCore.Mvc;
-using FileManager.Models;
-using FileManager.Web.Services;
+
+using System;
+using System.Collections.Generic;
 
 namespace FileManager.Web.Controllers
 {
@@ -43,10 +45,10 @@ namespace FileManager.Web.Controllers
         
         // POST: api/Episode
         [HttpPost]
-        public bool Post([FromBody]Episode episode)
+        public void Post([FromBody]Episode episode)
         {
-            var success = _episodeControllerService.SaveEpisode(episode);
-            return success;
+            _episodeControllerService.SaveEpisode(episode);
+            // return success;
         }
         
         // GET: api/Episode/seasonid/5

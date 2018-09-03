@@ -10,6 +10,7 @@ using FileManager.BusinessLayer.Interfaces;
 using FileManager.BusinessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Web.Services;
+using FileManager.Web.Services.Interfaces;
 using FileManager.DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,7 +31,6 @@ namespace FileManager.Web
             services
                 .AddScoped<IFileManagerDb, FileManagerDb>()
                 .AddScoped<IEpisodeControllerService, EpisodeControllerService>()
-                .AddScoped<IFileManagerObjectRepository<Episode>, EpisodeRepository>()
                 .AddScoped<ISeasonControllerService, SeasonControllerService>()
                 .AddScoped<IFileManagerObjectRepository<Season>, SeasonRepository>()
                 .AddScoped<ISeriesControllerService, SeriesControllerService>()

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using FileManager.Models;
+using FileManager.Web.Services.Interfaces;
+
 using Microsoft.AspNetCore.Mvc;
-using FileManager.Models;
-using FileManager.Web.Services;
+
+using System.Collections.Generic;
 
 namespace FileManager.Web.Controllers
 {

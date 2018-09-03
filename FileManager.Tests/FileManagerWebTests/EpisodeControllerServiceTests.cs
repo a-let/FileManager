@@ -1,17 +1,32 @@
-﻿using System;
+﻿using FileManager.Models.Constants;
+using FileManager.Models;
+using FileManager.Web.Services;
+using FileManager.DataAccessLayer;
+
+using Microsoft.EntityFrameworkCore;
+
+using System;
 using System.Collections.Generic;
 
 using Xunit;
 
-using FileManager.Models;
-using FileManager.Tests.Mocks;
-using FileManager.Web.Services;
-
 namespace FileManager.Tests.FileManagerWebTests
 {
-    public class EpisodeControllerServiceTests
+    public class EpisodeControllerServiceTests : IDisposable
     {
-        private readonly EpisodeControllerService _episodeControllerService = new EpisodeControllerService(new MockEpisodeRepository());
+        private readonly FileManagerContext _context;
+        private readonly EpisodeControllerService _episodeControllerService;
+
+        public EpisodeControllerServiceTests()
+        {
+            var options = new DbContextOptionsBuilder<FileManagerContext>()
+                .UseInMemoryDatabase(databaseName: "EpisodeControllerServiceTests")
+                .Options;
+
+            _context = new FileManagerContext(options);
+
+            _episodeControllerService = new EpisodeControllerService(_context);
+        }
 
         [Fact]
         public void GetEpisodeById_GivenInvalidId_ThenThrowsArgumentException()
@@ -68,6 +83,17 @@ namespace FileManager.Tests.FileManagerWebTests
             //Arrange
             var name = "Test";
 
+            _context.Episodes.Add(new Episode
+            {
+                EpisodeNumber = 1,
+                SeasonId = 1,
+                Format = FileFormatTypes.MKV,
+                Name = name,
+                Path = "Some Path"
+            });
+
+            _context.SaveChanges();
+
             //Act
             var episode = _episodeControllerService.GetEpisodeByName(name);
 
@@ -89,19 +115,28 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveEpisode_GivenEpisode_ThenReturnsTrue()
+        public void SaveEpisode_GivenEpisode_ThenDoesNotThrow()
         {
             //Arrange
             var episode = new Episode
             {
-
+                EpisodeNumber = 1,
+                SeasonId = 1,
+                Format = FileFormatTypes.MKV,
+                Name = "Test Name",
+                Path = "Some Path"
             };
 
             //Act
-            var success = _episodeControllerService.SaveEpisode(episode);
+            var exception = Record.Exception(() => _episodeControllerService.SaveEpisode(episode));
 
             //Assert
-            Assert.True(success);
+            Assert.Null(exception);
+        }
+
+        public void Dispose()
+        {
+            _context.Dispose();
         }
     }
 }

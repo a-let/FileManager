@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FileManager.DataAccessLayer;
 using FileManager.Models;
-using FileManager.BusinessLayer.Interfaces;
+using FileManager.Web.Services.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FileManager.Web.Services
 {
     public class EpisodeControllerService : IEpisodeControllerService
     {
-        private readonly IFileManagerObjectRepository<Episode> _episodeRepository;
+        private readonly FileManagerContext _fileManagerContext;
 
-        public EpisodeControllerService(IFileManagerObjectRepository<Episode> episodeRepository)
+        public EpisodeControllerService(FileManagerContext fileManagerContext)
         {
-            _episodeRepository = episodeRepository;
+            _fileManagerContext = fileManagerContext;
         }
 
         public Episode GetEpisodeById(int id)
@@ -19,12 +22,12 @@ namespace FileManager.Web.Services
             if (id <= 0)
                 throw new ArgumentException("Invalid EpisodeId");
 
-            return _episodeRepository.GetById(id);
+            return _fileManagerContext.Episodes.Find(id);
         }
 
         public IEnumerable<Episode> GetEpisodes()
         {
-            return _episodeRepository.Get();
+            return _fileManagerContext.Episodes;
         }
 
         public Episode GetEpisodeByName(string name)
@@ -32,23 +35,26 @@ namespace FileManager.Web.Services
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException();
 
-            return _episodeRepository.GetByName(name);
+            return _fileManagerContext.Episodes.Single(e => e.Name.Equals(name));
         }
 
-        public bool SaveEpisode(Episode episode)
+        public void SaveEpisode(Episode episode)
         {
             if (episode == null)
                 throw new ArgumentNullException(nameof(episode));
 
-            return _episodeRepository.Save(episode);
+            if (episode.EpisodeId == 0)
+                _fileManagerContext.Episodes.Add(episode);
+
+            _fileManagerContext.SaveChanges();
         }
 
-        public IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId)
+        public IQueryable<Episode> GetEpisodesBySeasonId(int seasonId)
         {
             if (seasonId <= 0)
                 throw new ArgumentException("Invalid SeasonId");
 
-            return _episodeRepository.GetByParentId(seasonId);
+            return _fileManagerContext.Episodes.Where(e => e.SeasonId == seasonId);
         }
     }
 }

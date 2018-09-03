@@ -1,5 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+
+using System;
 
 namespace FileManager.Web.Controllers
 {

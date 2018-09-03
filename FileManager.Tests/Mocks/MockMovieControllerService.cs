@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-using FileManager.Models;
-using FileManager.Web.Services;
+﻿using FileManager.Models;
+using FileManager.Web.Services.Interfaces;
+using System.Collections.Generic;
 
 namespace FileManager.Tests.Mocks
 {
