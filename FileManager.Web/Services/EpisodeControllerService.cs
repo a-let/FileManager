@@ -45,6 +45,16 @@ namespace FileManager.Web.Services
 
             if (episode.EpisodeId == 0)
                 _fileManagerContext.Episodes.Add(episode);
+            else
+            {
+                var e = _fileManagerContext.Episodes.Find(episode.EpisodeId);
+                e.EpisodeId = episode.EpisodeId;
+                e.SeasonId = episode.SeasonId;
+                e.Name = episode.Name;
+                e.EpisodeNumber = episode.EpisodeNumber;
+                e.Format = episode.Format;
+                e.Path = episode.Path;
+            }
 
             _fileManagerContext.SaveChanges();
         }

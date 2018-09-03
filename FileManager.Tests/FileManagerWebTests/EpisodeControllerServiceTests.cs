@@ -47,6 +47,18 @@ namespace FileManager.Tests.FileManagerWebTests
             //Arrange
             var id = 1;
 
+            _context.Episodes.Add(new Episode
+            {
+                EpisodeId = id,
+                EpisodeNumber = 1,
+                SeasonId = 1,
+                Format = FileFormatTypes.MKV,
+                Name = "Test",
+                Path = "Some Path"
+            });
+
+            _context.SaveChanges();
+
             //Act
             var episode = _episodeControllerService.GetEpisodeById(id);
 
@@ -99,6 +111,7 @@ namespace FileManager.Tests.FileManagerWebTests
 
             //Assert
             Assert.IsAssignableFrom<Episode>(episode);
+            Assert.Equal(name, episode.Name);
         }
 
         [Fact]
@@ -115,12 +128,12 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveEpisode_GivenEpisode_ThenDoesNotThrow()
+        public void SaveEpisode_GivenNewEpisode_ThenDoesNotThrow()
         {
             //Arrange
             var episode = new Episode
             {
-                EpisodeNumber = 1,
+                EpisodeNumber = 0,
                 SeasonId = 1,
                 Format = FileFormatTypes.MKV,
                 Name = "Test Name",
@@ -136,6 +149,7 @@ namespace FileManager.Tests.FileManagerWebTests
 
         public void Dispose()
         {
+            _context.Database.EnsureDeleted();
             _context.Dispose();
         }
     }

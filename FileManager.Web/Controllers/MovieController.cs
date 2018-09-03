@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FileManager.Web.Controllers
 {
@@ -45,15 +46,14 @@ namespace FileManager.Web.Controllers
         
         // POST: api/Movie
         [HttpPost]
-        public bool Post([FromBody]Movie movie)
+        public void Post([FromBody]Movie movie)
         {
-            var success = _movieControllerService.SaveMovie(movie);
-            return success;
+             _movieControllerService.SaveMovie(movie);
         }
 
         // GET: api/Movie/seriesId/5
         [HttpGet("seriesId/{seriesId}")]
-        public IEnumerable<Movie> GetBySeriesId(int seriesId)
+        public IQueryable<Movie> GetBySeriesId(int seriesId)
         {
             var movies = _movieControllerService.GetMoviesBySeriesId(seriesId);
             return movies;

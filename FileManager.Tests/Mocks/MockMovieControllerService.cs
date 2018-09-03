@@ -1,6 +1,7 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FileManager.Tests.Mocks
 {
@@ -27,14 +28,14 @@ namespace FileManager.Tests.Mocks
             return new List<Movie>();
         }
 
-        public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId)
+        public IQueryable<Movie> GetMoviesBySeriesId(int seriesId)
         {
-            return new List<Movie>();
+            return new List<Movie>().AsQueryable();
         }
 
-        public bool SaveMovie(Movie movie)
+        public void SaveMovie(Movie movie)
         {
-            return movie != null;
+            
         }
     }
 }
