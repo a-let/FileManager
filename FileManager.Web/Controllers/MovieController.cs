@@ -46,9 +46,10 @@ namespace FileManager.Web.Controllers
         
         // POST: api/Movie
         [HttpPost]
-        public void Post([FromBody]Movie movie)
+        public bool Post([FromBody]Movie movie)
         {
-             _movieControllerService.SaveMovie(movie);
+            var success = _movieControllerService.SaveMovie(movie);
+            return success;
         }
 
         // GET: api/Movie/seriesId/5

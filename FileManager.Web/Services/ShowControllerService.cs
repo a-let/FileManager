@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using FileManager.Models;
-using FileManager.BusinessLayer.Interfaces;
+﻿using FileManager.Models;
+using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Web.Services.Interfaces;
+
+using System;
+using System.Collections.Generic;
 
 namespace FileManager.Web.Services
 {
     public class ShowControllerService : IShowControllerService
     {
-        private readonly IFileManagerObjectRepository<Show> _showRepository;
+        private readonly IShowRepository _showRepository;
 
-        public ShowControllerService(IFileManagerObjectRepository<Show> showRepository)
+        public ShowControllerService(IShowRepository showRepository)
         {
             _showRepository = showRepository;
         }
@@ -20,7 +21,7 @@ namespace FileManager.Web.Services
             if (id <= 0)
                 throw new ArgumentException("Invalid ShowId");
 
-            return _showRepository.GetById(id);
+            return _showRepository.GetShowById(id);
         }
 
         public Show GetShowByName(string name)
@@ -28,12 +29,12 @@ namespace FileManager.Web.Services
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            return _showRepository.GetByName(name);
+            return _showRepository.GetShowByName(name);
         }
 
         public IEnumerable<Show> GetShows()
         {
-            return _showRepository.Get();
+            return _showRepository.GetShows();
         }
 
         public bool SaveShow(Show show)
@@ -41,7 +42,7 @@ namespace FileManager.Web.Services
             if (show == null)
                 throw new ArgumentNullException(nameof(show));
 
-            return _showRepository.Save(show);
+            return _showRepository.SaveShow(show);
         }
     }
 }

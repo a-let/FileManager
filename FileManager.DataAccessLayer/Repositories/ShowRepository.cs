@@ -7,33 +7,31 @@ using System.Linq;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
-    public class EpisodeRepository : IEpisodeRepository
+    public class ShowRepository : IShowRepository
     {
         private readonly FileManagerContext _context;
 
-        public EpisodeRepository(FileManagerContext context)
+        public ShowRepository(FileManagerContext context)
         {
             _context = context;
         }
 
-        public Episode GetEpisodeById(int id) => _context.Episodes.Find(id);
+        public Show GetShowById(int id) => _context.Shows.Find(id);
 
-        public Episode GetEpisodeByName(string name) => _context.Episodes.Single(e => e.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        public Show GetShowByName(string name) => _context.Shows.Single(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-        public IEnumerable<Episode> GetEpisodes() => _context.Episodes;
+        public IEnumerable<Show> GetShows() => _context.Shows;
 
-        public IQueryable<Episode> GetEpisodesBySeasonId(int seasonId) => _context.Episodes.Where(e => e.SeasonId == seasonId);
-
-        public bool SaveEpisode(Episode episode)
+        public bool SaveShow(Show show)
         {
             try
             {
-                if (episode.EpisodeId == 0)
-                    _context.Episodes.Add(episode);
+                if (show.ShowId == 0)
+                    _context.Shows.Add(show);
                 else
                 {
-                    var e = _context.Episodes.Find(episode.EpisodeId);
-                    _context.Entry(e).CurrentValues.SetValues(episode);
+                    var s = _context.Shows.Find(show.ShowId);
+                    _context.Entry(s).CurrentValues.SetValues(show);
                 }
 
                 _context.SaveChanges();

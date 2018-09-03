@@ -1,10 +1,11 @@
 ﻿using FileManager.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace FileManager.DataAccessLayer.Interfaces
 {
-    public interface IMovieRepository
+    public interface IMovieRepository : IDisposable
     {
         Movie GetMovieById(int id);
         IEnumerable<Movie> GetMovies();

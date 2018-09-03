@@ -7,33 +7,33 @@ using System.Linq;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
-    public class EpisodeRepository : IEpisodeRepository
+    public class MovieRepository : IMovieRepository
     {
         private readonly FileManagerContext _context;
 
-        public EpisodeRepository(FileManagerContext context)
+        public MovieRepository(FileManagerContext context)
         {
             _context = context;
         }
 
-        public Episode GetEpisodeById(int id) => _context.Episodes.Find(id);
+        public Movie GetMovieById(int id) => _context.Movies.Find(id);
 
-        public Episode GetEpisodeByName(string name) => _context.Episodes.Single(e => e.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        public Movie GetMovieByName(string name) => _context.Movies.Single(m => m.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-        public IEnumerable<Episode> GetEpisodes() => _context.Episodes;
+        public IEnumerable<Movie> GetMovies() => _context.Movies;
 
-        public IQueryable<Episode> GetEpisodesBySeasonId(int seasonId) => _context.Episodes.Where(e => e.SeasonId == seasonId);
+        public IQueryable<Movie> GetMoviesBySeriesId(int seriesId) => _context.Movies.Where(m => m.SeriesId == seriesId);
 
-        public bool SaveEpisode(Episode episode)
+        public bool SaveMovie(Movie movie)
         {
             try
             {
-                if (episode.EpisodeId == 0)
-                    _context.Episodes.Add(episode);
+                if (movie.MovieId == 0)
+                    _context.Movies.Add(movie);
                 else
                 {
-                    var e = _context.Episodes.Find(episode.EpisodeId);
-                    _context.Entry(e).CurrentValues.SetValues(episode);
+                    var m = _context.Movies.Find(movie.MovieId);
+                    _context.Entry(m).CurrentValues.SetValues(movie);
                 }
 
                 _context.SaveChanges();

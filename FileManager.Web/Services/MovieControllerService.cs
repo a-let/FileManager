@@ -1,6 +1,6 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
-using FileManager.DataAccessLayer;
+using FileManager.DataAccessLayer.Interfaces;
 
 using System;
 using System.Collections.Generic;
@@ -10,11 +10,11 @@ namespace FileManager.Web.Services
 {
     public class MovieControllerService : IMovieControllerService
     {
-        private readonly FileManagerContext _fileManagerContext;
+        private readonly IMovieRepository _movieRepository;
 
-        public MovieControllerService(FileManagerContext fileManagerContext)
+        public MovieControllerService(IMovieRepository movieRepository)
         {
-            _fileManagerContext = fileManagerContext;
+            _movieRepository = movieRepository;
         }
 
         public Movie GetMovieById(int id)
@@ -22,7 +22,7 @@ namespace FileManager.Web.Services
             if (id <= 0)
                 throw new ArgumentException("Invalid MovieId");
 
-            return _fileManagerContext.Movies.Find(id);
+            return _movieRepository.GetMovieById(id);
         }
 
         public Movie GetMovieByName(string name)
@@ -30,12 +30,12 @@ namespace FileManager.Web.Services
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            return _fileManagerContext.Movies.Single(m => m.Name.Equals(name));
+            return _movieRepository.GetMovieByName(name);
         }
 
         public IEnumerable<Movie> GetMovies()
         {
-            return _fileManagerContext.Movies;
+            return _movieRepository.GetMovies();
         }
 
         public IQueryable<Movie> GetMoviesBySeriesId(int seriesId)
@@ -43,28 +43,15 @@ namespace FileManager.Web.Services
             if (seriesId < 0)
                 throw new ArgumentException("Invalid SeriesId");
 
-            return _fileManagerContext.Movies.Where(m => m.SeriesId == seriesId);
+            return _movieRepository.GetMoviesBySeriesId(seriesId);
         }
 
-        public void SaveMovie(Movie movie)
+        public bool SaveMovie(Movie movie)
         {
             if (movie == null)
                 throw new ArgumentNullException(nameof(movie));
 
-            if (movie.MovieId == 0)
-                _fileManagerContext.Movies.Add(movie);
-            else
-            {
-                var m = _fileManagerContext.Movies.Find(movie.MovieId);
-                m.SeriesId = movie.SeriesId;
-                m.Name = movie.Name;
-                m.IsSeries = movie.IsSeries;
-                m.Format = movie.Format;
-                m.Category = m.Category;
-                m.Path = movie.Path;
-            }
-
-            _fileManagerContext.SaveChanges();
+            return _movieRepository.SaveMovie(movie);
         }
     }
 }

@@ -1,34 +1,35 @@
-﻿using System.Collections.Generic;
-using FileManager.BusinessLayer.Interfaces;
+﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FileManager.Tests.Mocks
 {
-    public class MockSeasonRepository : IFileManagerObjectRepository<Season>
-    {
-        public IEnumerable<Season> Get()
+    public class MockSeasonRepository : ISeasonRepository
+    { 
+        public IEnumerable<Season> GetSeasons()
         {
             return new List<Season>();
         }
 
-        public Season GetById(int id)
+        public Season GetSeasonById(int id)
         {
             return new Season();
         }
 
-        public Season GetByName(string name)
+        public IQueryable<Season> GetSeasonsByShowId(int showId)
         {
-            return new Season();
+            return new List<Season>().AsQueryable();
         }
 
-        public IEnumerable<Season> GetByParentId(int parentId)
+        public bool SaveSeason(Season season)
         {
-            return new List<Season>();
+            return season != null;
         }
 
-        public bool Save(Season target)
+        public void Dispose()
         {
-            return target != null;
+
         }
     }
 }

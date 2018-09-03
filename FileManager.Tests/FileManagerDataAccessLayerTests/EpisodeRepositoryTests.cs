@@ -26,7 +26,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             _context.Episodes.Add(new Episode
             {
-                EpisodeId = id,
+                EpisodeId = 1,
                 EpisodeNumber = 1,
                 SeasonId = 1,
                 Format = FileFormatTypes.MKV,
@@ -40,18 +40,18 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var episode = _episodeRepository.GetEpisodeById(id);
 
             //Assert
-            Assert.IsAssignableFrom<Episode>(episode);
+            Assert.Equal(id, episode.EpisodeId);
         }
 
         [Fact]
-        public void GetEpisodeById_GivenValidName_ThenEpisodeIsReturned()
+        public void GetEpisodeByName_GivenValidName_ThenEpisodeIsReturned()
         {
             //Arrange
             var name = "Test";
 
             _context.Episodes.Add(new Episode
             {
-                EpisodeId = 1,
+                EpisodeId = 0,
                 SeasonId = 1,
                 Format = FileFormatTypes.MKV,
                 Name = name,
@@ -79,7 +79,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void GetEpisodesBySeasonId_GivenValidSeasonId_THenThrowsArgumentException()
+        public void GetEpisodesBySeasonId_GivenValidSeasonId_ThenEpisodesReturned()
         {
             //Arrange
             var id = 1;

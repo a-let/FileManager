@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using FileManager.Models;
-using FileManager.BusinessLayer.Interfaces;
+﻿using FileManager.Models;
+using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Web.Services.Interfaces;
+
+using System;
+using System.Collections.Generic;
 
 namespace FileManager.Web.Services
 {
     public class SeasonControllerService : ISeasonControllerService
     {
-        private readonly IFileManagerObjectRepository<Season> _seasonRepository;
+        private readonly ISeasonRepository _seasonRepository;
 
-        public SeasonControllerService(IFileManagerObjectRepository<Season> seasonRepository)
+        public SeasonControllerService(ISeasonRepository seasonRepository)
         {
             _seasonRepository = seasonRepository;
         }
@@ -20,12 +21,12 @@ namespace FileManager.Web.Services
             if (id <= 0)
                 throw new ArgumentException("Invalid SeasonId");
 
-            return _seasonRepository.GetById(id);
+            return _seasonRepository.GetSeasonById(id);
         }
 
         public IEnumerable<Season> GetSeasons()
         {
-            return _seasonRepository.Get();
+            return _seasonRepository.GetSeasons();
         }
 
         public IEnumerable<Season> GetSeasonsByShowId(int showId)
@@ -33,7 +34,7 @@ namespace FileManager.Web.Services
             if (showId <= 0)
                 throw new ArgumentException("Invalid ShowId");
 
-            return _seasonRepository.GetByParentId(showId);
+            return _seasonRepository.GetSeasonsByShowId(showId);
         }
 
         public bool SaveSeason(Season season)
@@ -41,7 +42,7 @@ namespace FileManager.Web.Services
             if (season == null)
                 throw new ArgumentNullException(nameof(season));
 
-            return _seasonRepository.Save(season);
+            return _seasonRepository.SaveSeason(season);
         }
     }
 }

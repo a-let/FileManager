@@ -9,7 +9,7 @@ namespace FileManager.Web.Services.Interfaces
         Movie GetMovieById(int id);
         IEnumerable<Movie> GetMovies();
         Movie GetMovieByName(string name);        
-        void SaveMovie(Movie movie);
+        bool SaveMovie(Movie movie);
         IQueryable<Movie> GetMoviesBySeriesId(int seriesId);
     }
 }
