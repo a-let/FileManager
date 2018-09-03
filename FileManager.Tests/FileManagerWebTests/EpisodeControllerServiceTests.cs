@@ -1,9 +1,7 @@
 ﻿using FileManager.Models.Constants;
 using FileManager.Models;
+using FileManager.Tests.Mocks;
 using FileManager.Web.Services;
-using FileManager.DataAccessLayer;
-
-using Microsoft.EntityFrameworkCore;
 
 using System;
 using System.Collections.Generic;
@@ -12,21 +10,9 @@ using Xunit;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
-    public class EpisodeControllerServiceTests : IDisposable
+    public class EpisodeControllerServiceTests
     {
-        private readonly FileManagerContext _context;
-        private readonly EpisodeControllerService _episodeControllerService;
-
-        public EpisodeControllerServiceTests()
-        {
-            var options = new DbContextOptionsBuilder<FileManagerContext>()
-                .UseInMemoryDatabase(databaseName: "EpisodeControllerServiceTests")
-                .Options;
-
-            _context = new FileManagerContext(options);
-
-            _episodeControllerService = new EpisodeControllerService(_context);
-        }
+        private readonly EpisodeControllerService _episodeControllerService = new EpisodeControllerService(new MockEpisodeRepository());
 
         [Fact]
         public void GetEpisodeById_GivenInvalidId_ThenThrowsArgumentException()
@@ -46,18 +32,6 @@ namespace FileManager.Tests.FileManagerWebTests
         {
             //Arrange
             var id = 1;
-
-            _context.Episodes.Add(new Episode
-            {
-                EpisodeId = id,
-                EpisodeNumber = 1,
-                SeasonId = 1,
-                Format = FileFormatTypes.MKV,
-                Name = "Test",
-                Path = "Some Path"
-            });
-
-            _context.SaveChanges();
 
             //Act
             var episode = _episodeControllerService.GetEpisodeById(id);
@@ -95,23 +69,11 @@ namespace FileManager.Tests.FileManagerWebTests
             //Arrange
             var name = "Test";
 
-            _context.Episodes.Add(new Episode
-            {
-                EpisodeNumber = 1,
-                SeasonId = 1,
-                Format = FileFormatTypes.MKV,
-                Name = name,
-                Path = "Some Path"
-            });
-
-            _context.SaveChanges();
-
             //Act
             var episode = _episodeControllerService.GetEpisodeByName(name);
 
             //Assert
             Assert.IsAssignableFrom<Episode>(episode);
-            Assert.Equal(name, episode.Name);
         }
 
         [Fact]
@@ -128,12 +90,12 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveEpisode_GivenNewEpisode_ThenDoesNotThrow()
+        public void SaveEpisode_GivenNewEpisode_ThenReturnsTrue()
         {
             //Arrange
             var episode = new Episode
             {
-                EpisodeNumber = 0,
+                EpisodeId = 0,
                 SeasonId = 1,
                 Format = FileFormatTypes.MKV,
                 Name = "Test Name",
@@ -141,16 +103,36 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var exception = Record.Exception(() => _episodeControllerService.SaveEpisode(episode));
+            var success = _episodeControllerService.SaveEpisode(episode);
 
             //Assert
-            Assert.Null(exception);
+            Assert.True(success);
         }
 
-        public void Dispose()
+        [Fact]
+        public void GetEpisodesBySeasonId_GivenInvalidSeasonId_ThenThrowsArgumentException()
         {
-            _context.Database.EnsureDeleted();
-            _context.Dispose();
+            //Arrange
+            var id = 0;
+
+            //Act
+            var exception = Record.Exception(() => _episodeControllerService.GetEpisodesBySeasonId(id));
+
+            //Assert
+            Assert.IsType<ArgumentException>(exception);
+        }
+
+        [Fact]
+        public void GetEpisodesBySeasonId_GivenValidSeasonId_THenThrowsArgumentException()
+        {
+            //Arrange
+            var id = 1;
+
+            //Act
+            var episodes = _episodeControllerService.GetEpisodesBySeasonId(id);
+
+            //Assert
+            Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using FileManager.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using FileManager.Models;
 
-namespace FileManager.Web.Services.Interfaces
+namespace FileManager.DataAccessLayer.Interfaces
 {
-    public interface IEpisodeControllerService
+    public interface IEpisodeRepository : IDisposable
     {
         Episode GetEpisodeById(int id);
         IEnumerable<Episode> GetEpisodes();

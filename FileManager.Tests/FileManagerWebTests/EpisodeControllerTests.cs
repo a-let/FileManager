@@ -64,25 +64,25 @@ namespace FileManager.Tests.FileManagerWebTests
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
         }
 
-        //[Fact]
-        //public void Save_GivenValidEpisode_ThenReturnsTrue()
-        //{
-        //    //Arrange
-        //    var episode = new Episode
-        //    {
-        //        EpisodeId = 1,
-        //        SeasonId = 1,
-        //        Name = "Test",
-        //        EpisodeNumber = 1,
-        //        Format = FileFormatTypes.MP4,
-        //        Path = "Test"
-        //    };
+        [Fact]
+        public void Save_GivenValidEpisode_ThenReturnsTrue()
+        {
+            //Arrange
+            var episode = new Episode
+            {
+                EpisodeId = 1,
+                SeasonId = 1,
+                Name = "Test",
+                EpisodeNumber = 1,
+                Format = FileFormatTypes.MP4,
+                Path = "Test"
+            };
 
-        //    //Act
-        //    var success = _episodeController.Post(episode);
+            //Act
+            var success = _episodeController.Post(episode);
 
-        //    //Assert
-        //    Assert.True(success);
-        //}
+            //Assert
+            Assert.True(success);
+        }
     }
 }

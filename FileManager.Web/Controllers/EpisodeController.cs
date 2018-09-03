@@ -45,10 +45,10 @@ namespace FileManager.Web.Controllers
         
         // POST: api/Episode
         [HttpPost]
-        public void Post([FromBody]Episode episode)
+        public bool Post([FromBody]Episode episode)
         {
-            _episodeControllerService.SaveEpisode(episode);
-            // return success;
+            var success = _episodeControllerService.SaveEpisode(episode);
+            return success;
         }
         
         // GET: api/Episode/seasonid/5

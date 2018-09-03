@@ -1,34 +1,41 @@
-﻿using System.Collections.Generic;
-using FileManager.BusinessLayer.Interfaces;
+﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
+
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FileManager.Tests.Mocks
 {
-    public class MockEpisodeRepository : IFileManagerObjectRepository<Episode>
+    public class MockEpisodeRepository : IEpisodeRepository
     {
-        public IEnumerable<Episode> Get()
+        public IEnumerable<Episode> GetEpisodes()
         {
             return new List<Episode>();
         }
 
-        public Episode GetById(int id)
+        public Episode GetEpisodeById(int id)
         {
             return new Episode();
         }
 
-        public Episode GetByName(string name)
+        public Episode GetEpisodeByName(string name)
         {
             return new Episode();
         }
 
-        public IEnumerable<Episode> GetByParentId(int parentId)
+        public IQueryable<Episode> GetEpisodesBySeasonId(int parentId)
         {
-            return new List<Episode>();
+            return new List<Episode>().AsQueryable();
         }
 
-        public bool Save(Episode target)
+        public bool SaveEpisode(Episode target)
         {
             return target != null;
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }
