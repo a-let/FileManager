@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using FileManager.Services.Interfaces;
 using FileManager.Models;
-using Formats = FileManager.Models.Helpers.FileFormats.FileFormatTypes;
+using FileManager.Models.Constants;
 
 namespace FileManager.ConsoleApp
 {
@@ -36,7 +36,7 @@ namespace FileManager.ConsoleApp
                 SeasonId = 1002,
                 Name = "New episode from console via service",
                 EpisodeNumber = 1,
-                Format = Formats.mp4.ToString(),
+                Format = FileFormatTypes.MP4,
                 Path = @"C:\Temp"
             };    
             
@@ -75,7 +75,7 @@ namespace FileManager.ConsoleApp
                 SeriesId = 2,
                 Name = "New movie from console via service",
                 IsSeries = false,
-                Format = Formats.mp4.ToString(),
+                Format = FileFormatTypes.MP4,
                 Category = "Testing",
                 Path = @"C:\Temp"
             };

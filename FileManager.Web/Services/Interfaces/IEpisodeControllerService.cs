@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FileManager.Models;
 
-namespace FileManager.Web.Services
+namespace FileManager.Web.Services.Interfaces
 {
     public interface IEpisodeControllerService
     {
@@ -9,6 +10,6 @@ namespace FileManager.Web.Services
         IEnumerable<Episode> GetEpisodes();
         Episode GetEpisodeByName(string name);
         bool SaveEpisode(Episode episode);
-        IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId);
+        IQueryable<Episode> GetEpisodesBySeasonId(int seasonId);
     }
 }

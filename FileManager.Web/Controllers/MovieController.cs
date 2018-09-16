@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FileManager.Models;
+using FileManager.Web.Services.Interfaces;
+
 using Microsoft.AspNetCore.Mvc;
-using FileManager.Models;
-using FileManager.Web.Services;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FileManager.Web.Controllers
 {
@@ -51,7 +54,7 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Movie/seriesId/5
         [HttpGet("seriesId/{seriesId}")]
-        public IEnumerable<Movie> GetBySeriesId(int seriesId)
+        public IQueryable<Movie> GetBySeriesId(int seriesId)
         {
             var movies = _movieControllerService.GetMoviesBySeriesId(seriesId);
             return movies;

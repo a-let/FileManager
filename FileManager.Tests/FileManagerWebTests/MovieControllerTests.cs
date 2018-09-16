@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-
-using Xunit;
-
-using FileManager.Models;
+﻿using FileManager.Models;
 using FileManager.Tests.Mocks;
 using FileManager.Web.Controllers;
+using FileManager.Models.Constants;
+
+using System.Collections.Generic;
+
+using Xunit;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
@@ -64,7 +65,7 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void Save_GivenValidMovie_ThenReturnsTrue()
+        public void Save_GivenValidMovie_ThenDoesNotThrow()
         {
             //Arrange
             var movie = new Movie
@@ -73,16 +74,16 @@ namespace FileManager.Tests.FileManagerWebTests
                 SeriesId = 1,
                 Name = "Test",
                 IsSeries = true,
-                Format = "Test",
+                Format = FileFormatTypes.MP4,
                 Category = "Test",
                 Path = "Test"
             };
 
             //Act
-            var success = _movieController.Post(movie);
+            var exception = Record.Exception(() => _movieController.Post(movie));
 
             //Assert
-            Assert.True(success);
+            Assert.Null(exception);
         }
     }
 }

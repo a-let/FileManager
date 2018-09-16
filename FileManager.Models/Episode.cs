@@ -1,51 +1,12 @@
 ﻿namespace FileManager.Models
 {
-    public class Episode : FileManagerObjectBase
+    public class Episode
     {
         public int EpisodeId { get; set; }
         public int SeasonId { get; set; }
         public string Name { get; set; }
-
-        private int _episodeNumber;
-        public int EpisodeNumber
-        {
-            get => _episodeNumber;
-            set
-            {
-                if (value != _episodeNumber)
-                {
-                    SetProperty("EpisodeNumber", ref _episodeNumber, value);
-                    _episodeNumber = value;
-                }
-            }
-        }
-
-        private string _format;
-        public string Format
-        {
-            get => _format;
-            set
-            {
-                if(value != _format)
-                {
-                    SetProperty("Format", ref _format, value);
-                    _format = value;                    
-                }
-            }
-        }
-
-        private string _path;
-        public string Path
-        {
-            get => _path;
-            set
-            {
-                if (value != _path)
-                {
-                    SetProperty("Path", ref _path, value);
-                    _path = value;
-                }
-            }
-        }
+        public int EpisodeNumber { get; set; }
+        public string Format { get; set; }
+        public string Path { get; set; }
     }
 }

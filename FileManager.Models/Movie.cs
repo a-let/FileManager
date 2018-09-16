@@ -1,6 +1,6 @@
 ﻿namespace FileManager.Models
 {
-    public class Movie : FileManagerObjectBase
+    public class Movie
     {
         public int MovieId { get; set; }
         public int SeriesId { get; set; }

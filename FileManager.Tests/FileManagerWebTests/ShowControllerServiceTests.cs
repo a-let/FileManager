@@ -1,11 +1,11 @@
-﻿using System;
+﻿using FileManager.Models;
+using FileManager.Tests.Mocks;
+using FileManager.Web.Services;
+
+using System;
 using System.Collections.Generic;
 
 using Xunit;
-
-using FileManager.Models;
-using FileManager.Tests.Mocks;
-using FileManager.Web.Services;
 
 namespace FileManager.Tests.FileManagerWebTests
 {

@@ -1,34 +1,40 @@
-﻿using System.Collections.Generic;
-using FileManager.BusinessLayer.Interfaces;
+﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FileManager.Tests.Mocks
 {
-    public class MockMovieRepository : IFileManagerObjectRepository<Movie>
+    public class MockMovieRepository : IMovieRepository
     {
-        public IEnumerable<Movie> Get()
-        {
-            return new List<Movie>();
-        }
-
-        public Movie GetById(int id)
+        public Movie GetMovieById(int id)
         {
             return new Movie();
         }
 
-        public Movie GetByName(string name)
+        public Movie GetMovieByName(string name)
         {
             return new Movie();
         }
 
-        public IEnumerable<Movie> GetByParentId(int parentId)
+        public IEnumerable<Movie> GetMovies()
         {
             return new List<Movie>();
         }
 
-        public bool Save(Movie target)
+        public IQueryable<Movie> GetMoviesBySeriesId(int seriesId)
         {
-            return target != null;
+            return new List<Movie>().AsQueryable();
+        }
+
+        public bool SaveMovie(Movie movie)
+        {
+            return movie != null;
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

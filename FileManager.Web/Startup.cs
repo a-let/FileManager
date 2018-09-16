@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FileManager.DataAccessLayer;
+using FileManager.DataAccessLayer.Interfaces;
+using FileManager.DataAccessLayer.Repositories;
+using FileManager.Web.Services;
+using FileManager.Web.Services.Interfaces;
+
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using Swashbuckle.AspNetCore.Swagger;
-
-using FileManager.BusinessLayer;
-using FileManager.BusinessLayer.Interfaces;
-using FileManager.BusinessLayer.Repositories;
-using FileManager.Models;
-using FileManager.Web.Services;
 
 namespace FileManager.Web
 {
@@ -26,18 +27,18 @@ namespace FileManager.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddScoped<IFileManagerDb, FileManagerDb>()
                 .AddScoped<IEpisodeControllerService, EpisodeControllerService>()
-                .AddScoped<IFileManagerObjectRepository<Episode>, EpisodeRepository>()
+                .AddScoped<IEpisodeRepository, EpisodeRepository>()
                 .AddScoped<ISeasonControllerService, SeasonControllerService>()
-                .AddScoped<IFileManagerObjectRepository<Season>, SeasonRepository>()
+                .AddScoped<ISeasonRepository, SeasonRepository>()
                 .AddScoped<ISeriesControllerService, SeriesControllerService>()
-                .AddScoped<IFileManagerObjectRepository<Series>, SeriesRepository>()
+                .AddScoped<ISeriesRepository, SeriesRepository>()
                 .AddScoped<IShowControllerService, ShowControllerService>()
-                .AddScoped<IFileManagerObjectRepository<Show>, ShowRepository>()
+                .AddScoped<IShowRepository, ShowRepository>()
                 .AddScoped<IMovieControllerService, MovieControllerService>()
-                .AddScoped<IFileManagerObjectRepository<Movie>, MovieRepository>()
+                .AddScoped<IMovieRepository, MovieRepository>()
                 .AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" }))
+                .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b=> b.MigrationsAssembly("FileManager.DataAccessLayer")))
                 .AddMvc();
         }
 

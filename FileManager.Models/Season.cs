@@ -2,7 +2,7 @@
 
 namespace FileManager.Models
 {
-    public class Season : FileManagerObjectBase
+    public class Season
     {
         public int SeasonId { get; set; }
         public int ShowId { get; set; }

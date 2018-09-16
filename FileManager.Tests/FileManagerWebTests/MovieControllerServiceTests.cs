@@ -1,11 +1,12 @@
-﻿using System;
+﻿using FileManager.Models;
+using FileManager.Models.Constants;
+using FileManager.Tests.Mocks;
+using FileManager.Web.Services;
+
+using System;
 using System.Collections.Generic;
 
 using Xunit;
-
-using FileManager.Models;
-using FileManager.Tests.Mocks;
-using FileManager.Web.Services;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
@@ -89,19 +90,25 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveMovie_GivenMovie_ThenReturnsTrue()
+        public void SaveMovie_GivenNewMovie_ThenDoesNotThrow()
         {
             //Arrange
             var movie = new Movie
             {
-
+                MovieId = 0,
+                SeriesId = 1,
+                Name = "Test",
+                IsSeries = true,
+                Format = FileFormatTypes.MP4,
+                Category = "Test",
+                Path = "Test"
             };
 
             //Act
-            var success = _movieControllerService.SaveMovie(movie);
+            var exception = Record.Exception(() => _movieControllerService.SaveMovie(movie));
 
             //Assert
-            Assert.True(success);
+            Assert.Null(exception);
         }
     }
 }

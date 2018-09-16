@@ -5,6 +5,7 @@ using Xunit;
 using FileManager.Models;
 using FileManager.Tests.Mocks;
 using FileManager.Web.Controllers;
+using FileManager.Models.Constants;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
@@ -73,7 +74,7 @@ namespace FileManager.Tests.FileManagerWebTests
                 SeasonId = 1,
                 Name = "Test",
                 EpisodeNumber = 1,
-                Format = "Test",
+                Format = FileFormatTypes.MP4,
                 Path = "Test"
             };
 

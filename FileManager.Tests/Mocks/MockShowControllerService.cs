@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using FileManager.Models;
-using FileManager.Web.Services;
+using FileManager.Web.Services.Interfaces;
 
 namespace FileManager.Tests.Mocks
 {

@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Xunit;
-
+﻿using FileManager.Models.Constants;
 using FileManager.Models;
 using FileManager.Tests.Mocks;
 using FileManager.Web.Services;
+
+using System;
+using System.Collections.Generic;
+
+using Xunit;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
@@ -89,12 +90,16 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveEpisode_GivenEpisode_ThenReturnsTrue()
+        public void SaveEpisode_GivenNewEpisode_ThenReturnsTrue()
         {
             //Arrange
             var episode = new Episode
             {
-
+                EpisodeId = 0,
+                SeasonId = 1,
+                Format = FileFormatTypes.MKV,
+                Name = "Test Name",
+                Path = "Some Path"
             };
 
             //Act
@@ -102,6 +107,32 @@ namespace FileManager.Tests.FileManagerWebTests
 
             //Assert
             Assert.True(success);
+        }
+
+        [Fact]
+        public void GetEpisodesBySeasonId_GivenInvalidSeasonId_ThenThrowsArgumentException()
+        {
+            //Arrange
+            var id = 0;
+
+            //Act
+            var exception = Record.Exception(() => _episodeControllerService.GetEpisodesBySeasonId(id));
+
+            //Assert
+            Assert.IsType<ArgumentException>(exception);
+        }
+
+        [Fact]
+        public void GetEpisodesBySeasonId_GivenValidSeasonId_THenThrowsArgumentException()
+        {
+            //Arrange
+            var id = 1;
+
+            //Act
+            var episodes = _episodeControllerService.GetEpisodesBySeasonId(id);
+
+            //Assert
+            Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
         }
     }
 }

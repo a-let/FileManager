@@ -7,15 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{003296C2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.Web", "FileManager.Web\FileManager.Web.csproj", "{A88266A7-9462-4D90-9549-41DF6F2A5923}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.BusinessLayer", "FileManager.BusinessLayer\FileManager.BusinessLayer.csproj", "{794CAA5A-B1D0-410E-8177-D9C27E23D3FA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.Services", "FileManager.Services\FileManager.Services.csproj", "{591B7A8C-0407-480C-BF8F-9CCE7ED42A57}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.ConsoleApp", "FileManager.ConsoleApp\FileManager.ConsoleApp.csproj", "{61EE0C84-A993-4DD7-B4A4-DB271BCC2A7A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.Models", "FileManager.Models\FileManager.Models.csproj", "{105BBBC1-FB51-4E1C-B3A3-C000B49EC2A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManager.Tests", "FileManager.Tests\FileManager.Tests.csproj", "{2A7DD3A5-502B-4F7A-A544-B91022AAE43D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.Tests", "FileManager.Tests\FileManager.Tests.csproj", "{2A7DD3A5-502B-4F7A-A544-B91022AAE43D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.DataAccessLayer", "FileManager.DataAccessLayer\FileManager.DataAccessLayer.csproj", "{8A561D1F-3211-4C3F-AB11-A2EF94F2A062}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,6 @@ Global
 		{A88266A7-9462-4D90-9549-41DF6F2A5923}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A88266A7-9462-4D90-9549-41DF6F2A5923}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A88266A7-9462-4D90-9549-41DF6F2A5923}.Release|Any CPU.Build.0 = Release|Any CPU
-		{794CAA5A-B1D0-410E-8177-D9C27E23D3FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{794CAA5A-B1D0-410E-8177-D9C27E23D3FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{794CAA5A-B1D0-410E-8177-D9C27E23D3FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{794CAA5A-B1D0-410E-8177-D9C27E23D3FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{591B7A8C-0407-480C-BF8F-9CCE7ED42A57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{591B7A8C-0407-480C-BF8F-9CCE7ED42A57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{591B7A8C-0407-480C-BF8F-9CCE7ED42A57}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,6 +43,10 @@ Global
 		{2A7DD3A5-502B-4F7A-A544-B91022AAE43D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A7DD3A5-502B-4F7A-A544-B91022AAE43D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A7DD3A5-502B-4F7A-A544-B91022AAE43D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A561D1F-3211-4C3F-AB11-A2EF94F2A062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A561D1F-3211-4C3F-AB11-A2EF94F2A062}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A561D1F-3211-4C3F-AB11-A2EF94F2A062}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A561D1F-3211-4C3F-AB11-A2EF94F2A062}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

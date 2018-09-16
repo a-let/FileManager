@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
-using FileManager.BusinessLayer.Interfaces;
+using FileManager.Web.Services.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FileManager.Web.Services
 {
     public class EpisodeControllerService : IEpisodeControllerService
     {
-        private readonly IFileManagerObjectRepository<Episode> _episodeRepository;
+        private readonly IEpisodeRepository _episodeRepository;
 
-        public EpisodeControllerService(IFileManagerObjectRepository<Episode> episodeRepository)
+        public EpisodeControllerService(IEpisodeRepository episodeRepository)
         {
             _episodeRepository = episodeRepository;
         }
@@ -19,12 +22,12 @@ namespace FileManager.Web.Services
             if (id <= 0)
                 throw new ArgumentException("Invalid EpisodeId");
 
-            return _episodeRepository.GetById(id);
+            return _episodeRepository.GetEpisodeById(id);
         }
 
         public IEnumerable<Episode> GetEpisodes()
         {
-            return _episodeRepository.Get();
+            return _episodeRepository.GetEpisodes();
         }
 
         public Episode GetEpisodeByName(string name)
@@ -32,7 +35,7 @@ namespace FileManager.Web.Services
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException();
 
-            return _episodeRepository.GetByName(name);
+            return _episodeRepository.GetEpisodeByName(name);
         }
 
         public bool SaveEpisode(Episode episode)
@@ -40,15 +43,15 @@ namespace FileManager.Web.Services
             if (episode == null)
                 throw new ArgumentNullException(nameof(episode));
 
-            return _episodeRepository.Save(episode);
+            return _episodeRepository.SaveEpisode(episode);
         }
 
-        public IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId)
+        public IQueryable<Episode> GetEpisodesBySeasonId(int seasonId)
         {
             if (seasonId <= 0)
                 throw new ArgumentException("Invalid SeasonId");
 
-            return _episodeRepository.GetByParentId(seasonId);
+            return _episodeRepository.GetEpisodesBySeasonId(seasonId);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-using FileManager.Models;
-using FileManager.Web.Services;
+﻿using FileManager.Models;
+using FileManager.Web.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FileManager.Tests.Mocks
 {
@@ -28,9 +28,9 @@ namespace FileManager.Tests.Mocks
             return new List<Episode>();
         }
 
-        public IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId)
+        public IQueryable<Episode> GetEpisodesBySeasonId(int seasonId)
         {
-            return new List<Episode>();
+            return new List<Episode>().AsQueryable();
         }
 
         public bool SaveEpisode(Episode episode)

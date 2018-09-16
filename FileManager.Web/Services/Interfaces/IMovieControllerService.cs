@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FileManager.Models;
 
-namespace FileManager.Web.Services
+namespace FileManager.Web.Services.Interfaces
 {
     public interface IMovieControllerService
     {
@@ -9,6 +10,6 @@ namespace FileManager.Web.Services
         IEnumerable<Movie> GetMovies();
         Movie GetMovieByName(string name);        
         bool SaveMovie(Movie movie);
-        IEnumerable<Movie> GetMoviesBySeriesId(int seriesId);
+        IQueryable<Movie> GetMoviesBySeriesId(int seriesId);
     }
 }
