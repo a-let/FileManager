@@ -16,23 +16,23 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public Episode GetEpisodeById(int id) => _context.Episodes.Find(id);
+        public Episode GetEpisodeById(int id) => _context.Episode.Find(id);
 
-        public Episode GetEpisodeByName(string name) => _context.Episodes.Single(e => e.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        public Episode GetEpisodeByName(string name) => _context.Episode.Single(e => e.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-        public IEnumerable<Episode> GetEpisodes() => _context.Episodes;
+        public IEnumerable<Episode> GetEpisodes() => _context.Episode;
 
-        public IQueryable<Episode> GetEpisodesBySeasonId(int seasonId) => _context.Episodes.Where(e => e.SeasonId == seasonId);
+        public IQueryable<Episode> GetEpisodesBySeasonId(int seasonId) => _context.Episode.Where(e => e.SeasonId == seasonId);
 
         public bool SaveEpisode(Episode episode)
         {
             try
             {
                 if (episode.EpisodeId == 0)
-                    _context.Episodes.Add(episode);
+                    _context.Episode.Add(episode);
                 else
                 {
-                    var e = _context.Episodes.Find(episode.EpisodeId);
+                    var e = _context.Episode.Find(episode.EpisodeId);
                     _context.Entry(e).CurrentValues.SetValues(episode);
                 }
 

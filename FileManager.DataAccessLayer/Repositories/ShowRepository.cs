@@ -16,21 +16,21 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public Show GetShowById(int id) => _context.Shows.Find(id);
+        public Show GetShowById(int id) => _context.Show.Find(id);
 
-        public Show GetShowByName(string name) => _context.Shows.Single(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        public Show GetShowByName(string name) => _context.Show.Single(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-        public IEnumerable<Show> GetShows() => _context.Shows;
+        public IEnumerable<Show> GetShows() => _context.Show;
 
         public bool SaveShow(Show show)
         {
             try
             {
                 if (show.ShowId == 0)
-                    _context.Shows.Add(show);
+                    _context.Show.Add(show);
                 else
                 {
-                    var s = _context.Shows.Find(show.ShowId);
+                    var s = _context.Show.Find(show.ShowId);
                     _context.Entry(s).CurrentValues.SetValues(show);
                 }
 

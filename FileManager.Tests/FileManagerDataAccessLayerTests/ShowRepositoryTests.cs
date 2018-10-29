@@ -22,7 +22,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
-            _context.Shows.Add(new Show
+            _context.Show.Add(new Show
             {
                 ShowId = 1,
                 Name = "Test",
@@ -45,7 +45,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var name = "Test";
 
-            _context.Shows.Add(new Show
+            _context.Show.Add(new Show
             {
                 ShowId = 0,
                 Name = name,
@@ -104,7 +104,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
-            _context.Shows.Add(show);
+            _context.Show.Add(show);
             _context.SaveChanges();
 
             //Act

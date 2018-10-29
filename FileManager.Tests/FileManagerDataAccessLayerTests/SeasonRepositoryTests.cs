@@ -23,7 +23,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
-            _context.Seasons.Add(new Season
+            _context.Season.Add(new Season
             {
                 SeasonId = 1,
                 ShowId = 1,
@@ -56,7 +56,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
-            _context.Seasons.Add(new Season
+            _context.Season.Add(new Season
             {
                 SeasonId = 1,
                 ShowId = id,
@@ -105,7 +105,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Test"
             };
 
-            _context.Seasons.Add(season);
+            _context.Season.Add(season);
             _context.SaveChanges();
 
             //Act
