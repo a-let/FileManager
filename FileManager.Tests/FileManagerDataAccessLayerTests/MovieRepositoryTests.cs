@@ -24,7 +24,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
-            _context.Movies.Add(new Movie
+            _context.Movie.Add(new Movie
             {
                 MovieId = 1,
                 SeriesId = 1,
@@ -50,7 +50,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var name = "Test";
 
-            _context.Movies.Add(new Movie
+            _context.Movie.Add(new Movie
             {
                 MovieId = 0,
                 SeriesId = 1,
@@ -87,7 +87,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
-            _context.Movies.Add(new Movie
+            _context.Movie.Add(new Movie
             {
                 MovieId = 0,
                 SeriesId = id,
@@ -145,7 +145,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
-            _context.Movies.Add(movie);
+            _context.Movie.Add(movie);
             _context.SaveChanges();
 
             //Act

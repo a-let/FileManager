@@ -24,7 +24,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
-            _context.Episodes.Add(new Episode
+            _context.Episode.Add(new Episode
             {
                 EpisodeId = 1,
                 EpisodeNumber = 1,
@@ -49,7 +49,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var name = "Test";
 
-            _context.Episodes.Add(new Episode
+            _context.Episode.Add(new Episode
             {
                 EpisodeId = 0,
                 SeasonId = 1,
@@ -84,7 +84,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
-            _context.Episodes.Add(new Episode
+            _context.Episode.Add(new Episode
             {
                 EpisodeId = 0,
                 SeasonId = id,
@@ -136,7 +136,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
-            _context.Episodes.Add(episode);
+            _context.Episode.Add(episode);
             _context.SaveChanges();
 
             //Act

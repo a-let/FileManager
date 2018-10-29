@@ -8,10 +8,10 @@ namespace FileManager.DataAccessLayer
         public FileManagerContext(DbContextOptions<FileManagerContext> options)
             : base(options) { }
 
-        public DbSet<Episode> Episodes { get; set; }
-        public DbSet<Season> Seasons { get; set; }
-        public DbSet<Show> Shows { get; set; }
-        public DbSet<Movie> Movies { get; set; }
+        public DbSet<Episode> Episode { get; set; }
+        public DbSet<Season> Season { get; set; }
+        public DbSet<Show> Show { get; set; }
+        public DbSet<Movie> Movie { get; set; }
         public DbSet<Series> Series { get; set; }
     }
 }

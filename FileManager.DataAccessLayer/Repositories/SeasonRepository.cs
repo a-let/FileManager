@@ -16,21 +16,21 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public Season GetSeasonById(int id) => _context.Seasons.Find(id);
+        public Season GetSeasonById(int id) => _context.Season.Find(id);
 
-        public IEnumerable<Season> GetSeasons() => _context.Seasons;
+        public IEnumerable<Season> GetSeasons() => _context.Season;
 
-        public IQueryable<Season> GetSeasonsByShowId(int showId) => _context.Seasons.Where(s => s.ShowId == showId);
+        public IQueryable<Season> GetSeasonsByShowId(int showId) => _context.Season.Where(s => s.ShowId == showId);
 
         public bool SaveSeason(Season season)
         {
             try
             {
                 if (season.SeasonId == 0)
-                    _context.Seasons.Add(season);
+                    _context.Season.Add(season);
                 else
                 {
-                    var s = _context.Seasons.Find(season.SeasonId);
+                    var s = _context.Season.Find(season.SeasonId);
                     _context.Entry(s).CurrentValues.SetValues(season);
                 }
 
