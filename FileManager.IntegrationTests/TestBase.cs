@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json;
 using System.Net.Http;
 using Xunit;
 
@@ -12,5 +13,7 @@ namespace FileManager.IntegrationTests
         {
             _client = factory.CreateClient();
         }
+
+        protected T DeserializeObject<T>(string value) => JsonConvert.DeserializeObject<T>(value);
     }
 }
