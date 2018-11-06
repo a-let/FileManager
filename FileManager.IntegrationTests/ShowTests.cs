@@ -59,6 +59,29 @@ namespace FileManager.IntegrationTests
             Assert.Equal(showName, show.Name);
         }
 
+        [Fact]
+        public async void Post()
+        {
+            // Arrange
+            var show = new Show
+            {
+                ShowId = 0,
+                Name = "Test Show Two",
+                Category = "Testing",
+                Path = @"C:/Temp",
+                Seasons = null
+            };
+
+            // Act
+            var responseMessage = await _client.PostAsync("api/Show", CreateStringContent(show));
+            var strContent = await responseMessage.Content.ReadAsStringAsync();
+            var success = DeserializeObject<bool>(strContent);
+
+            // Assert
+            Assert.True(success);
+            Assert.NotNull(GetShows().Result.Where(s => s.Name == show.Name));
+        }
+
         private async Task<IEnumerable<Show>> GetShows()
         {
             var responseMessage = await _client.GetAsync("api/Show");
