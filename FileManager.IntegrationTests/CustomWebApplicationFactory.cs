@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 
 namespace FileManager.IntegrationTests
 {
@@ -43,11 +42,30 @@ namespace FileManager.IntegrationTests
 
         private void InitializeDbForTests(FileManagerContext db)
         {
-            db.Show.AddRange(SeedShows());
+            SeedShows(db);
+            SeedSeasons(db);
+        }
+
+        private void SeedShows(FileManagerContext db)
+        {
+            db.Show.AddRange(
+                new[] 
+                {
+                    new Show { ShowId = 0, Name = "Test Show", Category = "Testing", Path = @"C:/Temp", Seasons = null }
+                });
+
             db.SaveChanges();
         }
 
-        private IEnumerable<Show> SeedShows() =>
-            new[] { new Show { ShowId = 0, Name = "Test Show", Category = "Testing", Path = @"C:/Temp", Seasons = null } };
+        private void SeedSeasons(FileManagerContext db)
+        {
+            db.Season.AddRange(
+                new[]
+                {
+                    new Season { SeasonId = 0, ShowId = 1, SeasonNumber = 1, Path = @"C:/Temp", EpisodeList = null }
+                });
+
+            db.SaveChanges();
+        }            
     }
 }

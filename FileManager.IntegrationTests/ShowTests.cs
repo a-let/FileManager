@@ -6,6 +6,7 @@ using Xunit;
 
 namespace FileManager.IntegrationTests
 {
+    [Collection("Integration Test Collection")]
     public class ShowTests : TestBase
     {
         public ShowTests() : base(new CustomWebApplicationFactory<Web.Startup>())
@@ -29,8 +30,7 @@ namespace FileManager.IntegrationTests
         public async void GetById()
         {
             // Arrange
-            var shows = await GetShows();
-            var showId = shows.First().ShowId;
+            var showId = 1;
 
             // Act
             var responseMessage = await _client.GetAsync($"api/Show/id/{showId}");
@@ -46,8 +46,7 @@ namespace FileManager.IntegrationTests
         public async void GetByName()
         {
             // Arrange
-            var shows = await GetShows();
-            var showName = shows.First().Name;
+            var showName = "Test Show";
 
             // Act
             var responseMessage = await _client.GetAsync($"api/Show/name/{showName}");
@@ -79,7 +78,7 @@ namespace FileManager.IntegrationTests
 
             // Assert
             Assert.True(success);
-            Assert.NotNull(GetShows().Result.Where(s => s.Name == show.Name));
+            Assert.Equal(2, GetShows().Result.Count());
         }
 
         private async Task<IEnumerable<Show>> GetShows()
