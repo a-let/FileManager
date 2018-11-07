@@ -78,7 +78,7 @@ namespace FileManager.IntegrationTests
         public async void Post()
         {
             // Arrange
-            var season = new Episode
+            var episode = new Episode
             {
                 EpisodeId = 0,
                 SeasonId = 1,
@@ -89,7 +89,7 @@ namespace FileManager.IntegrationTests
             };
 
             // Act
-            var responseMessage = await _client.PostAsync("api/Episode", CreateStringContent(season));
+            var responseMessage = await _client.PostAsync("api/Episode", CreateStringContent(episode));
             var strContent = await responseMessage.Content.ReadAsStringAsync();
             var success = DeserializeObject<bool>(strContent);
 
