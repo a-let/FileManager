@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.Tests", "FileMa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager.DataAccessLayer", "FileManager.DataAccessLayer\FileManager.DataAccessLayer.csproj", "{8A561D1F-3211-4C3F-AB11-A2EF94F2A062}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManager.IntegrationTests", "FileManager.IntegrationTests\FileManager.IntegrationTests.csproj", "{9A973718-2C0B-455E-99D7-1B6E739C6D31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,12 +49,17 @@ Global
 		{8A561D1F-3211-4C3F-AB11-A2EF94F2A062}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A561D1F-3211-4C3F-AB11-A2EF94F2A062}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A561D1F-3211-4C3F-AB11-A2EF94F2A062}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A973718-2C0B-455E-99D7-1B6E739C6D31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A973718-2C0B-455E-99D7-1B6E739C6D31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A973718-2C0B-455E-99D7-1B6E739C6D31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A973718-2C0B-455E-99D7-1B6E739C6D31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2A7DD3A5-502B-4F7A-A544-B91022AAE43D} = {003296C2-30F1-45DE-A291-01E711E85FCC}
+		{9A973718-2C0B-455E-99D7-1B6E739C6D31} = {003296C2-30F1-45DE-A291-01E711E85FCC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0083B09A-9111-4607-9CD5-DD1A8669D297}
