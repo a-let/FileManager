@@ -46,6 +46,7 @@ namespace FileManager.IntegrationTests
             SeedSeasons(db);
             SeedEpisodes(db);
             SeedSeries(db);
+            SeedMovies(db);
         }
 
         private void SeedShows(FileManagerContext db)
@@ -87,6 +88,17 @@ namespace FileManager.IntegrationTests
                 new[]
                 {
                     new Series { SeriesId = 0, Name = "Test Series", Path = @"C:/Temp" }
+                });
+
+            db.SaveChanges();
+        }
+
+        private void SeedMovies(FileManagerContext db)
+        {
+            db.Movie.AddRange(
+                new[]
+                {
+                    new Movie { MovieId = 0, SeriesId = 1, Category = "Testing", Format = Models.Constants.FileFormatTypes.MKV, IsSeries = true, Name = "Test Movie", Path = @"C:/Temp" }
                 });
 
             db.SaveChanges();
