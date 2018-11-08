@@ -34,7 +34,7 @@ namespace FileManager.Web.Services
                 LogLevel = logLevel.ToString(),
                 Message = message,
                 StackTrace = exception?.StackTrace ?? string.Empty,
-                CreateDate = DateTime.Now
+                CreatedDate = DateTime.Now
             });
         }
 
