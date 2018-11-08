@@ -4,14 +4,16 @@ using FileManager.DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FileManager.DataAccessLayer.Migrations
 {
     [DbContext(typeof(FileManagerContext))]
-    partial class FileManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20181108231116_AddExceptionTypeToLog")]
+    partial class AddExceptionTypeToLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

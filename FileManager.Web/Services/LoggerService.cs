@@ -32,6 +32,7 @@ namespace FileManager.Web.Services
             {
                 LogId = 0,
                 LogLevel = logLevel.ToString(),
+                ExceptionType = exception.GetType().ToString(),
                 Message = message,
                 StackTrace = exception?.StackTrace ?? string.Empty,
                 CreatedDate = DateTime.Now
