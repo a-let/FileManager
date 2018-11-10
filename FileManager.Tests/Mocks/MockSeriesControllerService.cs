@@ -28,9 +28,9 @@ namespace FileManager.Tests.Mocks
             };
         }
 
-        public bool SaveSeries(Series series)
+        public int SaveSeries(Series series)
         {
-            return series != null;
+            return series != null ? 1 : 0;
         }
     }
 }

@@ -89,16 +89,16 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveSeries_GivenSeries_ThenReturnsTrue()
+        public void SaveSeries_GivenSeries_ThenReturnsSeriesId()
         {
             //Arrange
             var series = new Series();
 
             //Act
-            var success = _seriesControllerService.SaveSeries(series);
+            var seriesId = _seriesControllerService.SaveSeries(series);
 
             //Assert
-            Assert.True(success);
+            Assert.True(seriesId > 0);
         }
     }
 }
