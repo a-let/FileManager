@@ -24,26 +24,19 @@ namespace FileManager.DataAccessLayer.Repositories
 
         public IQueryable<Episode> GetEpisodesBySeasonId(int seasonId) => _context.Episode.Where(e => e.SeasonId == seasonId);
 
-        public bool SaveEpisode(Episode episode)
+        public int SaveEpisode(Episode episode)
         {
-            try
+            if (episode.EpisodeId == 0)
+                _context.Episode.Add(episode);
+            else
             {
-                if (episode.EpisodeId == 0)
-                    _context.Episode.Add(episode);
-                else
-                {
-                    var e = _context.Episode.Find(episode.EpisodeId);
-                    _context.Entry(e).CurrentValues.SetValues(episode);
-                }
-
-                _context.SaveChanges();
-
-                return true;
+                var e = _context.Episode.Find(episode.EpisodeId);
+                _context.Entry(e).CurrentValues.SetValues(episode);
             }
-            catch
-            {
-                return false;
-            }
+
+            _context.SaveChanges();
+
+            return episode.EpisodeId;
         }
 
         protected virtual void Dispose(bool disposing)

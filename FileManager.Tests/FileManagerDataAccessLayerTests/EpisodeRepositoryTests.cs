@@ -1,7 +1,7 @@
 ﻿using FileManager.DataAccessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Models.Constants;
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -104,7 +104,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void SaveEpisode_GivenValidNewEpisode_ThenReturnsTrue()
+        public void SaveEpisode_GivenValidNewEpisode_ThenReturnsId()
         {
             //Arrange
             var episode = new Episode
@@ -117,14 +117,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var success = _episodeRepository.SaveEpisode(episode);
+            var episodeId = _episodeRepository.SaveEpisode(episode);
 
             //Assert
-            Assert.True(success);
+            Assert.True(episodeId > 0);
         }
 
         [Fact]
-        public void SaveEpisode_GivenValidExistingEpisode_ThenReturnsTrue()
+        public void SaveEpisode_GivenValidExistingEpisode_ThenEpisodeIdIsEqual()
         {
             //Arrange
             var episode = new Episode
@@ -140,17 +140,16 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             _context.SaveChanges();
 
             //Act
-            episode.EpisodeId = 1;
             episode.Name = "Updated Name";
 
-            var success = _episodeRepository.SaveEpisode(episode);
+            var episodeId = _episodeRepository.SaveEpisode(episode);
 
             //Assert
-            Assert.True(success);
+            Assert.Equal(episode.EpisodeId, episodeId);
         }
 
         [Fact]
-        public void SaveEpisode_GivenNonExistingEpisode_ThenReturnsFalse()
+        public void SaveEpisode_GivenNonExistingEpisode_ThenThrowsArgumentNullException()
         {
             //Arrange
             var episode = new Episode
@@ -163,10 +162,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var success = _episodeRepository.SaveEpisode(episode);
+            var exception = Record.Exception(() => _episodeRepository.SaveEpisode(episode));
 
             //Assert
-            Assert.False(success);
+            Assert.IsType<ArgumentNullException>(exception);
         }
 
         protected override void Dispose(bool disposing = true)

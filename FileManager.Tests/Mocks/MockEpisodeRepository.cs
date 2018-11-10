@@ -28,9 +28,9 @@ namespace FileManager.Tests.Mocks
             return new List<Episode>().AsQueryable();
         }
 
-        public bool SaveEpisode(Episode target)
+        public int SaveEpisode(Episode target)
         {
-            return target != null;
+            return target != null ? 1 : 0;
         }
 
         public void Dispose()

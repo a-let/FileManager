@@ -38,7 +38,7 @@ namespace FileManager.Web.Services
             return _episodeRepository.GetEpisodeByName(name);
         }
 
-        public bool SaveEpisode(Episode episode)
+        public int SaveEpisode(Episode episode)
         {
             if (episode == null)
                 throw new ArgumentNullException(nameof(episode));
