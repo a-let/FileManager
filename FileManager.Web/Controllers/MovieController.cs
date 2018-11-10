@@ -2,7 +2,7 @@
 using FileManager.Web.Services.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,64 +14,122 @@ namespace FileManager.Web.Controllers
     public class MovieController : Controller
     {
         private readonly IMovieControllerService _movieControllerService;
+        private readonly ILogger _logger;
 
-        public MovieController(IMovieControllerService movieControllerService)
+        public MovieController(IMovieControllerService movieControllerService, ILogger logger)
         {
             _movieControllerService = movieControllerService;
+            _logger = logger;
         }
 
         // GET: api/Movie
         [HttpGet]
         public IEnumerable<Movie> Get()
         {
-            var movies = _movieControllerService.GetMovies();
-            return movies;
+            try
+            {
+                var movies = _movieControllerService.GetMovies();
+                return movies;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
 
         // GET: api/Movie/id/5
         [HttpGet("id/{id}")]
         public Movie Get(int id)
         {
-            var movie = _movieControllerService.GetMovieById(id);
-            return movie;
+            try
+            {
+                var movie = _movieControllerService.GetMovieById(id);
+                return movie;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
 
         // GET: api/Movie/name/Name
         [HttpGet("name/{name}")]
         public Movie Get(string name)
         {
-            var movie = _movieControllerService.GetMovieByName(name);
-            return movie;
+            try
+            {
+                var movie = _movieControllerService.GetMovieByName(name);
+                return movie;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // POST: api/Movie
         [HttpPost]
-        public bool Post([FromBody]Movie movie)
+        public int Post([FromBody]Movie movie)
         {
-            var success = _movieControllerService.SaveMovie(movie);
-            return success;
+            try
+            {
+                var movieId = _movieControllerService.SaveMovie(movie);
+                return movieId;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
 
         // GET: api/Movie/seriesId/5
         [HttpGet("seriesId/{seriesId}")]
         public IQueryable<Movie> GetBySeriesId(int seriesId)
         {
-            var movies = _movieControllerService.GetMoviesBySeriesId(seriesId);
-            return movies;
+            try
+            {
+                var movies = _movieControllerService.GetMoviesBySeriesId(seriesId);
+                return movies;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // PUT: api/Movie/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
     }
 }

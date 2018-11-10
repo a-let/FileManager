@@ -24,26 +24,19 @@ namespace FileManager.DataAccessLayer.Repositories
 
         public IQueryable<Movie> GetMoviesBySeriesId(int seriesId) => _context.Movie.Where(m => m.SeriesId == seriesId);
 
-        public bool SaveMovie(Movie movie)
+        public int SaveMovie(Movie movie)
         {
-            try
+            if (movie.MovieId == 0)
+                _context.Movie.Add(movie);
+            else
             {
-                if (movie.MovieId == 0)
-                    _context.Movie.Add(movie);
-                else
-                {
-                    var m = _context.Movie.Find(movie.MovieId);
-                    _context.Entry(m).CurrentValues.SetValues(movie);
-                }
-
-                _context.SaveChanges();
-
-                return true;
+                var m = _context.Movie.Find(movie.MovieId);
+                _context.Entry(m).CurrentValues.SetValues(movie);
             }
-            catch
-            {
-                return false;
-            }
+
+            _context.SaveChanges();
+
+            return movie.MovieId;
         }
 
         protected virtual void Dispose(bool disposing)

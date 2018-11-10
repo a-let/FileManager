@@ -11,7 +11,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class MovieControllerTests
     {
-        private readonly MovieController _movieController = new MovieController(new MockMovieControllerService());
+        private readonly MovieController _movieController = new MovieController(new MockMovieControllerService(), new MockLoggerService());
 
         [Fact]
         public void Get_GivenNoParameter_ThenReturnsListOfMovies()

@@ -1,7 +1,7 @@
 ﻿using FileManager.DataAccessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Models.Constants;
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -109,7 +109,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void SaveMovie_GivenValidNewMovie_ThenReturnsTrue()
+        public void SaveMovie_GivenValidNewMovie_ThenReturnsMovieId()
         {
             //Arrange
             var movie = new Movie
@@ -124,14 +124,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var success = _movieRepository.SaveMovie(movie);
+            var movieId = _movieRepository.SaveMovie(movie);
 
             //Assert
-            Assert.True(success);
+            Assert.True(movieId > 0);
         }
 
         [Fact]
-        public void SaveMovie_GivenValidExistingMovie_ThenReturnsTrue()
+        public void SaveMovie_GivenValidExistingMovie_ThenMovieIdIsEqual()
         {
             //Arrange
             var movie = new Movie
@@ -149,18 +149,16 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             _context.SaveChanges();
 
             //Act
-
-            movie.MovieId = 2;
             movie.Name = "Updated Name";
 
-            var success = _movieRepository.SaveMovie(movie);
+            var movieId = _movieRepository.SaveMovie(movie);
 
             //Assert
-            Assert.True(success);
+            Assert.Equal(movie.MovieId, movieId);
         }
 
         [Fact]
-        public void SaveMovie_GivenNonExistingMovie_ThenReturnsFalse()
+        public void SaveMovie_GivenNonExistingMovie_ThenThrowsArgumentNullException()
         {
             //Arrange
             var movie = new Movie
@@ -175,10 +173,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var success = _movieRepository.SaveMovie(movie);
+            var exception = Record.Exception(() => _movieRepository.SaveMovie(movie));
 
             //Assert
-            Assert.False(success);
+            Assert.IsType<ArgumentNullException>(exception);
         }
 
         protected override void Dispose(bool disposing = true)

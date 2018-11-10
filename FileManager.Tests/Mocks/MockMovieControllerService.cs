@@ -33,9 +33,9 @@ namespace FileManager.Tests.Mocks
             return new List<Movie>().AsQueryable();
         }
 
-        public bool SaveMovie(Movie movie)
+        public int SaveMovie(Movie movie)
         {
-            return movie != null;
+            return movie != null ? 1 : 0;
         }
     }
 }

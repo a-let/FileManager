@@ -10,7 +10,7 @@ namespace FileManager.DataAccessLayer.Interfaces
         Movie GetMovieById(int id);
         IEnumerable<Movie> GetMovies();
         Movie GetMovieByName(string name);
-        bool SaveMovie(Movie movie);
+        int SaveMovie(Movie movie);
         IQueryable<Movie> GetMoviesBySeriesId(int seriesId);
     }
 }
