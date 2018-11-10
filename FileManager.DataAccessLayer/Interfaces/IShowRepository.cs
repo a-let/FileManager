@@ -9,6 +9,6 @@ namespace FileManager.DataAccessLayer.Interfaces
         Show GetShowById(int id);
         IEnumerable<Show> GetShows();
         Show GetShowByName(string name);
-        bool SaveShow(Show show);
+        int SaveShow(Show show);
     }
 }

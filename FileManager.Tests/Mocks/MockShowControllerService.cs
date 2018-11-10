@@ -27,9 +27,9 @@ namespace FileManager.Tests.Mocks
             return new List<Show>();
         }
 
-        public bool SaveShow(Show show)
+        public int SaveShow(Show show)
         {
-            return show != null;
+            return show != null ? 1 : 0;
         }
     }
 }
