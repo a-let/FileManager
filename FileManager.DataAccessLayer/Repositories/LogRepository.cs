@@ -12,26 +12,17 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public bool SaveLog(Log log)
+        public void SaveLog(Log log)
         {
-            try
+            if (log.LogId == 0)
+                _context.Log.Add(log);
+            else
             {
-                if (log.LogId == 0)
-                    _context.Log.Add(log);
-                else
-                {
-                    var l = _context.Log.Find(log.LogId);
-                    _context.Entry(l).CurrentValues.SetValues(log);
-                }
-
-                _context.SaveChanges();
-
-                return true;
+                var l = _context.Log.Find(log.LogId);
+                _context.Entry(l).CurrentValues.SetValues(log);
             }
-            catch
-            {
-                return false;
-            }
+
+            _context.SaveChanges();
         }
     }
 }

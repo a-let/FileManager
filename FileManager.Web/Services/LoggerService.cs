@@ -14,34 +14,23 @@ namespace FileManager.Web.Services
             _logRepository = logRepository;
         }
 
-        public IDisposable BeginScope<TState>(TState state)
-        {
-            return null;
-        }
+        public IDisposable BeginScope<TState>(TState state) => null;
 
-        public bool IsEnabled(LogLevel logLevel)
-        {
-            return true;
-        }
+        public bool IsEnabled(LogLevel logLevel) => true;
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
-        {
-            var message = formatter != null ? formatter(state, exception) : Format(logLevel, exception);
-
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state,
+            Exception exception, Func<TState, Exception, string> formatter) =>
             _logRepository.SaveLog(new Log
             {
                 LogId = 0,
                 LogLevel = logLevel.ToString(),
                 ExceptionType = exception.GetType().ToString(),
-                Message = message,
+                Message = formatter != null ? formatter(state, exception) : Format(logLevel, exception),
                 StackTrace = exception?.StackTrace ?? string.Empty,
                 CreatedDate = DateTime.Now
             });
-        }
 
-        private string Format(LogLevel logLevel, Exception exception)
-        {
-            return exception?.Message ?? string.Empty;
-        }
+        private string Format(LogLevel logLevel, Exception exception) =>
+            exception?.Message ?? string.Empty;
     }
 }

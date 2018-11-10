@@ -4,6 +4,6 @@ namespace FileManager.DataAccessLayer.Interfaces
 {
     public interface ILogRepository
     {
-        bool SaveLog(Log log);
+        void SaveLog(Log log);
     }
 }
