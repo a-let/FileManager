@@ -10,7 +10,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class SeasonControllerTests
     {
-        private readonly SeasonController _seasonController = new SeasonController(new MockSeasonControllerService());
+        private readonly SeasonController _seasonController = new SeasonController(new MockSeasonControllerService(), new MockLoggerService());
 
         [Fact]
         public void Get_GivenNoParameter_ThenReturnsListOfSeasons()
@@ -51,7 +51,7 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void Save_GivenValidSeason_ThenReturnsTrue()
+        public void Save_GivenValidSeason_ThenReturnsSeasonId()
         {
             //Arrange
             var season = new Season
@@ -63,10 +63,10 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var success = _seasonController.Post(season);
+            var seasonId = _seasonController.Post(season);
 
             //Assert
-            Assert.True(success);
+            Assert.True(seasonId > 0);
         }
     }
 }

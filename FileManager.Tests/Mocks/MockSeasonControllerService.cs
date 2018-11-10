@@ -25,9 +25,9 @@ namespace FileManager.Tests.Mocks
             return new List<Season>();
         }
 
-        public bool SaveSeason(Season season)
+        public int SaveSeason(Season season)
         {
-            return season != null;
+            return season != null ? 1 : 0;
         }
     }
 }

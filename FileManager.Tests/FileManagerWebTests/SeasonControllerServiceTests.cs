@@ -89,7 +89,7 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveSeason_GivenSeason_ThenReturnsTrue()
+        public void SaveSeason_GivenSeason_ThenReturnsSeasonId()
         {
             //Arrange
             var season = new Season
@@ -98,10 +98,10 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var success = _seasonControllerService.SaveSeason(season);
+            var seasonId = _seasonControllerService.SaveSeason(season);
 
             //Assert
-            Assert.True(success);
+            Assert.True(seasonId > 0);
         }
     }
 }

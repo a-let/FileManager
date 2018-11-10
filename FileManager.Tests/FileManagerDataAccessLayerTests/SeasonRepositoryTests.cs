@@ -1,6 +1,6 @@
 ﻿using FileManager.DataAccessLayer.Repositories;
 using FileManager.Models;
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -75,7 +75,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void SaveSeason_GivenValidNewSeason_ThenReturnsTrue()
+        public void SaveSeason_GivenValidNewSeason_ThenReturnsSeasonId()
         {
             //Arrange
             var season = new Season
@@ -87,19 +87,19 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var success = _seasonRepository.SaveSeason(season);
+            var seasonId = _seasonRepository.SaveSeason(season);
 
             //Assert
-            Assert.True(success);
+            Assert.True(seasonId > 0);
         }
 
         [Fact]
-        public void SaveSeason_GivenValidExistingSeason_ThenReturnsTrue()
+        public void SaveSeason_GivenValidExistingSeason_ThenSeasonIdIsEqual()
         {
             //Arrange
             var season = new Season
             {
-                SeasonId = 1,
+                SeasonId = 0,
                 ShowId = 1,
                 SeasonNumber = 1,
                 Path = "Test"
@@ -109,17 +109,16 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             _context.SaveChanges();
 
             //Act
-            season.SeasonId = 1;
             season.Path = "Updated Path";
 
-            var success = _seasonRepository.SaveSeason(season);
+            var seasonId = _seasonRepository.SaveSeason(season);
 
             //Assert
-            Assert.True(success);
+            Assert.Equal(season.SeasonId, seasonId);
         }
 
         [Fact]
-        public void SaveSeason_GivenNonExistingSeason_ThenReturnsFalse()
+        public void SaveSeason_GivenNonExistingSeason_ThenThrowsArgumentNullException()
         {
             //Arrange
             var season = new Season
@@ -131,10 +130,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var success = _seasonRepository.SaveSeason(season);
+            var exception = Record.Exception(() => _seasonRepository.SaveSeason(season));
 
             //Assert
-            Assert.False(success);
+            Assert.IsType<ArgumentNullException>(exception);
         }
 
         protected override void Dispose(bool disposing = true)

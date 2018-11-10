@@ -22,9 +22,9 @@ namespace FileManager.Tests.Mocks
             return new List<Season>().AsQueryable();
         }
 
-        public bool SaveSeason(Season season)
+        public int SaveSeason(Season season)
         {
-            return season != null;
+            return season != null ? 1 : 0;
         }
 
         public void Dispose()

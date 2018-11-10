@@ -37,7 +37,7 @@ namespace FileManager.Web.Services
             return _seasonRepository.GetSeasonsByShowId(showId);
         }
 
-        public bool SaveSeason(Season season)
+        public int SaveSeason(Season season)
         {
             if (season == null)
                 throw new ArgumentNullException(nameof(season));
