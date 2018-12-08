@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -37,6 +38,8 @@ namespace FileManager.Web
                 .AddScoped<IShowRepository, ShowRepository>()
                 .AddScoped<IMovieControllerService, MovieControllerService>()
                 .AddScoped<IMovieRepository, MovieRepository>()
+                .AddScoped<ILogRepository, LogRepository>()
+                .AddScoped<ILogger, LoggerService>()
                 .AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" }))
                 .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b=> b.MigrationsAssembly("FileManager.DataAccessLayer")))
                 .AddMvc();

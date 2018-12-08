@@ -7,7 +7,7 @@ namespace FileManager.Web.Services.Interfaces
     {
         Show GetShowById(int id);
         Show GetShowByName(string name);
-        bool SaveShow(Show show);
+        int SaveShow(Show show);
         IEnumerable<Show> GetShows();
     }
 }

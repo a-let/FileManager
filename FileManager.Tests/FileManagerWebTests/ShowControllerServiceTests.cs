@@ -89,16 +89,16 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveShow_GivenShow_ThenReturnsTrue()
+        public void SaveShow_GivenShow_ThenReturnsShowId()
         {
             //Arrange
             var show = new Show();
 
             //Act
-            var success = _showControllerService.SaveShow(show);
+            var showId = _showControllerService.SaveShow(show);
 
             //Assert
-            Assert.True(success);
+            Assert.True(showId > 0);
         }
     }
 }

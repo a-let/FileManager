@@ -9,7 +9,7 @@ namespace FileManager.DataAccessLayer.Interfaces
     {
         Season GetSeasonById(int id);
         IEnumerable<Season> GetSeasons();
-        bool SaveSeason(Season season);
+        int SaveSeason(Season season);
         IQueryable<Season> GetSeasonsByShowId(int showId);
     }
 }

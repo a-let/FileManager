@@ -10,7 +10,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class ShowControllerTests
     {
-        private readonly ShowController _showController = new ShowController(new MockShowControllerService());
+        private readonly ShowController _showController = new ShowController(new MockShowControllerService(), new MockLoggerService());
 
         [Fact]
         public void Get_GivenNoParameter_ThenReturnsListOfShows()
@@ -51,7 +51,7 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void Save_GivenValidShow_ThenReturnsTrue()
+        public void Save_GivenValidShow_ThenReturnsShowId()
         {
             //Arrange
             var show = new Show
@@ -63,10 +63,10 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var success = _showController.Post(show);
+            var showId = _showController.Post(show);
 
             //Assert
-            Assert.True(success);
+            Assert.True(showId > 0);
         }
     }
 }

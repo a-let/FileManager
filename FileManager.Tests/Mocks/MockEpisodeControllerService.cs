@@ -33,9 +33,9 @@ namespace FileManager.Tests.Mocks
             return new List<Episode>().AsQueryable();
         }
 
-        public bool SaveEpisode(Episode episode)
+        public int SaveEpisode(Episode episode)
         {
-            return episode != null;
+            return episode != null ? 1 : 0;
         }
     }
 }

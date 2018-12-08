@@ -22,26 +22,19 @@ namespace FileManager.DataAccessLayer.Repositories
 
         public IEnumerable<Show> GetShows() => _context.Show;
 
-        public bool SaveShow(Show show)
+        public int SaveShow(Show show)
         {
-            try
+            if (show.ShowId == 0)
+                _context.Show.Add(show);
+            else
             {
-                if (show.ShowId == 0)
-                    _context.Show.Add(show);
-                else
-                {
-                    var s = _context.Show.Find(show.ShowId);
-                    _context.Entry(s).CurrentValues.SetValues(show);
-                }
-
-                _context.SaveChanges();
-
-                return true;
+                var s = _context.Show.Find(show.ShowId);
+                _context.Entry(s).CurrentValues.SetValues(show);
             }
-            catch
-            {
-                return false;
-            }
+
+            _context.SaveChanges();
+
+            return show.ShowId;
         }
 
         protected virtual void Dispose(bool disposing)

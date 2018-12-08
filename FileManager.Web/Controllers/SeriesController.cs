@@ -2,6 +2,7 @@
 using FileManager.Web.Services.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
@@ -13,56 +14,106 @@ namespace FileManager.Web.Controllers
     public class SeriesController : Controller
     {
         private readonly ISeriesControllerService _seriesControllerService;
+        private readonly ILogger _logger;
 
-        public SeriesController(ISeriesControllerService seriesControllerService)
+        public SeriesController(ISeriesControllerService seriesControllerService, ILogger logger)
         {
             _seriesControllerService = seriesControllerService;
+            _logger = logger;
         }
 
         // GET: api/Series
         [HttpGet]
         public IEnumerable<Series> Get()
         {
-            var series = _seriesControllerService.GetSeries();
-            return series;
+            try
+            {
+                var series = _seriesControllerService.GetSeries();
+                return series;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
 
         // GET: api/Series/5
         [HttpGet("id/{id}")]
         public Series Get(int id)
         {
-            var series = _seriesControllerService.GetSeriesById(id);
-            return series;
+            try
+            {
+                var series = _seriesControllerService.GetSeriesById(id);
+                return series;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
 
         // GET: api/Series/name/Name
         [HttpGet("name/{name}")]
         public Series Get(string name)
         {
-            var series = _seriesControllerService.GetSeriesByName(name);
-            return series;
+            try
+            {
+                var series = _seriesControllerService.GetSeriesByName(name);
+                return series;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // POST: api/Series
         [HttpPost]
-        public bool Post([FromBody]Series series)
+        public int Post([FromBody]Series series)
         {
-            var success = _seriesControllerService.SaveSeries(series);
-            return success;
+            try
+            {
+                var seriesId = _seriesControllerService.SaveSeries(series);
+                return seriesId;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // PUT: api/Series/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
     }
 }

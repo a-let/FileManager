@@ -8,6 +8,6 @@ namespace FileManager.Web.Services.Interfaces
         Season GetSeasonById(int id);
         IEnumerable<Season> GetSeasons();
         IEnumerable<Season> GetSeasonsByShowId(int showId);
-        bool SaveSeason(Season season);
+        int SaveSeason(Season season);
     }
 }

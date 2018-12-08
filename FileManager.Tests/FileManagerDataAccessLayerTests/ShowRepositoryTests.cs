@@ -74,7 +74,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void SaveShow_GivenValidNewShow_ThenReturnsTrue()
+        public void SaveShow_GivenValidNewShow_ThenReturnsShowId()
         {
             //Arrange
             var show = new Show
@@ -86,14 +86,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var success = _showRepository.SaveShow(show);
+            var showId = _showRepository.SaveShow(show);
 
             //Assert
-            Assert.True(success);
+            Assert.True(showId > 0);
         }
 
         [Fact]
-        public void SaveShow_GivenValidExistingShow_ThenReturnsTrue()
+        public void SaveShow_GivenValidExistingShow_ThenShowIdIsEqual()
         {
             //Arrange
             var show = new Show
@@ -112,14 +112,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             show.ShowId = 1;
             show.Name = "Updated Name";
 
-            var success = _showRepository.SaveShow(show);
+            var showId = _showRepository.SaveShow(show);
 
             //Assert
-            Assert.True(success);
+            Assert.Equal(show.ShowId, showId);
         }
 
         [Fact]
-        public void SaveShow_GivenNonExistingShow_ThenReturnsFalse()
+        public void SaveShow_GivenNonExistingShow_ThenThrowsArgumentNullException()
         {
             //Arrange
             var show = new Show
@@ -131,10 +131,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var success = _showRepository.SaveShow(show);
+            var exception = Record.Exception(() => _showRepository.SaveShow(show));
 
             //Assert
-            Assert.False(success);
+            Assert.IsType<ArgumentNullException>(exception);
         }
 
         protected override void Dispose(bool disposing = true)

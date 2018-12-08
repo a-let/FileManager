@@ -9,7 +9,7 @@ namespace FileManager.Web.Services.Interfaces
         Episode GetEpisodeById(int id);
         IEnumerable<Episode> GetEpisodes();
         Episode GetEpisodeByName(string name);
-        bool SaveEpisode(Episode episode);
+        int SaveEpisode(Episode episode);
         IQueryable<Episode> GetEpisodesBySeasonId(int seasonId);
     }
 }

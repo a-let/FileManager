@@ -37,7 +37,7 @@ namespace FileManager.Web.Services
             return _seriesRepository.GetSeriesByName(name);
         }
 
-        public bool SaveSeries(Series series)
+        public int SaveSeries(Series series)
         {
             if (series == null)
                 throw new ArgumentNullException(nameof(series));

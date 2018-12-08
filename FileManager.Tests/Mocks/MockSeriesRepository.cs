@@ -21,9 +21,9 @@ namespace FileManager.Tests.Mocks
             return new Series();
         }
 
-        public bool SaveSeries(Series series)
+        public int SaveSeries(Series series)
         {
-            return series != null;
+            return series != null ? 1 : 0;
         }
 
         public void Dispose()

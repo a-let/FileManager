@@ -2,7 +2,9 @@
 using FileManager.Web.Services.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
+using System;
 using System.Collections.Generic;
 
 namespace FileManager.Web.Controllers
@@ -12,56 +14,106 @@ namespace FileManager.Web.Controllers
     public class SeasonController : Controller
     {
         private readonly ISeasonControllerService _seasonControllerService;
+        private readonly ILogger _logger;
 
-        public SeasonController(ISeasonControllerService seasonControllerService)
+        public SeasonController(ISeasonControllerService seasonControllerService, ILogger logger)
         {
             _seasonControllerService = seasonControllerService;
+            _logger = logger;
         }
 
         // GET: api/Season
         [HttpGet]
         public IEnumerable<Season> Get()
         {
-            var seasons = _seasonControllerService.GetSeasons();
-            return seasons;
+            try
+            {
+                var seasons = _seasonControllerService.GetSeasons();
+                return seasons;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
 
         // GET: api/Season/5
         [HttpGet("id/{id}")]
         public Season Get(int id)
         {
-            var season = _seasonControllerService.GetSeasonById(id);
-            return season;
+            try
+            {
+                var season = _seasonControllerService.GetSeasonById(id);
+                return season;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // POST: api/Season
         [HttpPost]
-        public bool Post([FromBody]Season season)
+        public int Post([FromBody]Season season)
         {
-            var success = _seasonControllerService.SaveSeason(season);
-            return success;
+            try
+            {
+                var seasonId = _seasonControllerService.SaveSeason(season);
+                return seasonId;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
 
         // Get: api/Season/showId/5
         [HttpGet("showId/{showId}")]
         public IEnumerable<Season> GetByShowId(int showId)
         {
-            var seasons = _seasonControllerService.GetSeasonsByShowId(showId);
-            return seasons;
+            try
+            {
+                var seasons = _seasonControllerService.GetSeasonsByShowId(showId);
+                return seasons;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // PUT: api/Season/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
     }
 }

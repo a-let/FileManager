@@ -72,7 +72,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void SaveSeries_GivenValidNewSeries_ThenReturnsTrue()
+        public void SaveSeries_GivenValidNewSeries_ThenReturnsSeriesId()
         {
             //Arrange
             var series = new Series
@@ -83,14 +83,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var success = _seriesRepository.SaveSeries(series);
+            var seriesId = _seriesRepository.SaveSeries(series);
 
             //Assert
-            Assert.True(success);
+            Assert.True(seriesId > 0);
         }
 
         [Fact]
-        public void SaveSeries_GivenValidExistingSeries_ThenReturnsTrue()
+        public void SaveSeries_GivenValidExistingSeries_ThenSeriesIdIsEqual()
         {
             //Arrange
             var series = new Series
@@ -108,14 +108,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             series.SeriesId = 2;
             series.Name = "Updated Name";
 
-            var success = _seriesRepository.SaveSeries(series);
+            var seriesId = _seriesRepository.SaveSeries(series);
 
             //Assert
-            Assert.True(success);
+            Assert.Equal(series.SeriesId, seriesId);
         }
 
         [Fact]
-        public void SaveSeries_GivenNonExistingSeries_ThenReturnsFalse()
+        public void SaveSeries_GivenNonExistingSeries_ThenThrowsArgumentNullException()
         {
             //Arrange
             var series = new Series
@@ -126,10 +126,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var success = _seriesRepository.SaveSeries(series);
+            var exception = Record.Exception(() => _seriesRepository.SaveSeries(series));
 
             //Assert
-            Assert.False(success);
+            Assert.IsType<ArgumentNullException>(exception);
         }
 
         protected override void Dispose(bool disposing = true)

@@ -11,7 +11,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class EpisodeControllerTests
     {
-        private readonly EpisodeController _episodeController = new EpisodeController(new MockEpisodeControllerService());
+        private readonly EpisodeController _episodeController = new EpisodeController(new MockEpisodeControllerService(), new MockLoggerService());
 
         [Fact]
         public void Get_GivenNoParameter_ThenReturnsListOfEpisodes()
@@ -65,7 +65,7 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void Save_GivenValidEpisode_ThenReturnsTrue()
+        public void Save_GivenValidEpisode_ThenReturnsOne()
         {
             //Arrange
             var episode = new Episode
@@ -79,10 +79,10 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var success = _episodeController.Post(episode);
+            var episodeId = _episodeController.Post(episode);
 
             //Assert
-            Assert.True(success);
+            Assert.Equal(1, episodeId);
         }
     }
 }

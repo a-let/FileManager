@@ -37,7 +37,7 @@ namespace FileManager.Web.Services
             return _showRepository.GetShows();
         }
 
-        public bool SaveShow(Show show)
+        public int SaveShow(Show show)
         {
             if (show == null)
                 throw new ArgumentNullException(nameof(show));

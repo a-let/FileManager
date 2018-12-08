@@ -90,7 +90,7 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveEpisode_GivenNewEpisode_ThenReturnsTrue()
+        public void SaveEpisode_GivenNewEpisode_ThenReturnsOne()
         {
             //Arrange
             var episode = new Episode
@@ -103,10 +103,10 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var success = _episodeControllerService.SaveEpisode(episode);
+            var episodeId = _episodeControllerService.SaveEpisode(episode);
 
             //Assert
-            Assert.True(success);
+            Assert.Equal(1, episodeId);
         }
 
         [Fact]

@@ -22,26 +22,19 @@ namespace FileManager.DataAccessLayer.Repositories
 
         public Series GetSeriesByName(string name) => _context.Series.Single(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-        public bool SaveSeries(Series series)
+        public int SaveSeries(Series series)
         {
-            try
+            if (series.SeriesId == 0)
+                _context.Series.Add(series);
+            else
             {
-                if (series.SeriesId == 0)
-                    _context.Series.Add(series);
-                else
-                {
-                    var s = _context.Series.Find(series.SeriesId);
-                    _context.Entry(s).CurrentValues.SetValues(series);
-                }
-
-                _context.SaveChanges();
-
-                return true;
+                var s = _context.Series.Find(series.SeriesId);
+                _context.Entry(s).CurrentValues.SetValues(series);
             }
-            catch
-            {
-                return false;
-            }
+
+            _context.SaveChanges();
+
+            return series.SeriesId;
         }
 
         protected virtual void Dispose(bool disposing)

@@ -2,6 +2,7 @@
 using FileManager.Web.Services.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
@@ -13,56 +14,106 @@ namespace FileManager.Web.Controllers
     public class ShowController : Controller
     {
         private readonly IShowControllerService _showControllerService;
+        private readonly ILogger _logger;
 
-        public ShowController(IShowControllerService showControllerService)
+        public ShowController(IShowControllerService showControllerService, ILogger logger)
         {
             _showControllerService = showControllerService;
+            _logger = logger;
         }
 
         // GET: api/Show
         [HttpGet]
         public IEnumerable<Show> Get()
         {
-            var shows = _showControllerService.GetShows();
-            return shows;
+            try
+            {
+                var shows = _showControllerService.GetShows();
+                return shows;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
 
         // GET: api/Show/5
         [HttpGet("id/{id}")]
         public Show Get(int id)
         {
-            var show = _showControllerService.GetShowById(id);
-            return show;
+            try
+            {
+                var show = _showControllerService.GetShowById(id);
+                return show;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
 
         // GET: api/Show/name/Name
         [HttpGet("name/{name}")]
         public Show Get(string name)
         {
-            var show = _showControllerService.GetShowByName(name);
-            return show;
+            try
+            {
+                var show = _showControllerService.GetShowByName(name);
+                return show;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // POST: api/Show
         [HttpPost]
-        public bool Post([FromBody]Show show)
+        public int Post([FromBody]Show show)
         {
-            var success = _showControllerService.SaveShow(show);
-            return success;
+            try
+            {
+                var showId = _showControllerService.SaveShow(show);
+                return showId;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // PUT: api/Show/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
     }
 }

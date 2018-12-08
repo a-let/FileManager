@@ -8,7 +8,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class SeriesControllerTests
     {
-        private readonly SeriesController _seriesController = new SeriesController(new MockSeriesControllerService());
+        private readonly SeriesController _seriesController = new SeriesController(new MockSeriesControllerService(), new MockLoggerService());
 
         [Fact]
         public void Get_GivenNoParameter_ThenReturnsListOfSeriess()
@@ -49,7 +49,7 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void Save_GivenValidSeries_ThenReturnsTrue()
+        public void Save_GivenValidSeries_ThenReturnsSeriesId()
         {
             //Arrange
             var series = new Series
@@ -60,10 +60,10 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var success = _seriesController.Post(series);
+            var seriesId = _seriesController.Post(series);
 
             //Assert
-            Assert.True(success);
+            Assert.True(seriesId > 0);
         }
     }
 }

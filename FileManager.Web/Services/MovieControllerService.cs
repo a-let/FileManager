@@ -46,7 +46,7 @@ namespace FileManager.Web.Services
             return _movieRepository.GetMoviesBySeriesId(seriesId);
         }
 
-        public bool SaveMovie(Movie movie)
+        public int SaveMovie(Movie movie)
         {
             if (movie == null)
                 throw new ArgumentNullException(nameof(movie));
