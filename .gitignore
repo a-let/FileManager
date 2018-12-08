@@ -57,3 +57,10 @@
 /FileManager.DataAccessLayer/bin/Debug/netcoreapp2.1
 /FileManager.IntegrationTests/bin/Debug/netcoreapp2.1
 /FileManager.IntegrationTests/obj
+/FileManager.ConsoleApp/bin/Debug/netcoreapp2.2
+/FileManager.DataAccessLayer/bin/Debug/netcoreapp2.2
+/FileManager.IntegrationTests/bin/Debug/netcoreapp2.2
+/FileManager.Models/bin/Debug/netcoreapp2.2
+/FileManager.Services/bin/Debug/netcoreapp2.2
+/FileManager.Tests/bin/Debug/netcoreapp2.2
+/FileManager.Web/bin/Debug/netcoreapp2.2
