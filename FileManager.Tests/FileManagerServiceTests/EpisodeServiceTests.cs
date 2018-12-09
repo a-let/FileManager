@@ -2,13 +2,8 @@
 using FileManager.Services;
 using FileManager.Tests.Mocks;
 
-using Newtonsoft.Json;
-
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net;
-using System.Text;
 
 using Xunit;
 
