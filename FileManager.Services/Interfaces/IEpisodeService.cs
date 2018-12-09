@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
-using FileManager.Models;
+﻿using FileManager.Models;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Services.Interfaces
 {
     public interface IEpisodeService
     {
-        IEnumerable<Episode> GetEpisodes();
-        Episode GetEpisodeById(int id);
-        Episode GetEpisodeByName(string name);
-        bool SaveEpisode(Episode episode);
-        IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId);
+        Task<IEnumerable<Episode>> GetEpisodes();
+        Task<Episode> GetEpisodeById(int id);
+        Task<Episode> GetEpisodeByName(string name);
+        Task<int> SaveEpisode(Episode episode);
+        Task<IEnumerable<Episode>> GetEpisodesBySeasonId(int seasonId);
     }
 }

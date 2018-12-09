@@ -10,7 +10,8 @@ namespace FileManager.Tests.FileManagerServiceTests
 {
     public class MovieServiceTests
     {
-        private readonly MovieService _movieService = new MovieService(new MockConfiguration(), new MockHttpClientFactory());
+        //private readonly MovieService _movieService = new MovieService(new MockConfiguration(), new MockHttpClientFactory());
+        private readonly MovieService _movieService = new MovieService(new MockConfiguration(), null);
 
         [Fact]
         public void GetMovies_ThenDoesNotThrow()

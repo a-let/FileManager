@@ -1,26 +1,17 @@
-﻿using System.Threading.Tasks;
-
-using FileManager.Services.Interfaces;
+﻿using System.Net.Http;
 
 namespace FileManager.Tests.Mocks
 {
     public class MockHttpClientFactory : IHttpClientFactory
     {
-        public string BaseAddress { get; set; }
+        public FakeHttpMessageHandler FakeHttpMessageHandler { get; set; }
 
-        public T DeserializeObject<T>(string value)
+        public HttpClient CreateClient(string name)
         {
-            return default(T);
-        }
-
-        public Task<string> GetAsync(string requestUri)
-        {
-            return Task.FromResult("Test Get");
-        }
-
-        public Task<string> PostAsync(object value, string requestUri)
-        {
-            return Task.FromResult("Test Post");
+            return new HttpClient(FakeHttpMessageHandler)
+            {
+                BaseAddress = new System.Uri("http://good.uri")
+            };
         }
     }
 }

@@ -1,107 +1,219 @@
-﻿using System;
-
-using Xunit;
-
-using FileManager.Models;
+﻿using FileManager.Models;
 using FileManager.Services;
 using FileManager.Tests.Mocks;
+
+using Newtonsoft.Json;
+
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net;
+using System.Text;
+
+using Xunit;
 
 namespace FileManager.Tests.FileManagerServiceTests
 {
     public class EpisodeServiceTests
     {
-        private readonly EpisodeService _episodeService = new EpisodeService(new MockConfiguration(), new MockHttpClientFactory());
-
         [Fact]
         public void GetEpisodes_ThenDoesNotThrow()
         {
-            //Arrange, Act
-            var exception = Record.Exception(() => _episodeService.GetEpisodes());
+            // Arrange
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(new List<Episode>()), Encoding.UTF8, "application/json")
+                })
+            };
 
-            //Assert
-            Assert.Null(exception);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
+            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodes());
+
+            // Assert
+            Assert.Null(exception.Result);
         }
 
         [Fact]
         public void GetEpisodeById_GivenValidId_ThenDoesNotThrow()
         {
-            //Arrange, Act
-            var exception = Record.Exception(() => _episodeService.GetEpisodeById(1));
+            // Arrange
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(new Episode()), Encoding.UTF8, "application/json")
+                })
+            };
 
-            //Assert
-            Assert.Null(exception);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
+            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodeById(1));
+
+            // Assert
+            Assert.Null(exception.Result);
         }
 
         [Fact]
         public void GetEpisodeById_GivenIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
         {
-            //Arrange, Act
-            var exception = Record.Exception(() => _episodeService.GetEpisodeById(0));
+            // Arrange
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(new ArgumentOutOfRangeException()), Encoding.UTF8, "application/json")
+                })
+            };
 
-            //Assert
-            Assert.IsType<ArgumentOutOfRangeException>(exception.InnerException);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
+            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodeById(0));
+
+            // Assert
+            Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
         }
 
         [Fact]
         public void GetEpisodeByName_GivenValidName_ThenDoesNotThrow()
         {
-            //Arrange, Act
-            var exception = Record.Exception(() => _episodeService.GetEpisodeByName("Test Name"));
+            // Arrange
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(new Episode { Name = "Test Name"}), Encoding.UTF8, "application/json")
+                })
+            };
 
-            //Assert
-            Assert.Null(exception);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
+            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodeByName("Test Name"));
+
+            // Assert
+            Assert.Null(exception.Result);
         }
 
         [Fact]
         public void GetEpisodeByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
-            //Arrange, Act
-            var exception = Record.Exception(() => _episodeService.GetEpisodeByName(""));
+            // Arrange
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(new ArgumentNullException()), Encoding.UTF8, "application/json")
+                })
+            };
 
-            //Assert
-            Assert.IsType<ArgumentNullException>(exception.InnerException);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
+            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodeByName(""));
+
+            // Assert
+            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
         }
 
         [Fact]
         public void SaveEpisode_GivenValidEpisode_ThenDoesNotThrow()
         {
-            //Arrange, Act
+            // Arrange
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(1), Encoding.UTF8, "application/json")
+                })
+            };
+
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
             var episode = new Episode();
 
-            var exception = Record.Exception(() => _episodeService.SaveEpisode(episode));
+            var exception = Record.ExceptionAsync(() => episodeService.SaveEpisode(episode));
 
-            //Assert
-            Assert.Null(exception);
+            // Assert
+            Assert.Null(exception.Result);
         }
 
         [Fact]
         public void SaveEpisode_GivenNullEpisode_ThenThrowsArgumentNullException()
         {
-            //Arrange, Act
-            var exception = Record.Exception(() => _episodeService.SaveEpisode(null));
+            // Arrange
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(new ArgumentNullException()), Encoding.UTF8, "application/json")
+                })
+            };
 
-            //Assert
-            Assert.IsType<ArgumentNullException>(exception.InnerException);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
+            var exception = Record.ExceptionAsync(() => episodeService.SaveEpisode(null));
+
+            // Assert
+            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
         }
 
         [Fact]
         public void GetEpisodesBySeasonId_GivenValidSeasonId_ThenDoesNotThrow()
         {
-            //Arrange, Act
-            var exception = Record.Exception(() => _episodeService.GetEpisodesBySeasonId(1));
+            // Arrange
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(new List<Episode>()), Encoding.UTF8, "application/json")
+                })
+            };
 
-            //Assert
-            Assert.Null(exception);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
+            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodesBySeasonId(1));
+
+            // Assert
+            Assert.Null(exception.Result);
         }
 
         [Fact]
         public void GetEpisodesBySeasonId_GivenSeasonIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
         {
-            //Arrange, Act
-            var exception = Record.Exception(() => _episodeService.GetEpisodesBySeasonId(0));
+            // Arrange
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(new ArgumentOutOfRangeException()), Encoding.UTF8, "application/json")
+                })
+            };
 
-            //Assert
-            Assert.IsType<ArgumentOutOfRangeException>(exception.InnerException);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
+            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodesBySeasonId(0));
+
+            // Assert
+            Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
         }
     }
 }

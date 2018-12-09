@@ -10,7 +10,8 @@ namespace FileManager.Tests.FileManagerServiceTests
 {
     public class ShowServiceTests
     {
-        private readonly ShowService _showService = new ShowService(new MockConfiguration(), new MockHttpClientFactory());
+        //private readonly ShowService _showService = new ShowService(new MockConfiguration(), new MockHttpClientFactory());
+        private readonly ShowService _showService = new ShowService(new MockConfiguration(), null);
 
         [Fact]
         public void GetShowById_GivenValidId_ThenDoesNotThrow()

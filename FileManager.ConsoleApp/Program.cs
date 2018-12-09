@@ -1,8 +1,10 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using FileManager.Services.Interfaces;
+﻿using FileManager.Services.Interfaces;
 using FileManager.Models;
 using FileManager.Models.Constants;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using System;
 
 namespace FileManager.ConsoleApp
 {
@@ -27,21 +29,21 @@ namespace FileManager.ConsoleApp
         {
             var episodeService = _services.GetService<IEpisodeService>();
                         
-            var episodeById = episodeService.GetEpisodeById(1002);
-            var episodeByName = episodeService.GetEpisodeByName("episode - from program");
+            var episodeById = episodeService.GetEpisodeById(2).Result;
+            var episodeByName = episodeService.GetEpisodeByName("string").Result;
 
             var newEpisode = new Episode
             {
                 EpisodeId = 0,
-                SeasonId = 1002,
+                SeasonId = 2,
                 Name = "New episode from console via service",
                 EpisodeNumber = 1,
                 Format = FileFormatTypes.MP4,
                 Path = @"C:\Temp"
             };    
             
-            var episodeSaved = episodeService.SaveEpisode(newEpisode);
-            var episodesBySeasonId = episodeService.GetEpisodesBySeasonId(1002);
+            var episodeSaved = episodeService.SaveEpisode(newEpisode).Result;
+            var episodesBySeasonId = episodeService.GetEpisodesBySeasonId(1).Result;
             
             Console.WriteLine("Get by id...");
             Console.WriteLine($"{episodeById.EpisodeId} - {episodeById.Name}");
@@ -50,7 +52,7 @@ namespace FileManager.ConsoleApp
             Console.WriteLine("Saved...");
             Console.WriteLine($"{episodeSaved}");
 
-            var episodeList = episodeService.GetEpisodes();
+            var episodeList = episodeService.GetEpisodes().Result;
 
             Console.WriteLine("Get episodes...");
             foreach (var episode in episodeList)
@@ -80,11 +82,11 @@ namespace FileManager.ConsoleApp
                 Path = @"C:\Temp"
             };
           
-            var movieSaved = movieService.SaveMovie(newMovie);
-            var movieList = movieService.GetMovies();
-            var movieById = movieService.GetMovieById(1007);
-            var movieByName = movieService.GetMovieByName("New movie from console via service");
-            var moviesBySeriesId = movieService.GetMoviesBySeriesId(1);
+            var movieSaved = movieService.SaveMovie(newMovie).Result;
+            var movieList = movieService.GetMovies().Result;
+            var movieById = movieService.GetMovieById(1).Result;
+            var movieByName = movieService.GetMovieByName("string").Result;
+            var moviesBySeriesId = movieService.GetMoviesBySeriesId(1).Result;
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{movieSaved}");
@@ -119,9 +121,9 @@ namespace FileManager.ConsoleApp
                 Path = "New season path from console via service"
             };
 
-            var seasonSaved = seasonService.SaveSeason(newSeason);
-            var seasonById = seasonService.GetSeasonById(1002);
-            var seasonByShowId = seasonService.GetSeasonsByShowId(1);
+            var seasonSaved = seasonService.SaveSeason(newSeason).Result;
+            var seasonById = seasonService.GetSeasonById(2).Result;
+            var seasonByShowId = seasonService.GetSeasonsByShowId(2).Result;
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{seasonSaved}");
@@ -130,7 +132,7 @@ namespace FileManager.ConsoleApp
             Console.WriteLine($"{seasonById.SeasonId} - {seasonById.Path}");
 
             Console.WriteLine("Get seasons...");
-            foreach (var season in seasonService.GetSeasons())
+            foreach (var season in seasonService.GetSeasons().Result)
             {
                 Console.WriteLine($"{season.SeasonId} - {season.Path}");
             }
@@ -153,9 +155,9 @@ namespace FileManager.ConsoleApp
                 Path = @"C:\Temp"
             };
 
-            var seriesSave = seriesService.SaveSeries(newSeries);
-            var seriesById = seriesService.GetSeriesById(1002);
-            var seriesByName = seriesService.GetSeriesByName("Test Series from swagger");
+            var seriesSave = seriesService.SaveSeries(newSeries).Result;
+            var seriesById = seriesService.GetSeriesById(1).Result;
+            var seriesByName = seriesService.GetSeriesByName("Test Series").Result;
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{seriesSave}");
@@ -165,8 +167,8 @@ namespace FileManager.ConsoleApp
             Console.WriteLine("Get by name...");
             Console.WriteLine($"{seriesByName.SeriesId} - {seriesByName.Name}");
 
-            Console.WriteLine("Get seasons...");
-            foreach (var series in seriesService.GetSeries())
+            Console.WriteLine("Get series...");
+            foreach (var series in seriesService.GetSeries().Result)
             {
                 Console.WriteLine($"{series.SeriesId} - {series.Name}");
             }
@@ -184,9 +186,9 @@ namespace FileManager.ConsoleApp
                 Path = @"C:\Temp"
             };
 
-            var showSaved = showService.SaveShow(newShow);
-            var showById = showService.GetShowById(1);
-            var showByName = showService.GetShowByName("Testing Show - from program");
+            var showSaved = showService.SaveShow(newShow).Result;
+            var showById = showService.GetShowById(1).Result;
+            var showByName = showService.GetShowByName("Test Show").Result;
 
             Console.WriteLine("Get by id...");
             Console.WriteLine($"{showById.ShowId} - {showById.Name}");
@@ -196,8 +198,8 @@ namespace FileManager.ConsoleApp
             Console.WriteLine("Saved...");
             Console.WriteLine($"{showSaved}");
 
-            Console.WriteLine("Get seasons...");
-            foreach (var show in showService.GetShows())
+            Console.WriteLine("Get shows...");
+            foreach (var show in showService.GetShows().Result)
             {
                 Console.WriteLine($"{show.ShowId} - {show.Name}");
             }

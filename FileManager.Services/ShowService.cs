@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FileManager.Models;
+using FileManager.Services.Interfaces;
 
 using Microsoft.Extensions.Configuration;
 
-using FileManager.Models;
-using FileManager.Services.Interfaces;
+using Newtonsoft.Json;
+
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FileManager.Services
 {
@@ -12,28 +17,25 @@ namespace FileManager.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _showAddresses;
-        private readonly IHttpClientFactory _httpClient;
+        private readonly HttpClient _httpClient;
 
-        public ShowService(IConfiguration configuration, IHttpClientFactory httpClient)
+        public ShowService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
             _showAddresses = _configuration.GetSection("ShowAddresses");
 
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _configuration["FileManagerBaseAddress"];
+            _httpClient = httpClientFactory.CreateClient("FileManager");
         }
 
-        public Show GetShowById(int id)
+        public async Task<Show> GetShowById(int id)
         {
             try
             {
                 if (id <= 0)
                     throw new ArgumentOutOfRangeException("ShowId cannot be less than 1");
 
-                Show show = null;
-
-                var jsonString = _httpClient.GetAsync($"{_showAddresses["GetShowByIdAddress"]}/{id}").Result;
-                show = _httpClient.DeserializeObject<Show>(jsonString);
+                var message = await _httpClient.GetAsync($"{_showAddresses["GetShowByIdAddress"]}/{id}");
+                var show = JsonConvert.DeserializeObject<Show>(await message.Content.ReadAsStringAsync());
 
                 return show;
             }
@@ -43,17 +45,15 @@ namespace FileManager.Services
             }
         }
 
-        public Show GetShowByName(string name)
+        public async Task<Show> GetShowByName(string name)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(name))
                     throw new ArgumentNullException(nameof(name));
 
-                Show show = null;
-
-                var jsonString = _httpClient.GetAsync($"{_showAddresses["GetShowByNameAddress"]}/{name}").Result;
-                show = _httpClient.DeserializeObject<Show>(jsonString);
+                var message = await _httpClient.GetAsync($"{_showAddresses["GetShowByNameAddress"]}/{name}");
+                var show = JsonConvert.DeserializeObject<Show>(await message.Content.ReadAsStringAsync());
 
                 return show;
             }
@@ -63,14 +63,12 @@ namespace FileManager.Services
             }
         }
 
-        public IEnumerable<Show> GetShows()
+        public async Task<IEnumerable<Show>> GetShows()
         {
             try
             {
-                IEnumerable<Show> showList = null;
-
-                var jsonString = _httpClient.GetAsync(_showAddresses["GetShowsAddress"]).Result;
-                showList = _httpClient.DeserializeObject<IEnumerable<Show>>(jsonString);
+                var message = await _httpClient.GetAsync(_showAddresses["GetShowsAddress"]);
+                var showList = JsonConvert.DeserializeObject<IEnumerable<Show>>(await message.Content.ReadAsStringAsync());
 
                 return showList;
             }
@@ -80,19 +78,18 @@ namespace FileManager.Services
             }
         }
 
-        public bool SaveShow(Show show)
+        public async Task<int> SaveShow(Show show)
         {
             try
             {
                 if (show == null)
                     throw new ArgumentNullException(nameof(show));
 
-                bool success = false;
+                var content = new StringContent(JsonConvert.SerializeObject(show), Encoding.UTF8, "application/json");
+                var message = await _httpClient.PostAsync(_showAddresses["SaveShowAddress"], content);
+                var id = JsonConvert.DeserializeObject<int>(await message.Content.ReadAsStringAsync());
 
-                var jsonString = _httpClient.PostAsync(show, _showAddresses["SaveShowAddress"]).Result;
-                success = _httpClient.DeserializeObject<bool>(jsonString);
-
-                return success;
+                return id;
             }
             catch (Exception ex)
             {

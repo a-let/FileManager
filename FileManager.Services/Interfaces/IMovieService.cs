@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
-using FileManager.Models;
+﻿using FileManager.Models;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Services.Interfaces
 {
     public interface IMovieService
     {
-        IEnumerable<Movie> GetMovies();
-        Movie GetMovieById(int id);
-        Movie GetMovieByName(string name);
-        bool SaveMovie(Movie movie);
-        IEnumerable<Movie> GetMoviesBySeriesId(int seriesId);
+        Task<IEnumerable<Movie>> GetMovies();
+        Task<Movie> GetMovieById(int id);
+        Task<Movie> GetMovieByName(string name);
+        Task<int> SaveMovie(Movie movie);
+        Task<IEnumerable<Movie>> GetMoviesBySeriesId(int seriesId);
     }
 }

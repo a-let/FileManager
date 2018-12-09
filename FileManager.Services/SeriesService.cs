@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FileManager.Models;
+using FileManager.Services.Interfaces;
 
 using Microsoft.Extensions.Configuration;
 
-using FileManager.Models;
-using FileManager.Services.Interfaces;
+using Newtonsoft.Json;
+
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FileManager.Services
 {
@@ -12,25 +17,22 @@ namespace FileManager.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _seriesAddresses;
-        private readonly IHttpClientFactory _httpClient;
+        private readonly HttpClient _httpClient;
 
-        public SeriesService(IConfiguration configuration, IHttpClientFactory httpClient)
+        public SeriesService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
             _seriesAddresses = _configuration.GetSection("SeriesAddresses");
 
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _configuration["FIleManagerBaseAddress"];
+            _httpClient = httpClientFactory.CreateClient("FileManager");
         }
 
-        public IEnumerable<Series> GetSeries()
+        public async Task<IEnumerable<Series>> GetSeries()
         {
             try
             {
-                IEnumerable<Series> seriesList = null;
-
-                var jsonString = _httpClient.GetAsync(_seriesAddresses["GetSeriesAddress"]).Result;
-                seriesList = _httpClient.DeserializeObject<IEnumerable<Series>>(jsonString);
+                var message = await _httpClient.GetAsync(_seriesAddresses["GetSeriesAddress"]);
+                var seriesList = JsonConvert.DeserializeObject<IEnumerable<Series>>(await message.Content.ReadAsStringAsync());
 
                 return seriesList;
             }
@@ -40,17 +42,15 @@ namespace FileManager.Services
             }
         }
 
-        public Series GetSeriesById(int id)
+        public async Task<Series> GetSeriesById(int id)
         {
             try
             {
                 if (id <= 0)
                     throw new ArgumentOutOfRangeException("SeriesId cannot by less than 1");
 
-                Series series = null;
-
-                var jsonString = _httpClient.GetAsync($"{_seriesAddresses["GetSeriesByIdAddress"]}/{id}").Result;
-                series = _httpClient.DeserializeObject<Series>(jsonString);
+                var message = await _httpClient.GetAsync($"{_seriesAddresses["GetSeriesByIdAddress"]}/{id}");
+                var series = JsonConvert.DeserializeObject<Series>(await message.Content.ReadAsStringAsync());
 
                 return series;
             }
@@ -60,17 +60,15 @@ namespace FileManager.Services
             }
         }
 
-        public Series GetSeriesByName(string name)
+        public async Task<Series> GetSeriesByName(string name)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(name))
                     throw new ArgumentNullException(nameof(name));
 
-                Series series = null;
-
-                var jsonString = _httpClient.GetAsync($"{_seriesAddresses["GetSeriesByNameAddress"]}/{name}").Result;
-                series = _httpClient.DeserializeObject<Series>(jsonString);
+                var message = await _httpClient.GetAsync($"{_seriesAddresses["GetSeriesByNameAddress"]}/{name}");
+                var series = JsonConvert.DeserializeObject<Series>(await message.Content.ReadAsStringAsync());
 
                 return series;
             }
@@ -80,19 +78,18 @@ namespace FileManager.Services
             }
         }
 
-        public bool SaveSeries(Series series)
+        public async Task<int> SaveSeries(Series series)
         {
             try
             {
                 if (series == null)
                     throw new ArgumentNullException(nameof(series));
 
-                bool success = false;
+                var content = new StringContent(JsonConvert.SerializeObject(series), Encoding.UTF8, "application/json");
+                var message = await _httpClient.PostAsync(_seriesAddresses["SaveSeriesAddress"], content);
+                var id = JsonConvert.DeserializeObject<int>(await message.Content.ReadAsStringAsync());
 
-                var jsonString = _httpClient.PostAsync(series, _seriesAddresses["SaveSeriesAddress"]).Result;
-                success = _httpClient.DeserializeObject<bool>(jsonString);
-
-                return success;
+                return id;
             }
             catch (Exception ex)
             {

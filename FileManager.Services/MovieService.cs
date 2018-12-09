@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FileManager.Models;
+using FileManager.Services.Interfaces;
 
 using Microsoft.Extensions.Configuration;
 
-using FileManager.Models;
-using FileManager.Services.Interfaces;
+using Newtonsoft.Json;
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Text;
+using System.Net.Http;
 
 namespace FileManager.Services
 {
@@ -12,28 +17,25 @@ namespace FileManager.Services
     {        
         private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _movieAddresses;
-        private readonly IHttpClientFactory _httpClient;
+        private readonly HttpClient _httpClient;
 
-        public MovieService(IConfiguration configuration, IHttpClientFactory httpClient)
+        public MovieService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
             _movieAddresses = _configuration.GetSection("MovieAddresses");
 
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _configuration["FileManagerBaseAddress"];
+            _httpClient = httpClientFactory.CreateClient("FileManager");
         }
 
-        public Movie GetMovieById(int id)
+        public async Task<Movie> GetMovieById(int id)
         {
             try
             {
                 if (id <= 0)
                     throw new ArgumentOutOfRangeException("MovieId cannot be less than 1");
 
-                Movie movie = null;
-
-                var jsonString = _httpClient.GetAsync($"{_movieAddresses["GetMovieByIdAddress"]}/{id}").Result;
-                movie = _httpClient.DeserializeObject<Movie>(jsonString);
+                var message = await _httpClient.GetAsync($"{_movieAddresses["GetMovieByIdAddress"]}/{id}");
+                var movie = JsonConvert.DeserializeObject<Movie>(await message.Content.ReadAsStringAsync());
                                 
                 return movie;
             }
@@ -43,17 +45,15 @@ namespace FileManager.Services
             }
         }
 
-        public Movie GetMovieByName(string name)
+        public async Task<Movie> GetMovieByName(string name)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(name))
                     throw new ArgumentNullException(nameof(name));
 
-                Movie movie = null;
-
-                var jsonString = _httpClient.GetAsync($"{_movieAddresses["GetMovieByNameAddress"]}/{name}").Result;
-                movie = _httpClient.DeserializeObject<Movie>(jsonString);
+                var message = await _httpClient.GetAsync($"{_movieAddresses["GetMovieByNameAddress"]}/{name}");
+                var movie = JsonConvert.DeserializeObject<Movie>(await message.Content.ReadAsStringAsync());
 
                 return movie;
             }
@@ -63,14 +63,12 @@ namespace FileManager.Services
             }
         }
 
-        public IEnumerable<Movie> GetMovies()
+        public async Task<IEnumerable<Movie>> GetMovies()
         {
             try
             {
-                IEnumerable<Movie> movieList = null;
-
-                var jsonString = _httpClient.GetAsync(_movieAddresses["GetMoviesAddress"]).Result;
-                movieList = _httpClient.DeserializeObject<IEnumerable<Movie>>(jsonString);
+                var message = await _httpClient.GetAsync(_movieAddresses["GetMoviesAddress"]);
+                var movieList = JsonConvert.DeserializeObject<IEnumerable<Movie>>(await message.Content.ReadAsStringAsync());
 
                 return movieList;
             }
@@ -80,17 +78,15 @@ namespace FileManager.Services
             }
         }
 
-        public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId)
+        public async Task<IEnumerable<Movie>> GetMoviesBySeriesId(int seriesId)
         {
             try
             {
                 if (seriesId <= 0)
                     throw new ArgumentOutOfRangeException("SeriesId cannot be less than 1");
 
-                IEnumerable<Movie> movieList = null;
-
-                var jsonString = _httpClient.GetAsync($"{_movieAddresses["GetMoviesBySeriesIdAddress"]}/{seriesId}").Result;
-                movieList = _httpClient.DeserializeObject<IEnumerable<Movie>>(jsonString);
+                var message = await _httpClient.GetAsync($"{_movieAddresses["GetMoviesBySeriesIdAddress"]}/{seriesId}");
+                var movieList = JsonConvert.DeserializeObject<IEnumerable<Movie>>(await message.Content.ReadAsStringAsync());
 
                 return movieList;
             }
@@ -100,19 +96,18 @@ namespace FileManager.Services
             }
         }
 
-        public bool SaveMovie(Movie movie)
+        public async Task<int> SaveMovie(Movie movie)
         {
             try
             {
                 if (movie == null)
                     throw new ArgumentNullException(nameof(movie));
 
-                bool success = false;
+                var content = new StringContent(JsonConvert.SerializeObject(movie), Encoding.UTF8, "application/json");
+                var message = await _httpClient.PostAsync(_movieAddresses["SaveMovieAddress"], content);
+                var id = JsonConvert.DeserializeObject<int>(await message.Content.ReadAsStringAsync());
 
-                var jsonString = _httpClient.PostAsync(movie, _movieAddresses["SaveMovieAddress"]).Result;
-                success = _httpClient.DeserializeObject<bool>(jsonString);
-
-                return success;
+                return id;
             }
             catch(Exception ex)
             {

@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FileManager.Models;
+using FileManager.Services.Interfaces;
 
 using Microsoft.Extensions.Configuration;
 
-using FileManager.Models;
-using FileManager.Services.Interfaces;
+using Newtonsoft.Json;
+
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FileManager.Services
 {
@@ -12,28 +17,25 @@ namespace FileManager.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _seasonAddresses;
-        private readonly IHttpClientFactory _httpClient;
+        private readonly HttpClient _httpClient;
 
-        public SeasonService(IConfiguration configuration, IHttpClientFactory httpClient)
+        public SeasonService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
             _seasonAddresses = configuration.GetSection("SeasonAddresses");
 
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _configuration["FileManagerBaseAddress"];
+            _httpClient = httpClientFactory.CreateClient("FileManager");
         }
 
-        public Season GetSeasonById(int id)
+        public async Task<Season> GetSeasonById(int id)
         {
             try
             {
                 if (id <= 0)
                     throw new ArgumentOutOfRangeException("SeasonId cannot be less than 1");
 
-                Season season = null;
-
-                var jsonString = _httpClient.GetAsync($"{_seasonAddresses["GetSeasonByIdAddress"]}/{id}").Result;
-                season = _httpClient.DeserializeObject<Season>(jsonString);
+                var message = await _httpClient.GetAsync($"{_seasonAddresses["GetSeasonByIdAddress"]}/{id}");
+                var season = JsonConvert.DeserializeObject<Season>(await message.Content.ReadAsStringAsync());
 
                 return season;
             }
@@ -43,14 +45,12 @@ namespace FileManager.Services
             }
         }
 
-        public IEnumerable<Season> GetSeasons()
+        public async Task<IEnumerable<Season>> GetSeasons()
         {
             try
             {
-                IEnumerable<Season> seasonList = null;
-
-                var jsonString = _httpClient.GetAsync(_seasonAddresses["GetSeasonsAddress"]).Result;
-                seasonList = _httpClient.DeserializeObject<IEnumerable<Season>>(jsonString);
+                var message = await _httpClient.GetAsync(_seasonAddresses["GetSeasonsAddress"]);
+                var seasonList = JsonConvert.DeserializeObject<IEnumerable<Season>>(await message.Content.ReadAsStringAsync());
 
                 return seasonList;
             }
@@ -60,17 +60,15 @@ namespace FileManager.Services
             }
         }
 
-        public IEnumerable<Season> GetSeasonsByShowId(int showId)
+        public async Task<IEnumerable<Season>> GetSeasonsByShowId(int showId)
         {
             try
             {
                 if (showId <= 0)
                     throw new ArgumentOutOfRangeException("SeasonId cannot be less than 1");
 
-                IEnumerable<Season> seasonList = null;
-
-                var jsonString = _httpClient.GetAsync($"{_seasonAddresses["GetSeasonsByShowIdAddress"]}/{showId}").Result;
-                seasonList = _httpClient.DeserializeObject<IEnumerable<Season>>(jsonString);
+                var message = await _httpClient.GetAsync($"{_seasonAddresses["GetSeasonsByShowIdAddress"]}/{showId}");
+                var seasonList = JsonConvert.DeserializeObject<IEnumerable<Season>>(await message.Content.ReadAsStringAsync());
 
                 return seasonList;
             }
@@ -80,17 +78,16 @@ namespace FileManager.Services
             }
         }
 
-        public bool SaveSeason(Season season)
+        public async Task<int> SaveSeason(Season season)
         {
             try
             {
                 if (season == null)
                     throw new ArgumentNullException(nameof(season));
 
-                bool success = false;
-
-                var jsonString = _httpClient.PostAsync(season, _seasonAddresses["SaveSeasonAddress"]).Result;
-                success = _httpClient.DeserializeObject<bool>(jsonString);
+                var content = new StringContent(JsonConvert.SerializeObject(season), Encoding.UTF8, "application/json");
+                var message = await _httpClient.PostAsync(_seasonAddresses["SaveSeasonAddress"], content);
+                var success = JsonConvert.DeserializeObject<int>(await message.Content.ReadAsStringAsync());
 
                 return success;
             }

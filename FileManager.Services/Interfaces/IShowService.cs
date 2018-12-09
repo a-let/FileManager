@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using FileManager.Models;
+﻿using FileManager.Models;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Services.Interfaces
 {
     public interface IShowService
     {
-        Show GetShowById(int id);
-        Show GetShowByName(string name);
-        IEnumerable<Show> GetShows();
-        bool SaveShow(Show show);
+        Task<Show> GetShowById(int id);
+        Task<Show> GetShowByName(string name);
+        Task<IEnumerable<Show>> GetShows();
+        Task<int> SaveShow(Show show);
     }
 }

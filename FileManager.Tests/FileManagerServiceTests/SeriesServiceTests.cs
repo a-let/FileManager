@@ -10,7 +10,8 @@ namespace FileManager.Tests.FileManagerServiceTests
 {
     public class SeriesServiceTests
     {
-        private readonly SeriesService _seriesService = new SeriesService(new MockConfiguration(), new MockHttpClientFactory());
+        //private readonly SeriesService _seriesService = new SeriesService(new MockConfiguration(), new MockHttpClientFactory());
+        private readonly SeriesService _seriesService = new SeriesService(new MockConfiguration(), null);
 
         [Fact]
         public void GetSeries_ThenDoesNotThrow()

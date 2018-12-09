@@ -10,7 +10,8 @@ namespace FileManager.Tests.FileManagerServiceTests
 {
     public class SeasonServiceTests
     {
-        private readonly SeasonService _seasonService = new SeasonService(new MockConfiguration(), new MockHttpClientFactory());
+        //private readonly SeasonService _seasonService = new SeasonService(new MockConfiguration(), new MockHttpClientFactory());
+        private readonly SeasonService _seasonService = new SeasonService(new MockConfiguration(), null);
 
         [Fact]
         public void GetBySeasonId_GivenValidSeasonId_ThenDoesNotThrow()
