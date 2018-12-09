@@ -22,11 +22,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
-                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(new List<Episode>()), Encoding.UTF8, "application/json")
-                })
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Episode>())
             };
 
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
@@ -44,11 +40,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
-                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(new Episode()), Encoding.UTF8, "application/json")
-                })
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new Episode())
             };
 
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
@@ -66,11 +58,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
-                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(new ArgumentOutOfRangeException()), Encoding.UTF8, "application/json")
-                })
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
@@ -88,11 +76,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
-                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(new Episode { Name = "Test Name"}), Encoding.UTF8, "application/json")
-                })
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new Episode { Name = "Test Name"})
             };
 
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
@@ -110,11 +94,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
-                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(new ArgumentNullException()), Encoding.UTF8, "application/json")
-                })
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
@@ -132,11 +112,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
-                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(1), Encoding.UTF8, "application/json")
-                })
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
             };
 
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
@@ -156,11 +132,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
-                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(new ArgumentNullException()), Encoding.UTF8, "application/json")
-                })
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
@@ -178,11 +150,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
-                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(new List<Episode>()), Encoding.UTF8, "application/json")
-                })
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Episode>())
             };
 
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
@@ -200,11 +168,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
-                FakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(new ArgumentOutOfRangeException()), Encoding.UTF8, "application/json")
-                })
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);

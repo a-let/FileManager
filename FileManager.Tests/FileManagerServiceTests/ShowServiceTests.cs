@@ -1,101 +1,140 @@
-﻿using System;
-
-using Xunit;
-
-using FileManager.Models;
+﻿using FileManager.Models;
 using FileManager.Services;
 using FileManager.Tests.Mocks;
+
+using System;
+using System.Collections.Generic;
+
+using Xunit;
 
 namespace FileManager.Tests.FileManagerServiceTests
 {
     public class ShowServiceTests
     {
-        //private readonly ShowService _showService = new ShowService(new MockConfiguration(), new MockHttpClientFactory());
-        private readonly ShowService _showService = new ShowService(new MockConfiguration(), null);
-
         [Fact]
         public void GetShowById_GivenValidId_ThenDoesNotThrow()
         {
             //Arrange
-            var id = 1;
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new Show())
+            };
 
-            //Act
-            var exception = Record.Exception(() => _showService.GetShowById(id));
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
 
-            //Assert
-            Assert.Null(exception);
+            // Act
+            var exception = Record.ExceptionAsync(() => showService.GetShowById(1));
+
+            // Assert
+            Assert.Null(exception.Result);
         }
 
         [Fact]
         public void GetShowById_GivenInvalidId_ThenThrowsArgumentOutOfRangeException()
         {
             //Arrange
-            var id = 0;
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
+            };
 
-            //Act
-            var exception = Record.Exception(() => _showService.GetShowById(id));
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
 
-            //Assert
-            Assert.IsType<ArgumentOutOfRangeException>(exception.InnerException);
+            // Act
+            var exception = Record.ExceptionAsync(() => showService.GetShowById(0));
+
+            // Assert
+            Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
         }
 
         [Fact]
         public void GetShowByName_GivenValidName_ThenDoesNotThrow()
         {
             //Arrange
-            var name = "Test Show Name";
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new Show())
+            };
 
-            //Act
-            var exception = Record.Exception(() => _showService.GetShowByName(name));
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
 
-            //Assert
-            Assert.Null(exception);
+            // Act
+            var exception = Record.ExceptionAsync(() => showService.GetShowByName("Test"));
+
+            // Assert
+            Assert.Null(exception.Result);
         }
 
         [Fact]
         public void GetShowByName_GivenInvalidName_ThenDoesNotThrow()
         {
             //Arrange
-            var name = "";
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
+            };
 
-            //Act
-            var exception = Record.Exception(() => _showService.GetShowByName(name));
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
 
-            //Assert
-            Assert.IsType<ArgumentNullException>(exception.InnerException);
+            // Act
+            var exception = Record.ExceptionAsync(() => showService.GetShowByName(string.Empty));
+
+            // Assert
+            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
         }
 
         [Fact]
         public void GetShows_ThenDoesNotThrow()
         {
-            //Arrange, Act
-            var exception = Record.Exception(() => _showService.GetShows());
+            //Arrange
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Show>())
+            };
 
-            //Assert
-            Assert.Null(exception);
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
+            var exception = Record.ExceptionAsync(() => showService.GetShows());
+
+            // Assert
+            Assert.Null(exception.Result);
         }
 
         [Fact]
         public void SaveShow_GivenVaildShow_ThenDoesNotThrow()
         {
             //Arrange
-            var show = new Show();
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
+            };
 
-            //Act
-            var exception = Record.Exception(() => _showService.SaveShow(show));
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
+            var exception = Record.ExceptionAsync(() => showService.SaveShow(new Show()));
 
             //Assert
-            Assert.Null(exception);
+            Assert.Null(exception.Result);
         }
 
         [Fact]
         public void SaveShow_GivenInvaildShow_ThenThrowsArgumentNullException()
         {
-            //Arrange, Act
-            var exception = Record.Exception(() => _showService.SaveShow(null));
+            //Arrange
+            var mockHttpClientFactory = new MockHttpClientFactory
+            {
+                FakeHttpMessageHandler = new FakeHttpMessageHandler(new Show())
+            };
 
-            //Assert
-            Assert.IsType<ArgumentNullException>(exception.InnerException);
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
+
+            // Act
+            var exception = Record.ExceptionAsync(() => showService.SaveShow(null));
+
+            // Assert
+            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
         }
     }
 }
