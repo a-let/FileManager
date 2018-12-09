@@ -15,15 +15,12 @@ namespace FileManager.Services
 {
     public class SeasonService : ISeasonService
     {
-        private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _seasonAddresses;
         private readonly HttpClient _httpClient;
 
         public SeasonService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
-            _configuration = configuration;
             _seasonAddresses = configuration.GetSection("SeasonAddresses");
-
             _httpClient = httpClientFactory.CreateClient("FileManager");
         }
 

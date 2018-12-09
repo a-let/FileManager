@@ -15,15 +15,12 @@ namespace FileManager.Services
 {
     public class MovieService : IMovieService
     {        
-        private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _movieAddresses;
         private readonly HttpClient _httpClient;
 
         public MovieService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
-            _configuration = configuration;
-            _movieAddresses = _configuration.GetSection("MovieAddresses");
-
+            _movieAddresses = configuration.GetSection("MovieAddresses");
             _httpClient = httpClientFactory.CreateClient("FileManager");
         }
 

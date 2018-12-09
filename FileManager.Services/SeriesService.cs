@@ -15,15 +15,12 @@ namespace FileManager.Services
 {
     public class SeriesService : ISeriesService
     {
-        private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _seriesAddresses;
         private readonly HttpClient _httpClient;
 
         public SeriesService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
-            _configuration = configuration;
-            _seriesAddresses = _configuration.GetSection("SeriesAddresses");
-
+            _seriesAddresses = configuration.GetSection("SeriesAddresses");
             _httpClient = httpClientFactory.CreateClient("FileManager");
         }
 

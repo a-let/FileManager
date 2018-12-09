@@ -15,15 +15,12 @@ namespace FileManager.Services
 {
     public class ShowService : IShowService
     {
-        private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _showAddresses;
         private readonly HttpClient _httpClient;
 
         public ShowService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
-            _configuration = configuration;
-            _showAddresses = _configuration.GetSection("ShowAddresses");
-
+            _showAddresses = configuration.GetSection("ShowAddresses");
             _httpClient = httpClientFactory.CreateClient("FileManager");
         }
 
