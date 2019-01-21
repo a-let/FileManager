@@ -32,7 +32,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             //Act
-            var episode = _episodeController.Get(id);
+            var episode = _episodeController.GetById(id);
 
             //Assert
             Assert.Equal(id, episode.EpisodeId);
@@ -45,7 +45,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var name = "Test Episode";
 
             //Act
-            var episode = _episodeController.Get(name);
+            var episode = _episodeController.GetByName(name);
 
             //Assert
             Assert.Equal(name, episode.Name);

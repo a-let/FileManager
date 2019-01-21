@@ -13,7 +13,7 @@ namespace FileManager.IntegrationTests
         { }
 
         [Fact]
-        public async void Get()
+        public async Task Get()
         {
             // Arrange
 
@@ -27,7 +27,7 @@ namespace FileManager.IntegrationTests
         }
 
         [Fact]
-        public async void GetById()
+        public async Task GetById()
         {
             // Arrange
             var episodeId = 1;
@@ -43,7 +43,7 @@ namespace FileManager.IntegrationTests
         }
 
         [Fact]
-        public async void GetByName()
+        public async Task GetByName()
         {
             // Arrange
             var episodeName = "Test Episode";
@@ -59,7 +59,7 @@ namespace FileManager.IntegrationTests
         }
 
         [Fact]
-        public async void GetBySeasonId()
+        public async Task GetBySeasonId()
         {
             // Arrange
             var seasonId = 1;
@@ -75,7 +75,7 @@ namespace FileManager.IntegrationTests
         }
 
         [Fact]
-        public async void Post()
+        public async Task Post()
         {
             // Arrange
             var episode = new Episode

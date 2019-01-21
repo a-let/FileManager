@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
+using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace FileManager.Web
@@ -40,7 +41,12 @@ namespace FileManager.Web
                 .AddScoped<IMovieRepository, MovieRepository>()
                 .AddScoped<ILogRepository, LogRepository>()
                 .AddScoped<ILogger, LoggerService>()
-                .AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" }))
+                .AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" });
+                    c.ExampleFilters();
+                })
+                .AddSwaggerExamplesFromAssemblyOf<Startup>()
                 .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b=> b.MigrationsAssembly("FileManager.DataAccessLayer")))
                 .AddMvc();
         }
