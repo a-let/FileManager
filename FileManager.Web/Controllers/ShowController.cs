@@ -40,7 +40,7 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Show/5
         [HttpGet("id/{id}")]
-        public Show Get(int id)
+        public Show GetById(int id)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Show/name/Name
         [HttpGet("name/{name}")]
-        public Show Get(string name)
+        public Show GetByName(string name)
         {
             try
             {

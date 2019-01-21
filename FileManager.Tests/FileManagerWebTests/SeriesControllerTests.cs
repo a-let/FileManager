@@ -29,7 +29,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             //Act
-            var series = _seriesController.Get(id);
+            var series = _seriesController.GetById(id);
 
             //Assert
             Assert.Equal(id, series.SeriesId);
@@ -42,7 +42,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var name = "Test Movie";
 
             //Act
-            var series = _seriesController.Get(name);
+            var series = _seriesController.GetByName(name);
 
             //Assert
             Assert.Equal(name, series.Name);

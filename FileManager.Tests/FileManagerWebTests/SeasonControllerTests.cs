@@ -31,7 +31,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             //Act
-            var season = _seasonController.Get(id);
+            var season = _seasonController.GetById(id);
 
             //Assert
             Assert.Equal(id, season.SeasonId);

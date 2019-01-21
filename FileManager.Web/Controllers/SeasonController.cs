@@ -40,7 +40,7 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Season/5
         [HttpGet("id/{id}")]
-        public Season Get(int id)
+        public Season GetById(int id)
         {
             try
             {
