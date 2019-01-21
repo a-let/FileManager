@@ -1,6 +1,9 @@
 ﻿using FileManager.DataAccessLayer;
+using FileManager.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
 {
@@ -15,6 +18,33 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 .Options;
 
             _context = new FileManagerContext(options);
+
+            _context.Database.EnsureCreatedAsync();
+
+            InitializeDbForTestsAsync();
+        }
+
+        private async Task InitializeDbForTestsAsync()
+        {
+            await SeedUsersAsync();
+        }
+
+        private async Task SeedUsersAsync()
+        {
+            await _context.User.AddRangeAsync(new[]
+            {
+                new User
+                {
+                    UserId = 0,
+                    FirstName = "Test",
+                    LastName = "Tester",
+                    UserName = "TTester",
+                    PasswordHash = Encoding.ASCII.GetBytes("TestHash"),
+                    PasswordSalt = Encoding.ASCII.GetBytes("TestSalt")
+                }
+            });
+
+            await _context.SaveChangesAsync();
         }
 
         protected virtual void Dispose(bool disposing)
