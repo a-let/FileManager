@@ -31,7 +31,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             //Act
-            var show = _showController.Get(id);
+            var show = _showController.GetById(id);
 
             //Assert
             Assert.Equal(id, show.ShowId);
@@ -44,7 +44,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var name = "Test Show";
 
             //Act
-            var show = _showController.Get(name);
+            var show = _showController.GetByName(name);
 
             //Assert
             Assert.Equal(name, show.Name);
