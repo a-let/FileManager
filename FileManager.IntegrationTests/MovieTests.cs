@@ -13,7 +13,7 @@ namespace FileManager.IntegrationTests
         { }
 
         [Fact]
-        public async void Get()
+        public async Task Get()
         {
             // Arrange
 
@@ -27,7 +27,7 @@ namespace FileManager.IntegrationTests
         }
 
         [Fact]
-        public async void GetById()
+        public async Task GetById()
         {
             // Arrange
             var movieId = 1;
@@ -43,7 +43,7 @@ namespace FileManager.IntegrationTests
         }
 
         [Fact]
-        public async void GetByName()
+        public async Task GetByName()
         {
             // Arrange
             var movieName = "Test Movie";
@@ -59,7 +59,7 @@ namespace FileManager.IntegrationTests
         }
 
         [Fact]
-        public async void GetBySeriesId()
+        public async Task GetBySeriesId()
         {
             // Arrange
             var seriesId = 1;
@@ -75,7 +75,7 @@ namespace FileManager.IntegrationTests
         }
 
         [Fact]
-        public async void Post()
+        public async Task Post()
         {
             // Arrange
             var movie = new Movie

@@ -32,7 +32,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             //Act
-            var movie = _movieController.Get(id);
+            var movie = _movieController.GetById(id);
 
             //Assert
             Assert.Equal(id, movie.MovieId);
@@ -45,7 +45,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var name = "Test Movie";
 
             //Act
-            var movie = _movieController.Get(name);
+            var movie = _movieController.GetByName(name);
 
             //Assert
             Assert.Equal(name, movie.Name);
