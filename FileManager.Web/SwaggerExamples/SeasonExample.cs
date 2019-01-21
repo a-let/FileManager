@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace FileManager.Web.SwaggerExamples
 {
-    public class SeasonExamples : IExamplesProvider<Season>
+    public class SeasonExample : IExamplesProvider<Season>
     {
         public Season GetExamples() => new Season
         {
