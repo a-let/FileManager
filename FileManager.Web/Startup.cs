@@ -3,6 +3,7 @@ using FileManager.DataAccessLayer.Interfaces;
 using FileManager.DataAccessLayer.Repositories;
 using FileManager.Web.Services;
 using FileManager.Web.Services.Interfaces;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,11 +12,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
-using System.Collections;
+
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,6 +49,7 @@ namespace FileManager.Web
                 .AddScoped<ILogger, LoggerService>()
                 .AddScoped<IUserControllerService, UserControllerService>()
                 .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<ICryptographyService, CryptographyService>()
                 .AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" });
@@ -96,7 +98,7 @@ namespace FileManager.Web
                     OnAuthenticationFailed = context =>
                     {
                         var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
-                        logger.LogError("Login Failed", context.Exception);
+                        logger.LogError(context.Exception, $"Authentication Failed - {context.Exception.Message}");
                         return Task.CompletedTask;
                     }
                 };

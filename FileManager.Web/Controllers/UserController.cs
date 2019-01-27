@@ -1,5 +1,4 @@
-﻿using FileManager.Models;
-using FileManager.Models.Dtos;
+﻿using FileManager.Models.Dtos;
 using FileManager.Web.Services.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;
@@ -36,7 +35,7 @@ namespace FileManager.Web.Controllers
 
         // GET: api/User
         [HttpGet]
-        public IEnumerable<User> Get()
+        public IEnumerable<UserDto> Get()
         {
             try
             {
@@ -52,7 +51,7 @@ namespace FileManager.Web.Controllers
 
         // GET: api/User/id/5
         [HttpGet("id/{id}")]
-        public async Task<User> GetById(int id)
+        public async Task<UserDto> GetById(int id)
         {
             try
             {
@@ -68,7 +67,7 @@ namespace FileManager.Web.Controllers
 
         // GET: api/User/name/Name
         [HttpGet("name/{name}")]
-        public User GetByUserName(string name)
+        public UserDto GetByUserName(string name)
         {
             try
             {
