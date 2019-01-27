@@ -35,72 +35,82 @@ namespace FileManager.Web.Controllers
 
         // GET: api/User
         [HttpGet]
-        public IEnumerable<UserDto> Get()
+        [ProducesResponseType(200, Type = typeof(IEnumerable<UserDto>))]
+        [ProducesResponseType(400)]
+        public ActionResult<IEnumerable<UserDto>> Get()
         {
             try
             {
                 var users = _userControllerService.GetUsers();
-                return users;
+                return Ok(users);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
 
         // GET: api/User/id/5
         [HttpGet("id/{id}")]
-        public async Task<UserDto> GetById(int id)
+        [ProducesResponseType(200, Type = typeof(UserDto))]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<UserDto>> GetById(int id)
         {
             try
             {
                 var user = await _userControllerService.GetByIdAsync(id);
-                return user;
+                return Ok(user);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
 
         // GET: api/User/name/Name
-        [HttpGet("name/{name}")]
-        public UserDto GetByUserName(string name)
+        [HttpGet("userName/{userName}")]
+        [ProducesResponseType(200, Type = typeof(UserDto))]
+        [ProducesResponseType(400)]
+        public ActionResult<UserDto> GetByUserName(string userName)
         {
             try
             {
-                var user = _userControllerService.GetUserByUserName(name);
-                return user;
+                var user = _userControllerService.GetUserByUserName(userName);
+                return Ok(user);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
 
         // POST: api/User
         [AllowAnonymous]
         [HttpPost]
-        public async Task<int> Post([FromBody]UserDto user)
+        [ProducesResponseType(200, Type = typeof(int))]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<int>> Post([FromBody]UserDto user)
         {
             try
             {
                 var userId = await _userControllerService.SaveUserAsync(user);
-                return userId;
+                return Ok(userId);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
 
         // POST: api/User/Authenticate
         [AllowAnonymous]
         [HttpPost("Authenticate")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public IActionResult Authenticate([FromBody]UserDto user)
         {
             try
@@ -128,15 +138,15 @@ namespace FileManager.Web.Controllers
                 {
                     Id = u.UserId,
                     Username = u.UserName,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
+                    u.FirstName,
+                    u.LastName,
                     Token = tokenString
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
     }

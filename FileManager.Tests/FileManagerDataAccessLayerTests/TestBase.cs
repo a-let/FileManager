@@ -21,7 +21,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             _context.Database.EnsureCreatedAsync();
 
-            InitializeDbForTestsAsync();
+            Task.Run(async () => await InitializeDbForTestsAsync());
         }
 
         private async Task InitializeDbForTestsAsync()
