@@ -1,5 +1,7 @@
 ﻿using FileManager.DataAccessLayer;
 using FileManager.Models;
+using FileManager.Web.Services;
+using FileManager.Web.Services.Interfaces;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -31,6 +33,8 @@ namespace FileManager.IntegrationTests
                     options.UseInternalServiceProvider(serviceProvider);
                 });
 
+                services.AddScoped<ICryptographyService, CryptographyService>();
+
                 var sp = services.BuildServiceProvider();
 
                 using (var scope = sp.CreateScope())
@@ -41,18 +45,19 @@ namespace FileManager.IntegrationTests
                     _fileManagerContext.Database.EnsureDeleted();
                     _fileManagerContext.Database.EnsureCreated();
 
-                    InitializeDbForTests(_fileManagerContext);
+                    InitializeDbForTests(_fileManagerContext, scopedServices.GetRequiredService<ICryptographyService>());
                 }
             });
         }
 
-        private void InitializeDbForTests(FileManagerContext db)
+        private void InitializeDbForTests(FileManagerContext db, ICryptographyService cryptoService)
         {
             SeedShows(db);
             SeedSeasons(db);
             SeedEpisodes(db);
             SeedSeries(db);
             SeedMovies(db);
+            SeedUsers(db, cryptoService);
         }
 
         private void SeedShows(FileManagerContext db)
@@ -107,6 +112,26 @@ namespace FileManager.IntegrationTests
                     new Movie { MovieId = 0, SeriesId = 1, Category = "Testing", Format = Models.Constants.FileFormatTypes.MKV, IsSeries = true, Name = "Test Movie", Path = @"C:/Temp" }
                 });
 
+            db.SaveChanges();
+        }
+
+        private void SeedUsers(FileManagerContext db, ICryptographyService cryptoService)
+        {
+            cryptoService.CreateHash("Test123", out byte[] hash, out byte[] salt);
+
+            db.User.AddRange(
+                new[]
+                {
+                    new User
+                    {
+                        UserId = 0,
+                        FirstName = "John",
+                        LastName = "Doe",
+                        UserName = "JDoe",
+                        PasswordHash = hash,
+                        PasswordSalt = salt
+                    }
+                });
             db.SaveChanges();
         }
     }
