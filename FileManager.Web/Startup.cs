@@ -50,6 +50,7 @@ namespace FileManager.Web
                 .AddScoped<IUserControllerService, UserControllerService>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ICryptographyService, CryptographyService>()
+                .AddScoped<ITokenGenerator, TokenGenerator>()
                 .AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" });

@@ -5,13 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FileManager.Web.Controllers
@@ -23,14 +19,14 @@ namespace FileManager.Web.Controllers
     {
         private readonly IUserControllerService _userControllerService;
         private readonly ILogger _logger;
-        private readonly string _key;
+        private readonly ITokenGenerator _tokenService;
 
-        public UserController(IUserControllerService userControllerService, ILogger logger, IConfiguration config)
+        public UserController(IUserControllerService userControllerService, ILogger logger,
+            IConfiguration config, ITokenGenerator tokenService)
         {
             _userControllerService = userControllerService;
             _logger = logger;
-
-            _key = config["Secret"];
+            _tokenService = tokenService;
         }
 
         // GET: api/User
@@ -120,27 +116,13 @@ namespace FileManager.Web.Controllers
                 if (u == null)
                     return BadRequest(new { message = "Username or Password is incorrect." });
 
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim(ClaimTypes.Name, u.UserName)
-                    }),
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_key)), SecurityAlgorithms.HmacSha256Signature),
-                };
-
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var tokenString = tokenHandler.WriteToken(token);
-
                 return Ok(new
                 {
                     Id = u.UserId,
                     Username = u.UserName,
                     u.FirstName,
                     u.LastName,
-                    Token = tokenString
+                    Token = _tokenService.GenerateToken(u.UserName)
                 });
             }
             catch (Exception ex)
