@@ -11,11 +11,12 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 {
     public class DatabaseFixture : IDisposable
     {
-        private readonly FileManagerContext Context;
+        private readonly FileManagerContext _context;
 
         public readonly UserRepository UserRepo;
         public readonly EpisodeRepository EpisodeRepo;
         public readonly MovieRepository MovieRepo;
+        public readonly SeasonRepository SeasonRepository;
 
         public DatabaseFixture()
         {
@@ -23,15 +24,16 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
-            Context = new FileManagerContext(options);
+            _context = new FileManagerContext(options);
 
-            Context.Database.EnsureCreated();
+            _context.Database.EnsureCreated();
 
             Task.Run(async () => await InitializeDbForTestsAsync());
 
-            UserRepo = new UserRepository(Context);
-            EpisodeRepo = new EpisodeRepository(Context);
-            MovieRepo = new MovieRepository(Context);
+            UserRepo = new UserRepository(_context);
+            EpisodeRepo = new EpisodeRepository(_context);
+            MovieRepo = new MovieRepository(_context);
+            SeasonRepository = new SeasonRepository(_context);
         }
 
         private async Task InitializeDbForTestsAsync()
@@ -39,13 +41,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             await SeedUsersAsync();
             await SeedEpisodesAsync();
             await SeedMoviesAsync();
+            await SeedSeasonsAsync();
 
-            await Context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         private async Task SeedEpisodesAsync()
         {
-            await Context.Episode.AddRangeAsync(new[]
+            await _context.Episode.AddRangeAsync(new[]
             {
                 new Episode
                 {
@@ -59,9 +62,23 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             });
         }
 
+        private async Task SeedSeasonsAsync()
+        {
+            await _context.Season.AddRangeAsync(new[]
+            {
+                new Season
+                {
+                    SeasonId = 0,
+                    ShowId = 1,
+                    SeasonNumber = 1,
+                    Path = "Test"
+                }
+            });
+        }
+
         private async Task SeedMoviesAsync()
         {
-            await Context.Movie.AddRangeAsync(new[]
+            await _context.Movie.AddRangeAsync(new[]
             {
                 new Movie
                 {
@@ -78,7 +95,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
         private async Task SeedUsersAsync()
         {
-            await Context.User.AddRangeAsync(new[]
+            await _context.User.AddRangeAsync(new[]
             {
                 new User
                 {
@@ -96,8 +113,8 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         {
             if (disposing)
             {
-                Context.Database.EnsureDeleted();
-                Context.Dispose();
+                _context.Database.EnsureDeleted();
+                _context.Dispose();
             }
         }
 

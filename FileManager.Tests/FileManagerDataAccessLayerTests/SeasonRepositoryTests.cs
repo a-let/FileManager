@@ -3,18 +3,18 @@ using FileManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
 {
-    public class SeasonRepositoryTests : TestBase
+    [Collection("Database collection")]
+    public class SeasonRepositoryTests
     {
         private readonly SeasonRepository _seasonRepository;
 
-        public SeasonRepositoryTests() : base(nameof(SeasonRepositoryTests))
+        public SeasonRepositoryTests(DatabaseFixture dbFixture)
         {
-            _seasonRepository = new SeasonRepository(_context);
+            _seasonRepository = dbFixture.SeasonRepository;
         }
 
         [Fact]
@@ -22,16 +22,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         {
             //Arrange
             var id = 1;
-
-            _context.Season.Add(new Season
-            {
-                SeasonId = 1,
-                ShowId = 1,
-                SeasonNumber = 1,
-                Path = "Test"
-            });
-
-            _context.SaveChanges();
 
             //Act
             var season = _seasonRepository.GetSeasonById(id);
@@ -56,22 +46,12 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
-            _context.Season.Add(new Season
-            {
-                SeasonId = 1,
-                ShowId = id,
-                SeasonNumber = 1,
-                Path = "Test"
-            });
-
-            _context.SaveChanges();
-
             //Act
             var seasons = _seasonRepository.GetSeasonsByShowId(id);
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
-            Assert.True(seasons.Count() == 1);
+            Assert.True(seasons.Count() > 0);
         }
 
         [Fact]
@@ -105,9 +85,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Test"
             };
 
-            _context.Season.Add(season);
-            _context.SaveChanges();
-
             //Act
             season.Path = "Updated Path";
 
@@ -134,13 +111,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);
-        }
-
-        protected override void Dispose(bool disposing = true)
-        {
-            base.Dispose(disposing);
-
-            _seasonRepository.Dispose();
         }
     }
 }
