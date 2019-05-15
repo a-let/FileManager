@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
 {
+    [Obsolete("Add seed data to DatabaseFixture.cs and use [Collection(\"Database collection\")]")]
     public abstract class TestBase : IDisposable
     {
         protected readonly FileManagerContext _context;
@@ -19,32 +20,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             _context = new FileManagerContext(options);
 
-            _context.Database.EnsureCreatedAsync();
-
-            Task.Run(async () => await InitializeDbForTestsAsync());
-        }
-
-        private async Task InitializeDbForTestsAsync()
-        {
-            await SeedUsersAsync();
-        }
-
-        private async Task SeedUsersAsync()
-        {
-            await _context.User.AddRangeAsync(new[]
-            {
-                new User
-                {
-                    UserId = 0,
-                    FirstName = "Test",
-                    LastName = "Tester",
-                    UserName = "TTester",
-                    PasswordHash = Encoding.ASCII.GetBytes("TestHash"),
-                    PasswordSalt = Encoding.ASCII.GetBytes("TestSalt")
-                }
-            });
-
-            await _context.SaveChangesAsync();
+            Task.Run(async () => await _context.Database.EnsureCreatedAsync());
         }
 
         protected virtual void Dispose(bool disposing)

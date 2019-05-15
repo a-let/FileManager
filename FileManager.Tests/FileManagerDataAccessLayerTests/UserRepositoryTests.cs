@@ -9,13 +9,14 @@ using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
 {
-    public class UserRepositoryTests : TestBase
+    [Collection("Database collection")]
+    public class UserRepositoryTests
     {
         private readonly UserRepository _userRepository;
 
-        public UserRepositoryTests() : base(nameof(UserRepositoryTests))
+        public UserRepositoryTests(DatabaseFixture dbFixture)
         {
-            _userRepository = new UserRepository(_context);
+            _userRepository = dbFixture.UserRepo;
         }
 
         [Fact]
