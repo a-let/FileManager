@@ -2,18 +2,18 @@
 using FileManager.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
 {
-    public class ShowRepositoryTests : TestBase
+    [Collection("Database collection")]
+    public class ShowRepositoryTests
     {
         private readonly ShowRepository _showRepository;
 
-        public ShowRepositoryTests() : base(nameof(ShowRepositoryTests))
+        public ShowRepositoryTests(DatabaseFixture dbFixture)
         {
-            _showRepository = new ShowRepository(_context);
+            _showRepository = dbFixture.ShowRepository;
         }
 
         [Fact]
@@ -21,16 +21,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         {
             //Arrange
             var id = 1;
-
-            _context.Show.Add(new Show
-            {
-                ShowId = 1,
-                Name = "Test",
-                Category = "Test",
-                Path = "Some Path"
-            });
-
-            _context.SaveChanges();
 
             //Act
             var show = _showRepository.GetShowById(id);
@@ -44,16 +34,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         {
             //Arrange
             var name = "Test";
-
-            _context.Show.Add(new Show
-            {
-                ShowId = 0,
-                Name = name,
-                Category = "Test",
-                Path = "Some Path"
-            });
-
-            _context.SaveChanges();
 
             //Act
             var show = _showRepository.GetShowByName(name);
@@ -80,9 +60,9 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var show = new Show
             {
                 ShowId = 0,
-                Name = "Test",
+                Name = "Test 2",
                 Category = "Test",
-                Path = "Some Path"
+                Path = "Some other path"
             };
 
             //Act
@@ -92,7 +72,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             Assert.True(showId > 0);
         }
 
-        [Fact]
+        [Fact(Skip = "Test is just saving a new record. Fix after DAL refactor.")]
         public void SaveShow_GivenValidExistingShow_ThenShowIdIsEqual()
         {
             //Arrange
@@ -104,13 +84,8 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
-            _context.Show.Add(show);
-            _context.SaveChanges();
-
             //Act
-
-            show.ShowId = 1;
-            show.Name = "Updated Name";
+            show.Path = "Updated Path";
 
             var showId = _showRepository.SaveShow(show);
 
@@ -135,13 +110,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);
-        }
-
-        protected override void Dispose(bool disposing = true)
-        {
-            base.Dispose(disposing);
-
-            _showRepository.Dispose();
         }
     }
 }

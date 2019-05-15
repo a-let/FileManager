@@ -38,6 +38,8 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             MovieRepo = new MovieRepository(_context);
             SeasonRepository = new SeasonRepository(_context);
             SeriesRepository = new SeriesRepository(_context);
+            ShowRepository = new ShowRepository(_context);
+            LogRepository = new LogRepository(_context);
         }
 
         private async Task InitializeDbForTestsAsync()
@@ -47,6 +49,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             await SeedMoviesAsync();
             await SeedSeasonsAsync();
             await SeedSeriesAsync();
+            await SeedShowsAsync();
 
             await _context.SaveChangesAsync();
         }
@@ -77,6 +80,20 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                     ShowId = 1,
                     SeasonNumber = 1,
                     Path = "Test"
+                }
+            });
+        }
+
+        private async Task SeedShowsAsync()
+        {
+            await _context.Show.AddRangeAsync(new[]
+            {
+                new Show
+                {
+                    ShowId = 0,
+                    Name = "Test",
+                    Category = "Test",
+                    Path = "Some Path"
                 }
             });
         }

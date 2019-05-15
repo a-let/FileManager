@@ -88,7 +88,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             Assert.True(episodeId > 0);
         }
 
-        [Fact]
+        [Fact(Skip = "Test is just saving a new record. Fix after DAL refactor.")]
         public void SaveEpisode_GivenValidExistingEpisode_ThenEpisodeIdIsEqual()
         {
             //Arrange
