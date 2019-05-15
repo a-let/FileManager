@@ -1,7 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using FileManager.Models.Dtos;
+
+using Microsoft.AspNetCore.Mvc.Testing;
+
 using Newtonsoft.Json;
+
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
+
 using Xunit;
 
 namespace FileManager.IntegrationTests
@@ -19,5 +26,13 @@ namespace FileManager.IntegrationTests
 
         protected StringContent CreateStringContent<T>(T value) =>
             new StringContent(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");
+
+        protected async Task<string> GetToken(string userName, string password)
+        {
+            var message = await _client.PostAsync("api/User/Authenticate", CreateStringContent(new UserDto { UserName = userName, Password = password }));
+            var messageDict = DeserializeObject<Dictionary<string, string>>(await message.Content.ReadAsStringAsync());
+            var token = messageDict["token"];
+            return token;
+        }
     }
 }

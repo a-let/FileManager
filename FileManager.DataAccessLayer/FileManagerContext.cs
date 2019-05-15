@@ -15,5 +15,6 @@ namespace FileManager.DataAccessLayer
         public DbSet<Series> Series { get; set; }
 
         public DbSet<Log> Log { get; set; }
+        public DbSet<User> User { get; set; }
     }
 }

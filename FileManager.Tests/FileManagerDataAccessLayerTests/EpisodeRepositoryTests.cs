@@ -3,19 +3,18 @@ using FileManager.Models;
 using FileManager.Models.Constants;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-
 using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
 {
-    public class EpisodeRepositoryTests : TestBase
+    [Collection("Database collection")]
+    public class EpisodeRepositoryTests
     {
         private readonly EpisodeRepository _episodeRepository;
 
-        public EpisodeRepositoryTests() : base(nameof(EpisodeRepositoryTests))
+        public EpisodeRepositoryTests(DatabaseFixture dbFixture)
         {
-            _episodeRepository = new EpisodeRepository(_context);
+            _episodeRepository = dbFixture.EpisodeRepo;
         }
 
         [Fact]
@@ -23,18 +22,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         {
             //Arrange
             var id = 1;
-
-            _context.Episode.Add(new Episode
-            {
-                EpisodeId = 1,
-                EpisodeNumber = 1,
-                SeasonId = 1,
-                Format = FileFormatTypes.MKV,
-                Name = "Test",
-                Path = "Some Path"
-            });
-
-            _context.SaveChanges();
 
             //Act
             var episode = _episodeRepository.GetEpisodeById(id);
@@ -48,17 +35,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         {
             //Arrange
             var name = "Test";
-
-            _context.Episode.Add(new Episode
-            {
-                EpisodeId = 0,
-                SeasonId = 1,
-                Format = FileFormatTypes.MKV,
-                Name = name,
-                Path = "Some Path"
-            });
-
-            _context.SaveChanges();
 
             //Act
             var episode = _episodeRepository.GetEpisodeByName(name);
@@ -84,23 +60,12 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
-            _context.Episode.Add(new Episode
-            {
-                EpisodeId = 0,
-                SeasonId = id,
-                Format = FileFormatTypes.MKV,
-                Name = "Test",
-                Path = "Some Path"
-            });
-
-            _context.SaveChanges();
-
             //Act
             var episodes = _episodeRepository.GetEpisodesBySeasonId(id);
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
-            Assert.True(episodes.Count() == 1);
+            Assert.NotEmpty(episodes);
         }
 
         [Fact]
@@ -123,7 +88,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             Assert.True(episodeId > 0);
         }
 
-        [Fact]
+        [Fact(Skip = "Test is just saving a new record. Fix after DAL refactor.")]
         public void SaveEpisode_GivenValidExistingEpisode_ThenEpisodeIdIsEqual()
         {
             //Arrange
@@ -135,9 +100,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Name = "Test Name",
                 Path = "Some Path"
             };
-
-            _context.Episode.Add(episode);
-            _context.SaveChanges();
 
             //Act
             episode.Name = "Updated Name";
@@ -166,13 +128,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);
-        }
-
-        protected override void Dispose(bool disposing = true)
-        {
-            base.Dispose(disposing);
-
-            _episodeRepository.Dispose();
         }
     }
 }
