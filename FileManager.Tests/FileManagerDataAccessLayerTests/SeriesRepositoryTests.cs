@@ -2,18 +2,18 @@
 using FileManager.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
 {
-    public class SeriesRepositoryTests : TestBase
+    [Collection("Database collection")]
+    public class SeriesRepositoryTests
     {
         private readonly SeriesRepository _seriesRepository;
 
-        public SeriesRepositoryTests() : base(nameof(SeriesRepositoryTests))
+        public SeriesRepositoryTests(DatabaseFixture dbFixture)
         {
-            _seriesRepository = new SeriesRepository(_context);
+            _seriesRepository = dbFixture.SeriesRepository;
         }
 
         [Fact]
@@ -21,15 +21,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         {
             //Arrange
             var id = 1;
-
-            _context.Series.Add(new Series
-            {
-                SeriesId = 1,
-                Name = "Test",
-                Path = "Some Path"
-            });
-
-            _context.SaveChanges();
 
             //Act
             var series = _seriesRepository.GetSeriesById(id);
@@ -43,15 +34,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         {
             //Arrange
             var name = "Test";
-
-            _context.Series.Add(new Series
-            {
-                SeriesId = 0,
-                Name = name,
-                Path = "Some Path"
-            });
-
-            _context.SaveChanges();
 
             //Act
             var series = _seriesRepository.GetSeriesByName(name);
@@ -95,18 +77,13 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var series = new Series
             {
-                SeriesId = 2,
+                SeriesId = 1,
                 Name = "Test",
                 Path = "Some Path"
             };
 
-            _context.Series.Add(series);
-            _context.SaveChanges();
-
             //Act
-
-            series.SeriesId = 2;
-            series.Name = "Updated Name";
+            series.Path = "New path";
 
             var seriesId = _seriesRepository.SaveSeries(series);
 
@@ -130,13 +107,6 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);
-        }
-
-        protected override void Dispose(bool disposing = true)
-        {
-            base.Dispose(disposing);
-
-            _seriesRepository.Dispose();
         }
     }
 }
