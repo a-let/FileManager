@@ -20,7 +20,7 @@ namespace FileManager.DataAccessLayer.Repositories
 
         public User GetUserByUserName(string userName) => _context.User.Single(u => u.UserName.Equals(userName));
 
-        public IEnumerable<User> GetUsers() => _context.User;
+        public IEnumerable<User> GetUsers() => _context.User.ToArray();
 
         public async Task<int> SaveUserAsync(User user)
         {
