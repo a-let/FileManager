@@ -64,3 +64,5 @@
 /FileManager.Services/bin/Debug/netcoreapp2.2
 /FileManager.Tests/bin/Debug/netcoreapp2.2
 /FileManager.Web/bin/Debug/netcoreapp2.2
+/.vs/FileManager/v16/Server/sqlite3
+/.vs/FileManager/v16/.suo
