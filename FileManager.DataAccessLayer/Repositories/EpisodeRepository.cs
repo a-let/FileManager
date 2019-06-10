@@ -4,6 +4,7 @@ using FileManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
@@ -16,39 +17,27 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public Episode GetEpisodeById(int id) => _context.Episode.Find(id);
+        public async Task<Episode> GetEpisodeByIdAsync(int id) => await _context.Episode.FindAsync(id);
 
         public Episode GetEpisodeByName(string name) => _context.Episode.Single(e => e.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
         public IEnumerable<Episode> GetEpisodes() => _context.Episode;
 
-        public IQueryable<Episode> GetEpisodesBySeasonId(int seasonId) => _context.Episode.Where(e => e.SeasonId == seasonId);
+        public IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId) => _context.Episode.Where(e => e.SeasonId == seasonId);
 
-        public int SaveEpisode(Episode episode)
+        public async Task<int> SaveEpisodeAsync(Episode episode)
         {
             if (episode.EpisodeId == 0)
-                _context.Episode.Add(episode);
+                await _context.Episode.AddAsync(episode);
             else
             {
-                var e = _context.Episode.Find(episode.EpisodeId);
+                var e = await _context.Episode.FindAsync(episode.EpisodeId);
                 _context.Entry(e).CurrentValues.SetValues(episode);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return episode.EpisodeId;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-                _context.Dispose();
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }

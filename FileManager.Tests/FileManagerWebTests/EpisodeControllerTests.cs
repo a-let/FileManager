@@ -6,6 +6,7 @@ using FileManager.Models;
 using FileManager.Tests.Mocks;
 using FileManager.Web.Controllers;
 using FileManager.Models.Constants;
+using System.Threading.Tasks;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
@@ -26,13 +27,13 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void Get_GivenId_ThenEpisodeIsReturned()
+        public async Task Get_GivenId_ThenEpisodeIsReturned()
         {
             //Arrange
             var id = 1;
 
             //Act
-            var episode = _episodeController.GetById(id).GetValue();
+            var episode = (await _episodeController.GetByIdAsync(id)).GetValue();
 
             //Assert
             Assert.Equal(id, episode.EpisodeId);
@@ -65,7 +66,7 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void Save_GivenValidEpisode_ThenReturnsOne()
+        public async Task Save_GivenValidEpisode_ThenReturnsOne()
         {
             //Arrange
             var episode = new Episode
@@ -79,7 +80,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var episodeId = _episodeController.Post(episode).GetValue();
+            var episodeId = (await _episodeController.PostAsync(episode)).GetValue();
 
             //Assert
             Assert.Equal(1, episodeId);

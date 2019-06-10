@@ -2,7 +2,7 @@
 using FileManager.Models;
 
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.Tests.Mocks
 {
@@ -13,9 +13,9 @@ namespace FileManager.Tests.Mocks
             return new List<Episode>();
         }
 
-        public Episode GetEpisodeById(int id)
+        public async Task<Episode> GetEpisodeByIdAsync(int id)
         {
-            return new Episode();
+            return await Task.FromResult(new Episode());
         }
 
         public Episode GetEpisodeByName(string name)
@@ -23,14 +23,14 @@ namespace FileManager.Tests.Mocks
             return new Episode();
         }
 
-        public IQueryable<Episode> GetEpisodesBySeasonId(int parentId)
+        public IEnumerable<Episode> GetEpisodesBySeasonId(int parentId)
         {
-            return new List<Episode>().AsQueryable();
+            return new List<Episode>();
         }
 
-        public int SaveEpisode(Episode target)
+        public async Task<int> SaveEpisodeAsync(Episode target)
         {
-            return target != null ? 1 : 0;
+            return await Task.FromResult(target != null ? 1 : 0);
         }
 
         public void Dispose()

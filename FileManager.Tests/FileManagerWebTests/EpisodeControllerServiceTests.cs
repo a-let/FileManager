@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 
 using Xunit;
+using System.Threading.Tasks;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
@@ -15,26 +16,26 @@ namespace FileManager.Tests.FileManagerWebTests
         private readonly EpisodeControllerService _episodeControllerService = new EpisodeControllerService(new MockEpisodeRepository());
 
         [Fact]
-        public void GetEpisodeById_GivenInvalidId_ThenThrowsArgumentException()
+        public async Task GetEpisodeById_GivenInvalidId_ThenThrowsArgumentException()
         {
             //Arrange
             var id = 0;
 
             //Act
-            var exception = Record.Exception(() => _episodeControllerService.GetEpisodeById(id));
+            var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.GetEpisodeByIdAsync(id));
 
             //Assert
             Assert.IsType<ArgumentException>(exception);
         }
 
         [Fact]
-        public void GetEpisodeById_GivenValidId_ThenEpisodeIsReturned()
+        public async Task GetEpisodeById_GivenValidId_ThenEpisodeIsReturned()
         {
             //Arrange
             var id = 1;
 
             //Act
-            var episode = _episodeControllerService.GetEpisodeById(id);
+            var episode = await _episodeControllerService.GetEpisodeByIdAsync(id);
 
             //Assert
             Assert.IsAssignableFrom<Episode>(episode);
@@ -77,20 +78,20 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveEpisode_GivenNullEpisode_ThenThrowsArgumentNullReferenceException()
+        public async Task SaveEpisode_GivenNullEpisode_ThenThrowsArgumentNullReferenceException()
         {
             //Arrange
             Episode episode = null;
 
             //Act
-            var exception = Record.Exception(() => _episodeControllerService.SaveEpisode(episode));
+            var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.SaveEpisodeAsync(episode));
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void SaveEpisode_GivenNewEpisode_ThenReturnsOne()
+        public async Task SaveEpisode_GivenNewEpisode_ThenReturnsOne()
         {
             //Arrange
             var episode = new Episode
@@ -103,7 +104,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var episodeId = _episodeControllerService.SaveEpisode(episode);
+            var episodeId = await _episodeControllerService.SaveEpisodeAsync(episode);
 
             //Assert
             Assert.Equal(1, episodeId);

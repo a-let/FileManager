@@ -1,18 +1,18 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.Tests.Mocks
 {
     public class MockEpisodeControllerService : IEpisodeControllerService
     {
-        public Episode GetEpisodeById(int id)
+        public async Task<Episode> GetEpisodeByIdAsync(int id)
         {
-            return id != 1 ? null : new Episode
+            return await Task.FromResult(id != 1 ? null : new Episode
             {
                 EpisodeId = 1
-            };
+            });
         }
 
         public Episode GetEpisodeByName(string name)
@@ -28,14 +28,14 @@ namespace FileManager.Tests.Mocks
             return new List<Episode>();
         }
 
-        public IQueryable<Episode> GetEpisodesBySeasonId(int seasonId)
+        public IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId)
         {
-            return new List<Episode>().AsQueryable();
+            return new List<Episode>();
         }
 
-        public int SaveEpisode(Episode episode)
+        public async Task<int> SaveEpisodeAsync(Episode episode)
         {
-            return episode != null ? 1 : 0;
+            return await Task.FromResult(episode != null ? 1 : 0);
         }
     }
 }

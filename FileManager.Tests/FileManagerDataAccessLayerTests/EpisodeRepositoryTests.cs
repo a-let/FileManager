@@ -3,6 +3,7 @@ using FileManager.Models;
 using FileManager.Models.Constants;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
@@ -18,13 +19,13 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void GetEpisodeById_GivenValidId_ThenEpisodeIsReturned()
+        public async Task GetEpisodeById_GivenValidId_ThenEpisodeIsReturned()
         {
             //Arrange
             var id = 1;
 
             //Act
-            var episode = _episodeRepository.GetEpisodeById(id);
+            var episode = await _episodeRepository.GetEpisodeByIdAsync(id);
 
             //Assert
             Assert.Equal(id, episode.EpisodeId);
@@ -69,7 +70,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void SaveEpisode_GivenValidNewEpisode_ThenReturnsId()
+        public async Task SaveEpisode_GivenValidNewEpisode_ThenReturnsId()
         {
             //Arrange
             var episode = new Episode
@@ -82,14 +83,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var episodeId = _episodeRepository.SaveEpisode(episode);
+            var episodeId = await _episodeRepository.SaveEpisodeAsync(episode);
 
             //Assert
             Assert.True(episodeId > 0);
         }
 
         [Fact(Skip = "Test is just saving a new record. Fix after DAL refactor.")]
-        public void SaveEpisode_GivenValidExistingEpisode_ThenEpisodeIdIsEqual()
+        public async Task SaveEpisode_GivenValidExistingEpisode_ThenEpisodeIdIsEqual()
         {
             //Arrange
             var episode = new Episode
@@ -104,14 +105,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Act
             episode.Name = "Updated Name";
 
-            var episodeId = _episodeRepository.SaveEpisode(episode);
+            var episodeId = await _episodeRepository.SaveEpisodeAsync(episode);
 
             //Assert
             Assert.Equal(episode.EpisodeId, episodeId);
         }
 
         [Fact]
-        public void SaveEpisode_GivenNonExistingEpisode_ThenThrowsArgumentNullException()
+        public async Task SaveEpisode_GivenNonExistingEpisode_ThenThrowsArgumentNullException()
         {
             //Arrange
             var episode = new Episode
@@ -124,7 +125,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var exception = Record.Exception(() => _episodeRepository.SaveEpisode(episode));
+            var exception = await Record.ExceptionAsync(async () => await  _episodeRepository.SaveEpisodeAsync(episode));
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);

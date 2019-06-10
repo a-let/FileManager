@@ -4,7 +4,7 @@ using FileManager.Web.Services.Interfaces;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.Web.Services
 {
@@ -17,18 +17,15 @@ namespace FileManager.Web.Services
             _episodeRepository = episodeRepository;
         }
 
-        public Episode GetEpisodeById(int id)
+        public async Task<Episode> GetEpisodeByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid EpisodeId");
 
-            return _episodeRepository.GetEpisodeById(id);
+            return await _episodeRepository.GetEpisodeByIdAsync(id);
         }
 
-        public IEnumerable<Episode> GetEpisodes()
-        {
-            return _episodeRepository.GetEpisodes();
-        }
+        public IEnumerable<Episode> GetEpisodes() => _episodeRepository.GetEpisodes();
 
         public Episode GetEpisodeByName(string name)
         {
@@ -38,15 +35,15 @@ namespace FileManager.Web.Services
             return _episodeRepository.GetEpisodeByName(name);
         }
 
-        public int SaveEpisode(Episode episode)
+        public async Task<int> SaveEpisodeAsync(Episode episode)
         {
             if (episode == null)
                 throw new ArgumentNullException(nameof(episode));
 
-            return _episodeRepository.SaveEpisode(episode);
+            return await _episodeRepository.SaveEpisodeAsync(episode);
         }
 
-        public IQueryable<Episode> GetEpisodesBySeasonId(int seasonId)
+        public IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId)
         {
             if (seasonId <= 0)
                 throw new ArgumentException("Invalid SeasonId");

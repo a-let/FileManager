@@ -1,16 +1,16 @@
 ﻿using FileManager.Models;
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Interfaces
 {
-    public interface IEpisodeRepository : IDisposable
+    public interface IEpisodeRepository
     {
-        Episode GetEpisodeById(int id);
+        Task<Episode> GetEpisodeByIdAsync(int id);
         IEnumerable<Episode> GetEpisodes();
         Episode GetEpisodeByName(string name);
-        int SaveEpisode(Episode episode);
-        IQueryable<Episode> GetEpisodesBySeasonId(int seasonId);
+        Task<int> SaveEpisodeAsync(Episode episode);
+        IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId);
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Web.Controllers
 {
@@ -40,11 +41,11 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Episode/id/5
         [HttpGet("id/{id}")]
-        public ActionResult<Episode> GetById(int id)
+        public async Task<ActionResult<Episode>> GetByIdAsync(int id)
         {
             try
             {
-                var episode = _episodeControllerService.GetEpisodeById(id);
+                var episode = await _episodeControllerService.GetEpisodeByIdAsync(id);
                 return Ok(episode);
             }
             catch (Exception ex)
@@ -72,11 +73,11 @@ namespace FileManager.Web.Controllers
         
         // POST: api/Episode
         [HttpPost]
-        public ActionResult<int> Post([FromBody]Episode episode)
+        public async Task<ActionResult<int>> PostAsync([FromBody]Episode episode)
         {
             try
             {
-                var episodeId = _episodeControllerService.SaveEpisode(episode);
+                var episodeId = await _episodeControllerService.SaveEpisodeAsync(episode);
                 return Ok(episodeId);
             }
             catch (Exception ex)
