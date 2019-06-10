@@ -18,7 +18,7 @@ namespace FileManager.Tests.FileManagerWebTests
             //Arrange
 
             //Act
-            var shows = _showController.Get();
+            var shows = _showController.Get().GetValue();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Show>>(shows);
@@ -31,7 +31,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             //Act
-            var show = _showController.GetById(id);
+            var show = _showController.GetById(id).GetValue();
 
             //Assert
             Assert.Equal(id, show.ShowId);
@@ -44,7 +44,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var name = "Test Show";
 
             //Act
-            var show = _showController.GetByName(name);
+            var show = _showController.GetByName(name).GetValue();
 
             //Assert
             Assert.Equal(name, show.Name);
@@ -63,7 +63,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var showId = _showController.Post(show);
+            var showId = _showController.Post(show).GetValue();
 
             //Assert
             Assert.True(showId > 0);

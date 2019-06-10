@@ -25,28 +25,28 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Movie
         [HttpGet]
-        public IEnumerable<Movie> Get()
+        public ActionResult<IEnumerable<Movie>> Get()
         {
             try
             {
                 var movies = _movieControllerService.GetMovies();
-                return movies;
+                return Ok(movies);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
 
         // GET: api/Movie/id/5
         [HttpGet("id/{id}")]
-        public Movie GetById(int id)
+        public ActionResult<Movie> GetById(int id)
         {
             try
             {
                 var movie = _movieControllerService.GetMovieById(id);
-                return movie;
+                return Ok(movie);
             }
             catch (Exception ex)
             {
@@ -57,55 +57,55 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Movie/name/Name
         [HttpGet("name/{name}")]
-        public Movie GetByName(string name)
+        public ActionResult<Movie> GetByName(string name)
         {
             try
             {
                 var movie = _movieControllerService.GetMovieByName(name);
-                return movie;
+                return Ok(movie);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
         
         // POST: api/Movie
         [HttpPost]
-        public int Post([FromBody]Movie movie)
+        public ActionResult<int> Post([FromBody]Movie movie)
         {
             try
             {
                 var movieId = _movieControllerService.SaveMovie(movie);
-                return movieId;
+                return Ok(movieId);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
 
         // GET: api/Movie/seriesId/5
         [HttpGet("seriesId/{seriesId}")]
-        public IQueryable<Movie> GetBySeriesId(int seriesId)
+        public ActionResult<IQueryable<Movie>> GetBySeriesId(int seriesId)
         {
             try
             {
                 var movies = _movieControllerService.GetMoviesBySeriesId(seriesId);
-                return movies;
+                return Ok(movies);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
         
         // PUT: api/Movie/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public ActionResult Put(int id, [FromBody]string value)
         {
             try
             {
@@ -114,13 +114,13 @@ namespace FileManager.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
             try
             {
@@ -129,7 +129,7 @@ namespace FileManager.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
     }

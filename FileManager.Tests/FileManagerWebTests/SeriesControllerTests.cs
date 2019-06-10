@@ -16,7 +16,7 @@ namespace FileManager.Tests.FileManagerWebTests
             //Arrange
 
             //Act
-            var seriess = _seriesController.Get();
+            var seriess = _seriesController.Get().GetValue();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Series>>(seriess);
@@ -29,7 +29,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             //Act
-            var series = _seriesController.GetById(id);
+            var series = _seriesController.GetById(id).GetValue();
 
             //Assert
             Assert.Equal(id, series.SeriesId);
@@ -42,7 +42,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var name = "Test Movie";
 
             //Act
-            var series = _seriesController.GetByName(name);
+            var series = _seriesController.GetByName(name).GetValue();
 
             //Assert
             Assert.Equal(name, series.Name);
@@ -60,7 +60,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var seriesId = _seriesController.Post(series);
+            var seriesId = _seriesController.Post(series).GetValue();
 
             //Assert
             Assert.True(seriesId > 0);

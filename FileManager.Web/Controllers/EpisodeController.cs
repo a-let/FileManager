@@ -24,87 +24,87 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Episode
         [HttpGet]
-        public IEnumerable<Episode> Get()
+        public ActionResult<IEnumerable<Episode>> Get()
         {
             try
             {
                 var episodes = _episodeControllerService.GetEpisodes();
-                return episodes;
+                return Ok(episodes);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }            
         }
 
         // GET: api/Episode/id/5
         [HttpGet("id/{id}")]
-        public Episode GetById(int id)
+        public ActionResult<Episode> GetById(int id)
         {
             try
             {
                 var episode = _episodeControllerService.GetEpisodeById(id);
-                return episode;
+                return Ok(episode);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }            
         }
 
         // GET: api/Episode/name/Name
         [HttpGet("name/{name}")]
-        public Episode GetByName(string name)
+        public ActionResult<Episode> GetByName(string name)
         {
             try
             {
                 var episode = _episodeControllerService.GetEpisodeByName(name);
-                return episode;
+                return Ok(episode);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }            
         }
         
         // POST: api/Episode
         [HttpPost]
-        public int Post([FromBody]Episode episode)
+        public ActionResult<int> Post([FromBody]Episode episode)
         {
             try
             {
                 var episodeId = _episodeControllerService.SaveEpisode(episode);
-                return episodeId;
+                return Ok(episodeId);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }            
         }
         
         // GET: api/Episode/seasonid/5
         [HttpGet("seasonid/{seasonId}")]
-        public IEnumerable<Episode> GetBySeasonId(int seasonId)
+        public ActionResult<IEnumerable<Episode>> GetBySeasonId(int seasonId)
         {
             try
             {
                 var episodes = _episodeControllerService.GetEpisodesBySeasonId(seasonId);
-                return episodes;
+                return Ok(episodes);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }            
         }
 
         // PUT: api/Episode/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public ActionResult Put(int id, [FromBody]string value)
         {
             try
             {
@@ -113,13 +113,13 @@ namespace FileManager.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }            
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace FileManager.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
     }

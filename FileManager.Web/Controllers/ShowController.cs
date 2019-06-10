@@ -24,71 +24,71 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Show
         [HttpGet]
-        public IEnumerable<Show> Get()
+        public ActionResult<IEnumerable<Show>> Get()
         {
             try
             {
                 var shows = _showControllerService.GetShows();
-                return shows;
+                return Ok(shows);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
 
         // GET: api/Show/5
         [HttpGet("id/{id}")]
-        public Show GetById(int id)
+        public ActionResult<Show> GetById(int id)
         {
             try
             {
                 var show = _showControllerService.GetShowById(id);
-                return show;
+                return Ok(show);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
 
         // GET: api/Show/name/Name
         [HttpGet("name/{name}")]
-        public Show GetByName(string name)
+        public ActionResult<Show> GetByName(string name)
         {
             try
             {
                 var show = _showControllerService.GetShowByName(name);
-                return show;
+                return Ok(show);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
         
         // POST: api/Show
         [HttpPost]
-        public int Post([FromBody]Show show)
+        public ActionResult<int> Post([FromBody]Show show)
         {
             try
             {
                 var showId = _showControllerService.SaveShow(show);
-                return showId;
+                return Ok(showId);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
         
         // PUT: api/Show/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public ActionResult Put(int id, [FromBody]string value)
         {
             try
             {
@@ -97,13 +97,13 @@ namespace FileManager.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace FileManager.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
     }
