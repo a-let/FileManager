@@ -66,3 +66,4 @@
 /FileManager.Web/bin/Debug/netcoreapp2.2
 /.vs/FileManager/v16/Server/sqlite3
 /.vs/FileManager/v16/.suo
+/.vs/FileManager/config/applicationhost.config

@@ -18,7 +18,7 @@ namespace FileManager.Tests.FileManagerWebTests
             //Arrange
 
             //Act
-            var seasons = _seasonController.Get();
+            var seasons = _seasonController.Get().GetValue();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
@@ -31,7 +31,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             //Act
-            var season = _seasonController.GetById(id);
+            var season = _seasonController.GetById(id).GetValue();
 
             //Assert
             Assert.Equal(id, season.SeasonId);
@@ -44,7 +44,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var seasonId = 1;
 
             //Act
-            var seasons = _seasonController.GetByShowId(seasonId);
+            var seasons = _seasonController.GetByShowId(seasonId).GetValue();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
@@ -63,7 +63,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var seasonId = _seasonController.Post(season);
+            var seasonId = _seasonController.Post(season).GetValue();
 
             //Assert
             Assert.True(seasonId > 0);

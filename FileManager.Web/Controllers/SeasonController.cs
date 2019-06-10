@@ -24,71 +24,71 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Season
         [HttpGet]
-        public IEnumerable<Season> Get()
+        public ActionResult<IEnumerable<Season>> Get()
         {
             try
             {
                 var seasons = _seasonControllerService.GetSeasons();
-                return seasons;
+                return Ok(seasons);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
 
         // GET: api/Season/5
         [HttpGet("id/{id}")]
-        public Season GetById(int id)
+        public ActionResult<Season> GetById(int id)
         {
             try
             {
                 var season = _seasonControllerService.GetSeasonById(id);
-                return season;
+                return Ok(season);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
         
         // POST: api/Season
         [HttpPost]
-        public int Post([FromBody]Season season)
+        public ActionResult<int> Post([FromBody]Season season)
         {
             try
             {
                 var seasonId = _seasonControllerService.SaveSeason(season);
-                return seasonId;
+                return Ok(seasonId);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
 
         // Get: api/Season/showId/5
         [HttpGet("showId/{showId}")]
-        public IEnumerable<Season> GetByShowId(int showId)
+        public ActionResult<IEnumerable<Season>> GetByShowId(int showId)
         {
             try
             {
                 var seasons = _seasonControllerService.GetSeasonsByShowId(showId);
-                return seasons;
+                return Ok(seasons);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
         
         // PUT: api/Season/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public ActionResult Put(int id, [FromBody]string value)
         {
             try
             {
@@ -97,13 +97,13 @@ namespace FileManager.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace FileManager.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return BadRequest(ex);
             }
         }
     }
