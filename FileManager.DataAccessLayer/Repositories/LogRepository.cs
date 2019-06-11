@@ -1,6 +1,8 @@
 ﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
 
+using System.Threading.Tasks;
+
 namespace FileManager.DataAccessLayer.Repositories
 {
     public class LogRepository : ILogRepository
@@ -12,17 +14,17 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public void SaveLog(Log log)
+        public async Task SaveLogAsync(Log log)
         {
             if (log.LogId == 0)
-                _context.Log.Add(log);
+                await _context.Log.AddAsync(log);
             else
             {
-                var l = _context.Log.Find(log.LogId);
+                var l = await _context.Log.FindAsync(log.LogId);
                 _context.Entry(l).CurrentValues.SetValues(log);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

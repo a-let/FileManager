@@ -12,15 +12,15 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class EpisodeControllerTests
     {
-        private readonly EpisodeController _episodeController = new EpisodeController(new MockEpisodeControllerService(), new MockLoggerService());
+        private readonly EpisodeController _episodeController = new EpisodeController(new MockEpisodeControllerService(), new MockLog());
 
         [Fact]
-        public void Get_GivenNoParameter_ThenReturnsListOfEpisodes()
+        public async Task Get_GivenNoParameter_ThenReturnsListOfEpisodes()
         {
             //Arrange
 
             //Act
-            var episodes = _episodeController.Get().GetValue();
+            var episodes = (await _episodeController.Get()).GetValue();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
@@ -40,26 +40,26 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void Get_GivenName_ThenEpisodeIsReturned()
+        public async Task Get_GivenName_ThenEpisodeIsReturned()
         {
             //Arrange
             var name = "Test Episode";
 
             //Act
-            var episode = _episodeController.GetByName(name).GetValue();
+            var episode = (await _episodeController.GetByName(name)).GetValue();
 
             //Assert
             Assert.Equal(name, episode.Name);
         }
         
         [Fact]
-        public void Get_GivenSeasonId_ThenReturnsListOfEpisodes()
+        public async Task Get_GivenSeasonId_ThenReturnsListOfEpisodes()
         {
             //Arrange
             var seasonId = 1;
 
             //Act
-            var episodes = _episodeController.GetBySeasonId(seasonId).GetValue();
+            var episodes = (await _episodeController.GetBySeasonId(seasonId)).GetValue();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
