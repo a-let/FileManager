@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-
-using Xunit;
-
-using FileManager.Models;
+﻿using FileManager.Models;
 using FileManager.Tests.Mocks;
 using FileManager.Web.Controllers;
 using FileManager.Models.Constants;
+
+using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Xunit;
 
 namespace FileManager.Tests.FileManagerWebTests
 {

@@ -29,12 +29,9 @@ namespace FileManager.Tests.Mocks
 
         public void Log(LogLevel logLevel, Exception exception, Func<Exception, string> formatter)
         {
-            throw new NotImplementedException();
+            // Intentionally left empty
         }
 
-        public Task LogAsync(LogLevel logLevel, Exception exception, Func<Exception, string> formatter)
-        {
-            throw new NotImplementedException();
-        }
+        public Task LogAsync(LogLevel logLevel, Exception exception, Func<Exception, string> formatter) => Task.CompletedTask;
     }
 }

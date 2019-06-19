@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using FileManager.Models;
+
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using FileManager.Models;
 
 namespace FileManager.Web.Services.Interfaces
 {

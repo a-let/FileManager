@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.Web.Controllers
 {
@@ -15,9 +16,9 @@ namespace FileManager.Web.Controllers
     public class MovieController : Controller
     {
         private readonly IMovieControllerService _movieControllerService;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public MovieController(IMovieControllerService movieControllerService, ILogger logger)
+        public MovieController(IMovieControllerService movieControllerService, ILog logger)
         {
             _movieControllerService = movieControllerService;
             _logger = logger;
@@ -25,7 +26,7 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Movie
         [HttpGet]
-        public ActionResult<IEnumerable<Movie>> Get()
+        public async Task<ActionResult<IEnumerable<Movie>>> Get()
         {
             try
             {
@@ -34,14 +35,14 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
 
         // GET: api/Movie/id/5
         [HttpGet("id/{id}")]
-        public ActionResult<Movie> GetById(int id)
+        public async Task<ActionResult<Movie>> GetById(int id)
         {
             try
             {
@@ -50,14 +51,14 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 throw;
             }
         }
 
         // GET: api/Movie/name/Name
         [HttpGet("name/{name}")]
-        public ActionResult<Movie> GetByName(string name)
+        public async Task<ActionResult<Movie>> GetByName(string name)
         {
             try
             {
@@ -66,14 +67,14 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
         
         // POST: api/Movie
         [HttpPost]
-        public ActionResult<int> Post([FromBody]Movie movie)
+        public async Task<ActionResult<int>> Post([FromBody]Movie movie)
         {
             try
             {
@@ -82,14 +83,14 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
 
         // GET: api/Movie/seriesId/5
         [HttpGet("seriesId/{seriesId}")]
-        public ActionResult<IQueryable<Movie>> GetBySeriesId(int seriesId)
+        public async Task<ActionResult<IQueryable<Movie>>> GetBySeriesId(int seriesId)
         {
             try
             {
@@ -98,14 +99,14 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
         
         // PUT: api/Movie/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody]string value)
+        public async Task<ActionResult> Put(int id, [FromBody]string value)
         {
             try
             {
@@ -113,14 +114,14 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
@@ -128,7 +129,7 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }

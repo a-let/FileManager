@@ -4,6 +4,7 @@ using FileManager.Web.Controllers;
 using FileManager.Models.Constants;
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -11,61 +12,61 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class MovieControllerTests
     {
-        private readonly MovieController _movieController = new MovieController(new MockMovieControllerService(), new MockLoggerService());
+        private readonly MovieController _movieController = new MovieController(new MockMovieControllerService(), new MockLog());
 
         [Fact]
-        public void Get_GivenNoParameter_ThenReturnsListOfMovies()
+        public async Task Get_GivenNoParameter_ThenReturnsListOfMovies()
         {
             //Arrange
 
             //Act
-            var movies = _movieController.Get().GetValue();
+            var movies = (await _movieController.Get()).GetValue();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
         }
 
         [Fact]
-        public void Get_GivenId_ThenMovieIsReturned()
+        public async Task Get_GivenId_ThenMovieIsReturned()
         {
             //Arrange
             var id = 1;
 
             //Act
-            var movie = _movieController.GetById(id).GetValue();
+            var movie = (await _movieController.GetById(id)).GetValue();
 
             //Assert
             Assert.Equal(id, movie.MovieId);
         }
 
         [Fact]
-        public void Get_GivenName_ThenMovieIsReturned()
+        public async Task Get_GivenName_ThenMovieIsReturned()
         {
             //Arrange
             var name = "Test Movie";
 
             //Act
-            var movie = _movieController.GetByName(name).GetValue();
+            var movie = (await _movieController.GetByName(name)).GetValue();
 
             //Assert
             Assert.Equal(name, movie.Name);
         }
 
         [Fact]
-        public void Get_GivenSeriesId_ThenReturnsListOfMovies()
+        public async Task Get_GivenSeriesId_ThenReturnsListOfMovies()
         {
             //Arrange
             var seriesId = 1;
 
             //Act
-            var movies = _movieController.GetBySeriesId(seriesId).GetValue();
+            var movies = (await _movieController.GetBySeriesId(seriesId)).GetValue();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
         }
 
         [Fact]
-        public void Save_GivenValidMovie_ThenDoesNotThrow()
+        public async Task Save_GivenValidMovie_ThenDoesNotThrow()
         {
             //Arrange
             var movie = new Movie
@@ -80,7 +81,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var exception = Record.Exception(() => _movieController.Post(movie).GetValue());
+            var exception = await Record.ExceptionAsync(async () => (await _movieController.Post(movie)).GetValue());
 
             //Assert
             Assert.Null(exception);
