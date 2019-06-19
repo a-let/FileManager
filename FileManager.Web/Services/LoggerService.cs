@@ -22,7 +22,7 @@ namespace FileManager.Web.Services
             IsEnabled = true;
         }
 
-        [Obsolete("Use LogAsync.")]
+        [Obsolete("Use ILog and LogAsync.")]
         public void Log(LogLevel logLevel, Exception exception, Func<Exception, string> formatter) =>
             _logRepository.SaveLogAsync(new Log
             {
