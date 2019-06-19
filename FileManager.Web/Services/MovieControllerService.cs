@@ -4,7 +4,7 @@ using FileManager.DataAccessLayer.Interfaces;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.Web.Services
 {
@@ -17,12 +17,12 @@ namespace FileManager.Web.Services
             _movieRepository = movieRepository;
         }
 
-        public Movie GetMovieById(int id)
+        public async Task<Movie> GetMovieByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid MovieId");
 
-            return _movieRepository.GetMovieById(id);
+            return await _movieRepository.GetMovieByIdAsync(id);
         }
 
         public Movie GetMovieByName(string name)
@@ -38,7 +38,7 @@ namespace FileManager.Web.Services
             return _movieRepository.GetMovies();
         }
 
-        public IQueryable<Movie> GetMoviesBySeriesId(int seriesId)
+        public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId)
         {
             if (seriesId < 0)
                 throw new ArgumentException("Invalid SeriesId");
@@ -46,12 +46,12 @@ namespace FileManager.Web.Services
             return _movieRepository.GetMoviesBySeriesId(seriesId);
         }
 
-        public int SaveMovie(Movie movie)
+        public async Task<int> SaveMovieAsync(Movie movie)
         {
             if (movie == null)
                 throw new ArgumentNullException(nameof(movie));
 
-            return _movieRepository.SaveMovie(movie);
+            return await _movieRepository.SaveMovieAsync(movie);
         }
     }
 }

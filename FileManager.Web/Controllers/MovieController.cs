@@ -46,7 +46,7 @@ namespace FileManager.Web.Controllers
         {
             try
             {
-                var movie = _movieControllerService.GetMovieById(id);
+                var movie = await _movieControllerService.GetMovieByIdAsync(id);
                 return Ok(movie);
             }
             catch (Exception ex)
@@ -78,7 +78,7 @@ namespace FileManager.Web.Controllers
         {
             try
             {
-                var movieId = _movieControllerService.SaveMovie(movie);
+                var movieId = await _movieControllerService.SaveMovieAsync(movie);
                 return Ok(movieId);
             }
             catch (Exception ex)

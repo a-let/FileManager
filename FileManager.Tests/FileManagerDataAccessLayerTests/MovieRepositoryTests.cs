@@ -1,8 +1,11 @@
 ﻿using FileManager.DataAccessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Models.Constants;
+
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
@@ -18,13 +21,13 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void GetMovieById_GivenValidId_ThenMovieIsReturned()
+        public async Task GetMovieById_GivenValidId_ThenMovieIsReturned()
         {
             //Arrange
             var id = 1;
 
             //Act
-            var movie = _movieRepository.GetMovieById(id);
+            var movie = await _movieRepository.GetMovieByIdAsync(id);
 
             //Assert
             Assert.Equal(id, movie.MovieId);
@@ -69,7 +72,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void SaveMovie_GivenValidNewMovie_ThenReturnsMovieId()
+        public async Task SaveMovie_GivenValidNewMovie_ThenReturnsMovieId()
         {
             //Arrange
             var movie = new Movie
@@ -84,14 +87,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var movieId = _movieRepository.SaveMovie(movie);
+            var movieId = await _movieRepository.SaveMovieAsync(movie);
 
             //Assert
             Assert.True(movieId > 0);
         }
 
         [Fact(Skip = "Test is just saving a new record. Fix after DAL refactor.")]
-        public void SaveMovie_GivenValidExistingMovie_ThenMovieIdIsEqual()
+        public async Task SaveMovie_GivenValidExistingMovie_ThenMovieIdIsEqual()
         {
             //Arrange
             var movie = new Movie
@@ -108,14 +111,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Act
             movie.Name = "Updated Name";
 
-            var movieId = _movieRepository.SaveMovie(movie);
+            var movieId = await _movieRepository.SaveMovieAsync(movie);
 
             //Assert
             Assert.Equal(movie.MovieId, movieId);
         }
 
         [Fact]
-        public void SaveMovie_GivenNonExistingMovie_ThenThrowsArgumentNullException()
+        public async Task SaveMovie_GivenNonExistingMovie_ThenThrowsArgumentNullException()
         {
             //Arrange
             var movie = new Movie
@@ -130,7 +133,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var exception = Record.Exception(() => _movieRepository.SaveMovie(movie));
+            var exception = await Record.ExceptionAsync(async () => await _movieRepository.SaveMovieAsync(movie));
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);

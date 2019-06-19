@@ -5,6 +5,7 @@ using FileManager.Web.Services;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -15,26 +16,26 @@ namespace FileManager.Tests.FileManagerWebTests
         private readonly MovieControllerService _movieControllerService = new MovieControllerService(new MockMovieRepository());
 
         [Fact]
-        public void GetMovieById_GivenInvalidId_ThenThrowsArgumentException()
+        public async Task GetMovieById_GivenInvalidId_ThenThrowsArgumentException()
         {
             //Arrange
             var id = 0;
 
             //Act
-            var exception = Record.Exception(() => _movieControllerService.GetMovieById(id));
+            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.GetMovieByIdAsync(id));
 
             //Assert
             Assert.IsType<ArgumentException>(exception);
         }
 
         [Fact]
-        public void GetMovieById_GivenValidId_ThenMovieIsReturned()
+        public async Task GetMovieById_GivenValidId_ThenMovieIsReturned()
         {
             //Arrange
             var id = 1;
 
             //Act
-            var movie = _movieControllerService.GetMovieById(id);
+            var movie = await _movieControllerService.GetMovieByIdAsync(id);
 
             //Assert
             Assert.IsAssignableFrom<Movie>(movie);
@@ -77,20 +78,20 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveMovie_GivenNullMovie_ThenThrowsArgumentNullReferenceException()
+        public async Task SaveMovie_GivenNullMovie_ThenThrowsArgumentNullReferenceException()
         {
             //Arrange
             Movie movie = null;
 
             //Act
-            var exception = Record.Exception(() => _movieControllerService.SaveMovie(movie));
+            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.SaveMovieAsync(movie));
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void SaveMovie_GivenNewMovie_ThenDoesNotThrow()
+        public async Task SaveMovie_GivenNewMovie_ThenDoesNotThrow()
         {
             //Arrange
             var movie = new Movie
@@ -105,7 +106,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var exception = Record.Exception(() => _movieControllerService.SaveMovie(movie));
+            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.SaveMovieAsync(movie));
 
             //Assert
             Assert.Null(exception);
