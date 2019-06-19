@@ -1,20 +1,22 @@
 ﻿using FileManager.Tests.Mocks;
 using FileManager.Web.Controllers;
 
+using System.Threading.Tasks;
+
 using Xunit;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
     public class UserControllerTests
     {
-        private readonly UserController _userController = new UserController(new MockUserControllerService(), new MockLoggerService(), new MockConfiguration(), null);
+        private readonly UserController _userController = new UserController(new MockUserControllerService(), new MockLog(), null);
 
         [Fact]
-        public void Get_ReturnsUserDtoCollection()
+        public async Task Get_ReturnsUserDtoCollection()
         {
             // Arrange, Act
             var result = _userController.Get();
-            var users = result.GetValue();
+            var users = (await result).GetValue();
 
             // Assert
             Assert.NotEmpty(users);
