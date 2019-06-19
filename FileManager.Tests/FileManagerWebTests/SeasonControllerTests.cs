@@ -1,57 +1,58 @@
-﻿using System.Collections.Generic;
-
-using Xunit;
-
-using FileManager.Models;
+﻿using FileManager.Models;
 using FileManager.Tests.Mocks;
 using FileManager.Web.Controllers;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Xunit;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
     public class SeasonControllerTests
     {
-        private readonly SeasonController _seasonController = new SeasonController(new MockSeasonControllerService(), new MockLoggerService());
+        private readonly SeasonController _seasonController = new SeasonController(new MockSeasonControllerService(), new MockLog());
 
         [Fact]
-        public void Get_GivenNoParameter_ThenReturnsListOfSeasons()
+        public async Task Get_GivenNoParameter_ThenReturnsListOfSeasons()
         {
             //Arrange
 
             //Act
-            var seasons = _seasonController.Get().GetValue();
+            var seasons = (await _seasonController.Get()).GetValue();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
         }
 
         [Fact]
-        public void Get_GivenId_ThenSeasonIsReturned()
+        public async Task Get_GivenId_ThenSeasonIsReturned()
         {
             //Arrange
             var id = 1;
 
             //Act
-            var season = _seasonController.GetById(id).GetValue();
+            var season = (await _seasonController.GetById(id)).GetValue();
 
             //Assert
             Assert.Equal(id, season.SeasonId);
         }
 
         [Fact]
-        public void Get_GivenSeasonId_ThenReturnsListOfSeasons()
+        public async Task Get_GivenSeasonId_ThenReturnsListOfSeasons()
         {
             //Arrange
             var seasonId = 1;
 
             //Act
-            var seasons = _seasonController.GetByShowId(seasonId).GetValue();
+            var seasons = (await _seasonController.GetByShowId(seasonId)).GetValue();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
         }
 
         [Fact]
-        public void Save_GivenValidSeason_ThenReturnsSeasonId()
+        public async Task Save_GivenValidSeason_ThenReturnsSeasonId()
         {
             //Arrange
             var season = new Season
@@ -63,7 +64,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var seasonId = _seasonController.Post(season).GetValue();
+            var seasonId = (await _seasonController.Post(season)).GetValue();
 
             //Assert
             Assert.True(seasonId > 0);
