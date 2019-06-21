@@ -1,7 +1,10 @@
 ﻿using FileManager.DataAccessLayer.Repositories;
 using FileManager.Models;
+
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
@@ -17,13 +20,13 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void GetSeriesById_GivenValidId_ThenSeriesIsReturned()
+        public async Task GetSeriesById_GivenValidId_ThenSeriesIsReturned()
         {
             //Arrange
             var id = 1;
 
             //Act
-            var series = _seriesRepository.GetSeriesById(id);
+            var series = await _seriesRepository.GetSeriesByIdAsync(id);
 
             //Assert
             Assert.Equal(id, series.SeriesId);
@@ -54,7 +57,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void SaveSeries_GivenValidNewSeries_ThenReturnsSeriesId()
+        public async Task SaveSeries_GivenValidNewSeries_ThenReturnsSeriesId()
         {
             //Arrange
             var series = new Series
@@ -65,14 +68,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var seriesId = _seriesRepository.SaveSeries(series);
+            var seriesId = await _seriesRepository.SaveSeriesAsync(series);
 
             //Assert
             Assert.True(seriesId > 0);
         }
 
         [Fact(Skip = "Test is just saving a new record. Fix after DAL refactor.")]
-        public void SaveSeries_GivenValidExistingSeries_ThenSeriesIdIsEqual()
+        public async Task SaveSeries_GivenValidExistingSeries_ThenSeriesIdIsEqual()
         {
             //Arrange
             var series = new Series
@@ -85,14 +88,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Act
             series.Path = "New path";
 
-            var seriesId = _seriesRepository.SaveSeries(series);
+            var seriesId = await _seriesRepository.SaveSeriesAsync(series);
 
             //Assert
             Assert.Equal(series.SeriesId, seriesId);
         }
 
         [Fact]
-        public void SaveSeries_GivenNonExistingSeries_ThenThrowsArgumentNullException()
+        public async Task SaveSeries_GivenNonExistingSeries_ThenThrowsArgumentNullException()
         {
             //Arrange
             var series = new Series
@@ -103,7 +106,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var exception = Record.Exception(() => _seriesRepository.SaveSeries(series));
+            var exception = await Record.ExceptionAsync(async () => await _seriesRepository.SaveSeriesAsync(series));
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);

@@ -44,7 +44,7 @@ namespace FileManager.Web.Controllers
         {
             try
             {
-                var series = _seriesControllerService.GetSeriesById(id);
+                var series = await _seriesControllerService.GetSeriesByIdAsync(id);
                 return Ok(series);
             }
             catch (Exception ex)
@@ -76,7 +76,7 @@ namespace FileManager.Web.Controllers
         {
             try
             {
-                var seriesId = _seriesControllerService.SaveSeries(series);
+                var seriesId = await _seriesControllerService.SaveSeriesAsync(series);
                 return Ok(seriesId);
             }
             catch (Exception ex)

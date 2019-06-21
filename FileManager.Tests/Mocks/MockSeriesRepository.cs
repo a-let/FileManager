@@ -1,34 +1,19 @@
 ﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
+
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Tests.Mocks
 {
     public class MockSeriesRepository : ISeriesRepository
     {
-        public IEnumerable<Series> GetSeries()
-        {
-            return new List<Series>();
-        }
+        public IEnumerable<Series> GetSeries() => new List<Series>();
 
-        public Series GetSeriesById(int id)
-        {
-            return new Series();
-        }
+        public async Task<Series> GetSeriesByIdAsync(int id) => await Task.FromResult(new Series());
 
-        public Series GetSeriesByName(string name)
-        {
-            return new Series();
-        }
+        public Series GetSeriesByName(string name) => new Series();
 
-        public int SaveSeries(Series series)
-        {
-            return series != null ? 1 : 0;
-        }
-
-        public void Dispose()
-        {
-            
-        }
+        public async Task<int> SaveSeriesAsync(Series series) => await Task.FromResult(series != null ? 1 : 0);
     }
 }

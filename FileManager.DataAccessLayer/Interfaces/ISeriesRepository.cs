@@ -1,14 +1,15 @@
 ﻿using FileManager.Models;
-using System;
+
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Interfaces
 {
-    public interface ISeriesRepository : IDisposable
+    public interface ISeriesRepository
     {
-        Series GetSeriesById(int id);
+        Task<Series> GetSeriesByIdAsync(int id);
         IEnumerable<Series> GetSeries();
         Series GetSeriesByName(string name);
-        int SaveSeries(Series series);
+        Task<int> SaveSeriesAsync(Series series);
     }
 }
