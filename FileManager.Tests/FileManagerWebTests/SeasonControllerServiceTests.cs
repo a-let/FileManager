@@ -4,6 +4,7 @@ using FileManager.Web.Services;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -14,26 +15,26 @@ namespace FileManager.Tests.FileManagerWebTests
         private readonly SeasonControllerService _seasonControllerService = new SeasonControllerService(new MockSeasonRepository());
 
         [Fact]
-        public void GetSeasonById_GivenInvalidId_ThenThrowsArgumentException()
+        public async Task GetSeasonById_GivenInvalidId_ThenThrowsArgumentException()
         {
             //Arrange
             var id = 0;
 
             //Act
-            var exception = Record.Exception(() => _seasonControllerService.GetSeasonById(id));
+            var exception = await Record.ExceptionAsync(async () => await _seasonControllerService.GetSeasonByIdAsync(id));
 
             //Assert
             Assert.IsType<ArgumentException>(exception);
         }
 
         [Fact]
-        public void GetSeasonById_GivenValidId_ThenSeasonIsReturned()
+        public async Task GetSeasonById_GivenValidId_ThenSeasonIsReturned()
         {
             //Arrange
             var id = 1;
 
             //Act
-            var season = _seasonControllerService.GetSeasonById(id);
+            var season = await _seasonControllerService.GetSeasonByIdAsync(id);
 
             //Assert
             Assert.IsAssignableFrom<Season>(season);
@@ -76,20 +77,20 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void SaveSeason_GivenNullSeason_ThenThrowsArgumentNullReferenceException()
+        public async Task SaveSeason_GivenNullSeason_ThenThrowsArgumentNullReferenceException()
         {
             //Arrange
             Season season = null;
 
             //Act
-            var exception = Record.Exception(() => _seasonControllerService.SaveSeason(season));
+            var exception = await Record.ExceptionAsync(async () =>  await _seasonControllerService.SaveSeasonAsync(season));
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void SaveSeason_GivenSeason_ThenReturnsSeasonId()
+        public async Task SaveSeason_GivenSeason_ThenReturnsSeasonId()
         {
             //Arrange
             var season = new Season
@@ -98,7 +99,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             //Act
-            var seasonId = _seasonControllerService.SaveSeason(season);
+            var seasonId = await _seasonControllerService.SaveSeasonAsync(season);
 
             //Assert
             Assert.True(seasonId > 0);

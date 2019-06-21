@@ -1,15 +1,15 @@
 ﻿using FileManager.Models;
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Interfaces
 {
-    public interface ISeasonRepository : IDisposable
+    public interface ISeasonRepository
     {
-        Season GetSeasonById(int id);
+        Task<Season> GetSeasonByIdAsync(int id);
         IEnumerable<Season> GetSeasons();
-        int SaveSeason(Season season);
-        IQueryable<Season> GetSeasonsByShowId(int showId);
+        Task<int> SaveSeasonAsync(Season season);
+        IEnumerable<Season> GetSeasonsByShowId(int showId);
     }
 }

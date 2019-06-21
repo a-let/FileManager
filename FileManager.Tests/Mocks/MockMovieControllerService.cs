@@ -20,7 +20,7 @@ namespace FileManager.Tests.Mocks
 
         public IEnumerable<Movie> GetMovies() => new List<Movie>();
 
-        public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId) => new List<Movie>().AsQueryable();
+        public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId) => new List<Movie>();
 
         public async Task<int> SaveMovieAsync(Movie movie) => await Task.FromResult(movie != null ? 1 : 0);
     }

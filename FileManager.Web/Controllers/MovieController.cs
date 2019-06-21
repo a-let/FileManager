@@ -90,7 +90,7 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Movie/seriesId/5
         [HttpGet("seriesId/{seriesId}")]
-        public async Task<ActionResult<IQueryable<Movie>>> GetBySeriesId(int seriesId)
+        public async Task<ActionResult<IEnumerable<Movie>>> GetBySeriesId(int seriesId)
         {
             try
             {

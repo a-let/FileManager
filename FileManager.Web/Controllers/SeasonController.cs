@@ -44,7 +44,7 @@ namespace FileManager.Web.Controllers
         {
             try
             {
-                var season = _seasonControllerService.GetSeasonById(id);
+                var season = await _seasonControllerService.GetSeasonByIdAsync(id);
                 return Ok(season);
             }
             catch (Exception ex)
@@ -60,7 +60,7 @@ namespace FileManager.Web.Controllers
         {
             try
             {
-                var seasonId = _seasonControllerService.SaveSeason(season);
+                var seasonId = await _seasonControllerService.SaveSeasonAsync(season);
                 return Ok(seasonId);
             }
             catch (Exception ex)

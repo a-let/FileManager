@@ -1,35 +1,19 @@
 ﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
+
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.Tests.Mocks
 {
     public class MockSeasonRepository : ISeasonRepository
     { 
-        public IEnumerable<Season> GetSeasons()
-        {
-            return new List<Season>();
-        }
+        public IEnumerable<Season> GetSeasons() => new List<Season>();
 
-        public Season GetSeasonById(int id)
-        {
-            return new Season();
-        }
+        public async Task<Season> GetSeasonByIdAsync(int id) => await Task.FromResult(new Season());
 
-        public IQueryable<Season> GetSeasonsByShowId(int showId)
-        {
-            return new List<Season>().AsQueryable();
-        }
+        public IEnumerable<Season> GetSeasonsByShowId(int showId) => new List<Season>();
 
-        public int SaveSeason(Season season)
-        {
-            return season != null ? 1 : 0;
-        }
-
-        public void Dispose()
-        {
-
-        }
+        public async Task<int> SaveSeasonAsync(Season season) => await Task.FromResult(season != null ? 1 : 0);
     }
 }

@@ -1,9 +1,9 @@
 ﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
@@ -16,37 +16,25 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public Season GetSeasonById(int id) => _context.Season.Find(id);
+        public async Task<Season> GetSeasonByIdAsync(int id) => await _context.Season.FindAsync(id);
 
         public IEnumerable<Season> GetSeasons() => _context.Season;
 
-        public IQueryable<Season> GetSeasonsByShowId(int showId) => _context.Season.Where(s => s.ShowId == showId);
+        public IEnumerable<Season> GetSeasonsByShowId(int showId) => _context.Season.Where(s => s.ShowId == showId);
 
-        public int SaveSeason(Season season)
+        public async Task<int> SaveSeasonAsync(Season season)
         {
             if (season.SeasonId == 0)
-                _context.Season.Add(season);
+                await _context.Season.AddAsync(season);
             else
             {
-                var s = _context.Season.Find(season.SeasonId);
+                var s = await _context.Season.FindAsync(season.SeasonId);
                 _context.Entry(s).CurrentValues.SetValues(season);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return season.SeasonId;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-                _context.Dispose();
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }
