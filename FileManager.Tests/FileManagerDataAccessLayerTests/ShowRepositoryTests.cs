@@ -1,7 +1,10 @@
 ﻿using FileManager.DataAccessLayer.Repositories;
 using FileManager.Models;
+
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
@@ -17,13 +20,13 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void GetShowById_GivenValidId_ThenShowIsReturned()
+        public async Task GetShowById_GivenValidId_ThenShowIsReturned()
         {
             //Arrange
             var id = 1;
 
             //Act
-            var show = _showRepository.GetShowById(id);
+            var show = await _showRepository.GetShowByIdAsync(id);
 
             //Assert
             Assert.Equal(id, show.ShowId);
@@ -54,7 +57,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         }
 
         [Fact]
-        public void SaveShow_GivenValidNewShow_ThenReturnsShowId()
+        public async Task SaveShow_GivenValidNewShow_ThenReturnsShowId()
         {
             //Arrange
             var show = new Show
@@ -66,14 +69,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var showId = _showRepository.SaveShow(show);
+            var showId = await _showRepository.SaveShowAsync(show);
 
             //Assert
             Assert.True(showId > 0);
         }
 
         [Fact(Skip = "Test is just saving a new record. Fix after DAL refactor.")]
-        public void SaveShow_GivenValidExistingShow_ThenShowIdIsEqual()
+        public async Task SaveShow_GivenValidExistingShow_ThenShowIdIsEqual()
         {
             //Arrange
             var show = new Show
@@ -87,14 +90,14 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Act
             show.Path = "Updated Path";
 
-            var showId = _showRepository.SaveShow(show);
+            var showId = await _showRepository.SaveShowAsync(show);
 
             //Assert
             Assert.Equal(show.ShowId, showId);
         }
 
         [Fact]
-        public void SaveShow_GivenNonExistingShow_ThenThrowsArgumentNullException()
+        public async Task SaveShow_GivenNonExistingShow_ThenThrowsArgumentNullException()
         {
             //Arrange
             var show = new Show
@@ -106,7 +109,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             };
 
             //Act
-            var exception = Record.Exception(() => _showRepository.SaveShow(show));
+            var exception = await Record.ExceptionAsync(async () => await _showRepository.SaveShowAsync(show));
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);

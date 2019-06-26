@@ -44,7 +44,7 @@ namespace FileManager.Web.Controllers
         {
             try
             {
-                var show = _showControllerService.GetShowById(id);
+                var show = await _showControllerService.GetShowByIdAsync(id);
                 return Ok(show);
             }
             catch (Exception ex)
@@ -76,7 +76,7 @@ namespace FileManager.Web.Controllers
         {
             try
             {
-                var showId = _showControllerService.SaveShow(show);
+                var showId = await _showControllerService.SaveShowAsync(show);
                 return Ok(showId);
             }
             catch (Exception ex)
