@@ -16,45 +16,45 @@ namespace FileManager.Tests.FileManagerWebTests
         [Fact]
         public async Task Get_GivenNoParameter_ThenReturnsListOfSeriess()
         {
-            //Arrange
+            // Arrange
 
-            //Act
+            // Act
             var seriess = (await _seriesController.Get()).GetValue();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Series>>(seriess);
         }
 
         [Fact]
         public async Task Get_GivenId_ThenSeriesIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
+            // Act
             var series = (await _seriesController.GetById(id)).GetValue();
 
-            //Assert
+            // Assert
             Assert.Equal(id, series.SeriesId);
         }
 
         [Fact]
         public async Task Get_GivenName_ThenSeriesIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test Movie";
 
-            //Act
+            // Act
             var series = (await _seriesController.GetByName(name)).GetValue();
 
-            //Assert
+            // Assert
             Assert.Equal(name, series.Name);
         }
 
         [Fact]
         public async Task Save_GivenValidSeries_ThenReturnsSeriesId()
         {
-            //Arrange
+            // Arrange
             var series = new Series
             {
                 SeriesId = 1,
@@ -62,10 +62,10 @@ namespace FileManager.Tests.FileManagerWebTests
                 Path = "Test"
             };
 
-            //Act
+            // Act
             var seriesId = (await _seriesController.Post(series)).GetValue();
 
-            //Assert
+            // Assert
             Assert.True(seriesId > 0);
         }
     }

@@ -18,82 +18,82 @@ namespace FileManager.Tests.FileManagerWebTests
         [Fact]
         public async Task GetEpisodeById_GivenInvalidId_ThenThrowsArgumentException()
         {
-            //Arrange
+            // Arrange
             var id = 0;
 
-            //Act
+            // Act
             var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.GetEpisodeByIdAsync(id));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentException>(exception);
         }
 
         [Fact]
         public async Task GetEpisodeById_GivenValidId_ThenEpisodeIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
+            // Act
             var episode = await _episodeControllerService.GetEpisodeByIdAsync(id);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<Episode>(episode);
         }
 
         [Fact]
         public void GetEpisodes_ThenReturnsEpisodeList()
         {
-            //Arrange, Act
+            // Arrange, Act
             var episodes = _episodeControllerService.GetEpisodes();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
         }
 
         [Fact]
         public void GetEpisodeByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
-            //Arrange
+            // Arrange
             var name = string.Empty;
 
-            //Act
+            // Act
             var exception = Record.Exception(() => _episodeControllerService.GetEpisodeByName(name));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
         public void GetEpisodeByName_GivenValidName_ThenEpisodeIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test";
 
-            //Act
+            // Act
             var episode = _episodeControllerService.GetEpisodeByName(name);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<Episode>(episode);
         }
 
         [Fact]
         public async Task SaveEpisode_GivenNullEpisode_ThenThrowsArgumentNullReferenceException()
         {
-            //Arrange
+            // Arrange
             Episode episode = null;
 
-            //Act
+            // Act
             var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.SaveEpisodeAsync(episode));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
         public async Task SaveEpisode_GivenNewEpisode_ThenReturnsOne()
         {
-            //Arrange
+            // Arrange
             var episode = new Episode
             {
                 EpisodeId = 0,
@@ -103,36 +103,36 @@ namespace FileManager.Tests.FileManagerWebTests
                 Path = "Some Path"
             };
 
-            //Act
+            // Act
             var episodeId = await _episodeControllerService.SaveEpisodeAsync(episode);
 
-            //Assert
+            // Assert
             Assert.Equal(1, episodeId);
         }
 
         [Fact]
         public void GetEpisodesBySeasonId_GivenInvalidSeasonId_ThenThrowsArgumentException()
         {
-            //Arrange
+            // Arrange
             var id = 0;
 
-            //Act
+            // Act
             var exception = Record.Exception(() => _episodeControllerService.GetEpisodesBySeasonId(id));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentException>(exception);
         }
 
         [Fact]
         public void GetEpisodesBySeasonId_GivenValidSeasonId_THenThrowsArgumentException()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
+            // Act
             var episodes = _episodeControllerService.GetEpisodesBySeasonId(id);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
         }
     }

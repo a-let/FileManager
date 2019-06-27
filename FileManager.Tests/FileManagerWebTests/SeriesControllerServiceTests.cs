@@ -17,88 +17,88 @@ namespace FileManager.Tests.FileManagerWebTests
         [Fact]
         public async Task GetSeriesById_GivenInvalidId_ThenThrowsArgumentException()
         {
-            //Arrange
+            // Arrange
             var id = 0;
 
-            //Act
+            // Act
             var exception = await Record.ExceptionAsync(async () => await _seriesControllerService.GetSeriesByIdAsync(id));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentException>(exception);
         }
 
         [Fact]
         public async Task GetSeriesById_GivenValidId_ThenSeriesIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
+            // Act
             var series = await _seriesControllerService.GetSeriesByIdAsync(id);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<Series>(series);
         }
 
         [Fact]
         public void GetSeriess_ThenReturnsSeriesList()
         {
-            //Arrange, Act
+            // Arrange, Act
             var seriess = _seriesControllerService.GetSeries();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Series>>(seriess);
         }
 
         [Fact]
         public void GetSeriesByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
-            //Arrange
+            // Arrange
             var name = string.Empty;
 
-            //Act
+            // Act
             var exception = Record.Exception(() => _seriesControllerService.GetSeriesByName(name));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
         public void GetSeriesByName_GivenValidName_ThenSeriesIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test";
 
-            //Act
+            // Act
             var series = _seriesControllerService.GetSeriesByName(name);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<Series>(series);
         }
 
         [Fact]
         public async Task SaveSeries_GivenNullSeries_ThenThrowsArgumentNullReferenceException()
         {
-            //Arrange
+            // Arrange
             Series series = null;
 
-            //Act
+            // Act
             var exception = await Record.ExceptionAsync(async () => await _seriesControllerService.SaveSeriesAsync(series));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
         public async Task SaveSeries_GivenSeries_ThenReturnsSeriesId()
         {
-            //Arrange
+            // Arrange
             var series = new Series();
 
-            //Act
+            // Act
             var seriesId = await _seriesControllerService.SaveSeriesAsync(series);
 
-            //Assert
+            // Assert
             Assert.True(seriesId > 0);
         }
     }

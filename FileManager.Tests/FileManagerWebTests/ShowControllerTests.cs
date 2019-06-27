@@ -16,45 +16,45 @@ namespace FileManager.Tests.FileManagerWebTests
         [Fact]
         public async Task Get_GivenNoParameter_ThenReturnsListOfShows()
         {
-            //Arrange
+            // Arrange
 
-            //Act
+            // Act
             var shows = (await _showController.Get()).GetValue();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Show>>(shows);
         }
 
         [Fact]
         public async Task Get_GivenId_ThenShowIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
+            // Act
             var show = (await _showController.GetById(id)).GetValue();
 
-            //Assert
+            // Assert
             Assert.Equal(id, show.ShowId);
         }
 
         [Fact]
         public async Task Get_GivenName_ThenShowIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test Show";
 
-            //Act
+            // Act
             var show = (await _showController.GetByName(name)).GetValue();
 
-            //Assert
+            // Assert
             Assert.Equal(name, show.Name);
         }
 
         [Fact]
         public async Task Save_GivenValidShow_ThenReturnsShowId()
         {
-            //Arrange
+            // Arrange
             var show = new Show
             {
                 ShowId = 1,
@@ -63,10 +63,10 @@ namespace FileManager.Tests.FileManagerWebTests
                 Path = "Test"
             };
 
-            //Act
+            // Act
             var showId = (await _showController.Post(show)).GetValue();
 
-            //Assert
+            // Assert
             Assert.True(showId > 0);
         }
     }

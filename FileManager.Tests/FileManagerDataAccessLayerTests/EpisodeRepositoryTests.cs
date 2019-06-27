@@ -24,30 +24,30 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         [Fact]
         public async Task GetEpisodeById_GivenValidId_ThenEpisodeIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
             var episodeRepo = new EpisodeRepository(_context);
 
-            //Act
+            // Act
             var episode = await episodeRepo.GetEpisodeByIdAsync(id);
 
-            //Assert
+            // Assert
             Assert.Equal(id, episode.EpisodeId);
         }
 
         [Fact]
         public void GetEpisodeByName_GivenValidName_ThenEpisodeIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test";
 
             var episodeRepo = new EpisodeRepository(_context);
 
-            //Act
+            // Act
             var episode = episodeRepo.GetEpisodeByName(name);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<Episode>(episode);
             Assert.Equal(name, episode.Name);
         }
@@ -55,28 +55,28 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         [Fact]
         public void GetEpisodes_ThenReturnsEpisodeList()
         {
-            //Arrange
+            // Arrange
             var episodeRepo = new EpisodeRepository(_context);
 
-            //Act
+            // Act
             var episodes = episodeRepo.GetEpisodes();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
         }
 
         [Fact]
         public void GetEpisodesBySeasonId_GivenValidSeasonId_ThenEpisodesReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
             var episodeRepo = new EpisodeRepository(_context);
 
-            //Act
+            // Act
             var episodes = episodeRepo.GetEpisodesBySeasonId(id);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
             Assert.NotEmpty(episodes);
         }
@@ -84,7 +84,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         [Fact]
         public async Task SaveEpisode_GivenValidNewEpisode_ThenReturnsId()
         {
-            //Arrange
+            // Arrange
             var episode = new Episode
             {
                 EpisodeId = 0,
@@ -96,17 +96,17 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             var episodeRepo = new EpisodeRepository(_context);
 
-            //Act
+            // Act
             var episodeId = await episodeRepo.SaveEpisodeAsync(episode);
 
-            //Assert
+            // Assert
             Assert.True(episodeId > 0);
         }
 
         [Fact]
         public async Task SaveEpisode_GivenValidExistingEpisode_ThenEpisodeIdIsEqual()
         {
-            //Arrange
+            // Arrange
             var episode = new Episode
             {
                 EpisodeId = 1,
@@ -118,19 +118,19 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             var episodeRepo = new EpisodeRepository(_context);
 
-            //Act
+            // Act
             episode.Name = "Updated Name";
 
             var episodeId = await episodeRepo.SaveEpisodeAsync(episode);
 
-            //Assert
+            // Assert
             Assert.Equal(episode.EpisodeId, episodeId);
         }
 
         [Fact]
         public async Task SaveEpisode_GivenNonExistingEpisode_ThenThrowsArgumentNullException()
         {
-            //Arrange
+            // Arrange
             var episode = new Episode
             {
                 EpisodeId = 10,
@@ -142,10 +142,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             var episodeRepo = new EpisodeRepository(_context);
 
-            //Act
+            // Act
             var exception = await Record.ExceptionAsync(async () => await  episodeRepo.SaveEpisodeAsync(episode));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
     }

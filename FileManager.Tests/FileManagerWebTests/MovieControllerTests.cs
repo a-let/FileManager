@@ -17,58 +17,58 @@ namespace FileManager.Tests.FileManagerWebTests
         [Fact]
         public async Task Get_GivenNoParameter_ThenReturnsListOfMovies()
         {
-            //Arrange
+            // Arrange
 
-            //Act
+            // Act
             var movies = (await _movieController.Get()).GetValue();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
         }
 
         [Fact]
         public async Task Get_GivenId_ThenMovieIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
+            // Act
             var movie = (await _movieController.GetById(id)).GetValue();
 
-            //Assert
+            // Assert
             Assert.Equal(id, movie.MovieId);
         }
 
         [Fact]
         public async Task Get_GivenName_ThenMovieIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test Movie";
 
-            //Act
+            // Act
             var movie = (await _movieController.GetByName(name)).GetValue();
 
-            //Assert
+            // Assert
             Assert.Equal(name, movie.Name);
         }
 
         [Fact]
         public async Task Get_GivenSeriesId_ThenReturnsListOfMovies()
         {
-            //Arrange
+            // Arrange
             var seriesId = 1;
 
-            //Act
+            // Act
             var movies = (await _movieController.GetBySeriesId(seriesId)).GetValue();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
         }
 
         [Fact]
         public async Task Save_GivenValidMovie_ThenDoesNotThrow()
         {
-            //Arrange
+            // Arrange
             var movie = new Movie
             {
                 MovieId = 1,
@@ -80,10 +80,10 @@ namespace FileManager.Tests.FileManagerWebTests
                 Path = "Test"
             };
 
-            //Act
+            // Act
             var exception = await Record.ExceptionAsync(async () => (await _movieController.Post(movie)).GetValue());
 
-            //Assert
+            // Assert
             Assert.Null(exception);
         }
     }

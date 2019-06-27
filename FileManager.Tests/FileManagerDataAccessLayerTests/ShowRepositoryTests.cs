@@ -23,30 +23,30 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         [Fact]
         public async Task GetShowById_GivenValidId_ThenShowIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
             var showRepo = new ShowRepository(_context);
 
-            //Act
+            // Act
             var show = await showRepo.GetShowByIdAsync(id);
 
-            //Assert
+            // Assert
             Assert.Equal(id, show.ShowId);
         }
 
         [Fact]
         public void GetShowByName_GivenValidName_ThenShowIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test";
 
             var showRepo = new ShowRepository(_context);
 
-            //Act
+            // Act
             var show = showRepo.GetShowByName(name);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<Show>(show);
             Assert.Equal(name, show.Name);
         }
@@ -54,20 +54,20 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         [Fact]
         public void GetShows_ThenReturnsEpisodeList()
         {
-            //Arrange
+            // Arrange
             var showRepo = new ShowRepository(_context);
 
-            //Act
+            // Act
             var shows = showRepo.GetShows();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Show>>(shows);
         }
 
         [Fact]
         public async Task SaveShow_GivenValidNewShow_ThenReturnsShowId()
         {
-            //Arrange
+            // Arrange
             var show = new Show
             {
                 ShowId = 0,
@@ -78,17 +78,17 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             var showRepo = new ShowRepository(_context);
 
-            //Act
+            // Act
             var showId = await showRepo.SaveShowAsync(show);
 
-            //Assert
+            // Assert
             Assert.True(showId > 0);
         }
 
         [Fact]
         public async Task SaveShow_GivenValidExistingShow_ThenShowIdIsEqual()
         {
-            //Arrange
+            // Arrange
             var show = new Show
             {
                 ShowId = 1,
@@ -99,19 +99,19 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             var showRepo = new ShowRepository(_context);
 
-            //Act
+            // Act
             show.Path = "Updated Path";
 
             var showId = await showRepo.SaveShowAsync(show);
 
-            //Assert
+            // Assert
             Assert.Equal(show.ShowId, showId);
         }
 
         [Fact]
         public async Task SaveShow_GivenNonExistingShow_ThenThrowsArgumentNullException()
         {
-            //Arrange
+            // Arrange
             var show = new Show
             {
                 ShowId = 10,
@@ -122,10 +122,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
             var showRepo = new ShowRepository(_context);
 
-            //Act
+            // Act
             var exception = await Record.ExceptionAsync(async () => await showRepo.SaveShowAsync(show));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
     }

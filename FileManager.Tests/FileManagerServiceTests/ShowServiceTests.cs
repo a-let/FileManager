@@ -14,7 +14,7 @@ namespace FileManager.Tests.FileManagerServiceTests
         [Fact]
         public void GetShowById_GivenValidId_ThenDoesNotThrow()
         {
-            //Arrange
+            // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Show())
@@ -32,7 +32,7 @@ namespace FileManager.Tests.FileManagerServiceTests
         [Fact]
         public void GetShowById_GivenInvalidId_ThenThrowsArgumentOutOfRangeException()
         {
-            //Arrange
+            // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
@@ -50,7 +50,7 @@ namespace FileManager.Tests.FileManagerServiceTests
         [Fact]
         public void GetShowByName_GivenValidName_ThenDoesNotThrow()
         {
-            //Arrange
+            // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Show())
@@ -68,7 +68,7 @@ namespace FileManager.Tests.FileManagerServiceTests
         [Fact]
         public void GetShowByName_GivenInvalidName_ThenDoesNotThrow()
         {
-            //Arrange
+            // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
@@ -86,7 +86,7 @@ namespace FileManager.Tests.FileManagerServiceTests
         [Fact]
         public void GetShows_ThenDoesNotThrow()
         {
-            //Arrange
+            // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Show>())
@@ -104,7 +104,7 @@ namespace FileManager.Tests.FileManagerServiceTests
         [Fact]
         public void SaveShow_GivenVaildShow_ThenDoesNotThrow()
         {
-            //Arrange
+            // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
@@ -115,14 +115,14 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Act
             var exception = Record.ExceptionAsync(() => showService.SaveShow(new Show()));
 
-            //Assert
+            // Assert
             Assert.Null(exception.Result);
         }
 
         [Fact]
         public void SaveShow_GivenInvaildShow_ThenThrowsArgumentNullException()
         {
-            //Arrange
+            // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
             {
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Show())
