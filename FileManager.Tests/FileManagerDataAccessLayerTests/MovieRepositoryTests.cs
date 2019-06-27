@@ -1,4 +1,5 @@
-﻿using FileManager.DataAccessLayer.Repositories;
+﻿using FileManager.DataAccessLayer;
+using FileManager.DataAccessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Models.Constants;
 
@@ -13,11 +14,11 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
     [Collection("Database collection")]
     public class MovieRepositoryTests
     {
-        private readonly MovieRepository _movieRepository;
+        private readonly FileManagerContext _context;
 
         public MovieRepositoryTests(DatabaseFixture dbFixture)
         {
-            _movieRepository = dbFixture.MovieRepo;
+            _context = dbFixture.Context;
         }
 
         [Fact]
@@ -26,8 +27,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
+            var movieRepo = new MovieRepository(_context);
+
             //Act
-            var movie = await _movieRepository.GetMovieByIdAsync(id);
+            var movie = await movieRepo.GetMovieByIdAsync(id);
 
             //Assert
             Assert.Equal(id, movie.MovieId);
@@ -39,8 +42,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var name = "Test";
 
+            var movieRepo = new MovieRepository(_context);
+
             //Act
-            var movie = _movieRepository.GetMovieByName(name);
+            var movie = movieRepo.GetMovieByName(name);
 
             //Assert
             Assert.IsAssignableFrom<Movie>(movie);
@@ -50,8 +55,11 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         [Fact]
         public void GetMovies_ThenReturnsMovieList()
         {
-            //Arrange, Act
-            var movies = _movieRepository.GetMovies();
+            //Arrange
+            var movieRepo = new MovieRepository(_context);
+
+            //Act
+            var movies = movieRepo.GetMovies();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
@@ -63,8 +71,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
+            var movieRepo = new MovieRepository(_context);
+
             //Act
-            var movies = _movieRepository.GetMoviesBySeriesId(id);
+            var movies = movieRepo.GetMoviesBySeriesId(id);
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
@@ -86,20 +96,22 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
+            var movieRepo = new MovieRepository(_context);
+
             //Act
-            var movieId = await _movieRepository.SaveMovieAsync(movie);
+            var movieId = await movieRepo.SaveMovieAsync(movie);
 
             //Assert
             Assert.True(movieId > 0);
         }
 
-        [Fact(Skip = "Test is just saving a new record. Fix after DAL refactor.")]
+        [Fact]
         public async Task SaveMovie_GivenValidExistingMovie_ThenMovieIdIsEqual()
         {
             //Arrange
             var movie = new Movie
             {
-                MovieId = 0,
+                MovieId = 1,
                 SeriesId = 1,
                 Category = "Test",
                 IsSeries = false,
@@ -108,10 +120,12 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
-            //Act
-            movie.Name = "Updated Name";
+            var movieRepo = new MovieRepository(_context);
 
-            var movieId = await _movieRepository.SaveMovieAsync(movie);
+            //Act
+            movie.Path = "Updated Test Path";
+
+            var movieId = await movieRepo.SaveMovieAsync(movie);
 
             //Assert
             Assert.Equal(movie.MovieId, movieId);
@@ -132,8 +146,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
+            var movieRepo = new MovieRepository(_context);
+
             //Act
-            var exception = await Record.ExceptionAsync(async () => await _movieRepository.SaveMovieAsync(movie));
+            var exception = await Record.ExceptionAsync(async () => await movieRepo.SaveMovieAsync(movie));
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);

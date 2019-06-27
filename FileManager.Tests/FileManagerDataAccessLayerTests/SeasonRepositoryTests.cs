@@ -1,4 +1,5 @@
-﻿using FileManager.DataAccessLayer.Repositories;
+﻿using FileManager.DataAccessLayer;
+using FileManager.DataAccessLayer.Repositories;
 using FileManager.Models;
 
 using System;
@@ -13,11 +14,11 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
     [Collection("Database collection")]
     public class SeasonRepositoryTests
     {
-        private readonly SeasonRepository _seasonRepository;
+        private readonly FileManagerContext _context;
 
         public SeasonRepositoryTests(DatabaseFixture dbFixture)
         {
-            _seasonRepository = dbFixture.SeasonRepository;
+            _context = dbFixture.Context;
         }
 
         [Fact]
@@ -26,8 +27,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
+            var seasonRepo = new SeasonRepository(_context);
+
             //Act
-            var season = await _seasonRepository.GetSeasonByIdAsync(id);
+            var season = await seasonRepo.GetSeasonByIdAsync(id);
 
             //Assert
             Assert.Equal(id, season.SeasonId);
@@ -36,8 +39,11 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         [Fact]
         public void GetSeasons_ThenReturnsSeasonList()
         {
-            //Arrange, Act
-            var seasons = _seasonRepository.GetSeasons();
+            //Arrange
+            var seasonRepo = new SeasonRepository(_context);
+
+            //Act
+            var seasons = seasonRepo.GetSeasons();
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
@@ -49,8 +55,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             //Arrange
             var id = 1;
 
+            var seasonRepo = new SeasonRepository(_context);
+
             //Act
-            var seasons = _seasonRepository.GetSeasonsByShowId(id);
+            var seasons = seasonRepo.GetSeasonsByShowId(id);
 
             //Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
@@ -69,29 +77,33 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Test"
             };
 
+            var seasonRepo = new SeasonRepository(_context);
+
             //Act
-            var seasonId = await _seasonRepository.SaveSeasonAsync(season);
+            var seasonId = await seasonRepo.SaveSeasonAsync(season);
 
             //Assert
             Assert.True(seasonId > 0);
         }
 
-        [Fact(Skip = "Test is just saving a new record. Fix after DAL refactor.")]
+        [Fact]
         public async Task SaveSeason_GivenValidExistingSeason_ThenSeasonIdIsEqual()
         {
             //Arrange
             var season = new Season
             {
-                SeasonId = 0,
+                SeasonId = 1,
                 ShowId = 1,
                 SeasonNumber = 1,
                 Path = "Test"
             };
 
+            var seasonRepo = new SeasonRepository(_context);
+
             //Act
             season.Path = "Updated Path";
 
-            var seasonId = await _seasonRepository.SaveSeasonAsync(season);
+            var seasonId = await seasonRepo.SaveSeasonAsync(season);
 
             //Assert
             Assert.Equal(season.SeasonId, seasonId);
@@ -109,8 +121,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Test"
             };
 
+            var seasonRepo = new SeasonRepository(_context);
+
             //Act
-            var exception = await Record.ExceptionAsync(async () => await _seasonRepository.SaveSeasonAsync(season));
+            var exception = await Record.ExceptionAsync(async () => await seasonRepo.SaveSeasonAsync(season));
 
             //Assert
             Assert.IsType<ArgumentNullException>(exception);

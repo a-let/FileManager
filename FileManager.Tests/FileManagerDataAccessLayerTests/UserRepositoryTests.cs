@@ -1,10 +1,13 @@
-﻿using FileManager.DataAccessLayer.Repositories;
+﻿using FileManager.DataAccessLayer;
+using FileManager.DataAccessLayer.Repositories;
 using FileManager.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
@@ -12,11 +15,11 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
     [Collection("Database collection")]
     public class UserRepositoryTests
     {
-        private readonly UserRepository _userRepository;
+        private readonly FileManagerContext _context;
 
         public UserRepositoryTests(DatabaseFixture dbFixture)
         {
-            _userRepository = dbFixture.UserRepo;
+            _context = dbFixture.Context;
         }
 
         [Fact]
@@ -25,8 +28,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             // Arrange
             var id = 1;
 
+            var userRepo = new UserRepository(_context);
+
             // Act
-            var user = await _userRepository.GetUserByIdAsync(id);
+            var user = await userRepo.GetUserByIdAsync(id);
 
             // Assert
             Assert.Equal(id, user.UserId);
@@ -38,18 +43,23 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             // Arrange
             var userName = "TTester";
 
+            var userRepo = new UserRepository(_context);
+
             // Act
-            var user = _userRepository.GetUserByUserName(userName);
+            var user = userRepo.GetUserByUserName(userName);
 
             // Assert
             Assert.Equal(userName, user.UserName);
         }
 
-        [Fact(Skip = "Investigate failure")]
+        [Fact]
         public void GetUsers_ThenUsersAreReturned()
         {
-            // Arrange, Act
-            var users = _userRepository.GetUsers();
+            // Arrange
+            var userRepo = new UserRepository(_context);
+
+            // Act
+            var users = userRepo.GetUsers();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<User>>(users);
@@ -70,8 +80,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 PasswordSalt = Encoding.ASCII.GetBytes("TestSalt1")
             };
 
+            var userRepo = new UserRepository(_context);
+
             // Act
-            var userId = await _userRepository.SaveUserAsync(user);
+            var userId = await userRepo.SaveUserAsync(user);
 
             // Assert
             Assert.True(userId > 0);
@@ -94,10 +106,12 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 PasswordSalt = Encoding.ASCII.GetBytes("TestSalt")
             };
 
+            var userRepo = new UserRepository(_context);
+
             // Act
             user.UserName = newUserName;
 
-            var userId = await _userRepository.SaveUserAsync(user);
+            var userId = await userRepo.SaveUserAsync(user);
 
             // Assert
             Assert.True(userId > 0);
@@ -118,8 +132,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 PasswordSalt = Encoding.ASCII.GetBytes("TestSalt")
             };
 
+            var userRepo = new UserRepository(_context);
+
             // Act
-            var exception = await Record.ExceptionAsync(() => _userRepository.SaveUserAsync(user));
+            var exception = await Record.ExceptionAsync(() => userRepo.SaveUserAsync(user));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);

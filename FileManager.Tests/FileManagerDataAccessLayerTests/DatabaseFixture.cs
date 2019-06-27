@@ -11,15 +11,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 {
     public class DatabaseFixture : IDisposable
     {
-        private readonly FileManagerContext _context;
-
-        public readonly UserRepository UserRepo;
-        public readonly EpisodeRepository EpisodeRepo;
-        public readonly MovieRepository MovieRepo;
-        public readonly SeasonRepository SeasonRepository;
-        public readonly SeriesRepository SeriesRepository;
-        public readonly ShowRepository ShowRepository;
-        public readonly LogRepository LogRepository;
+        public readonly FileManagerContext Context;
 
         public DatabaseFixture()
         {
@@ -27,19 +19,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
-            _context = new FileManagerContext(options);
+            Context = new FileManagerContext(options);
+            Context.Database.EnsureCreated();
 
-            _context.Database.EnsureCreated();
-
-            Task.Run(async () => await InitializeDbForTestsAsync());
-
-            UserRepo = new UserRepository(_context);
-            EpisodeRepo = new EpisodeRepository(_context);
-            MovieRepo = new MovieRepository(_context);
-            SeasonRepository = new SeasonRepository(_context);
-            SeriesRepository = new SeriesRepository(_context);
-            ShowRepository = new ShowRepository(_context);
-            LogRepository = new LogRepository(_context);
+            InitializeDbForTestsAsync().GetAwaiter().GetResult();
         }
 
         private async Task InitializeDbForTestsAsync()
@@ -51,12 +34,12 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             await SeedSeriesAsync();
             await SeedShowsAsync();
 
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
 
         private async Task SeedEpisodesAsync()
         {
-            await _context.Episode.AddRangeAsync(new[]
+            await Context.Episode.AddRangeAsync(new[]
             {
                 new Episode
                 {
@@ -72,7 +55,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
         private async Task SeedSeasonsAsync()
         {
-            await _context.Season.AddRangeAsync(new[]
+            await Context.Season.AddRangeAsync(new[]
             {
                 new Season
                 {
@@ -86,7 +69,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
         private async Task SeedShowsAsync()
         {
-            await _context.Show.AddRangeAsync(new[]
+            await Context.Show.AddRangeAsync(new[]
             {
                 new Show
                 {
@@ -100,7 +83,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
         private async Task SeedSeriesAsync()
         {
-            await _context.Series.AddRangeAsync(new[]
+            await Context.Series.AddRangeAsync(new[]
             {
                 new Series
                 {
@@ -113,7 +96,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
         private async Task SeedMoviesAsync()
         {
-            await _context.Movie.AddRangeAsync(new[]
+            await Context.Movie.AddRangeAsync(new[]
             {
                 new Movie
                 {
@@ -130,7 +113,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
 
         private async Task SeedUsersAsync()
         {
-            await _context.User.AddRangeAsync(new[]
+            await Context.User.AddRangeAsync(new[]
             {
                 new User
                 {
@@ -148,8 +131,8 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         {
             if (disposing)
             {
-                _context.Database.EnsureDeleted();
-                _context.Dispose();
+                Context.Database.EnsureDeleted();
+                Context.Dispose();
             }
         }
 
