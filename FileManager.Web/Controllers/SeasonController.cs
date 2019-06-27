@@ -2,10 +2,10 @@
 using FileManager.Web.Services.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Web.Controllers
 {
@@ -14,9 +14,9 @@ namespace FileManager.Web.Controllers
     public class SeasonController : Controller
     {
         private readonly ISeasonControllerService _seasonControllerService;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public SeasonController(ISeasonControllerService seasonControllerService, ILogger logger)
+        public SeasonController(ISeasonControllerService seasonControllerService, ILog logger)
         {
             _seasonControllerService = seasonControllerService;
             _logger = logger;
@@ -24,7 +24,7 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Season
         [HttpGet]
-        public ActionResult<IEnumerable<Season>> Get()
+        public async Task<ActionResult<IEnumerable<Season>>> Get()
         {
             try
             {
@@ -33,46 +33,46 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
 
         // GET: api/Season/5
         [HttpGet("id/{id}")]
-        public ActionResult<Season> GetById(int id)
+        public async Task<ActionResult<Season>> GetById(int id)
         {
             try
             {
-                var season = _seasonControllerService.GetSeasonById(id);
+                var season = await _seasonControllerService.GetSeasonByIdAsync(id);
                 return Ok(season);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
         
         // POST: api/Season
         [HttpPost]
-        public ActionResult<int> Post([FromBody]Season season)
+        public async Task<ActionResult<int>> Post([FromBody]Season season)
         {
             try
             {
-                var seasonId = _seasonControllerService.SaveSeason(season);
+                var seasonId = await _seasonControllerService.SaveSeasonAsync(season);
                 return Ok(seasonId);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
 
         // Get: api/Season/showId/5
         [HttpGet("showId/{showId}")]
-        public ActionResult<IEnumerable<Season>> GetByShowId(int showId)
+        public async Task<ActionResult<IEnumerable<Season>>> GetByShowId(int showId)
         {
             try
             {
@@ -81,14 +81,14 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
         
         // PUT: api/Season/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody]string value)
+        public async Task<ActionResult> Put(int id, [FromBody]string value)
         {
             try
             {
@@ -96,14 +96,14 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }

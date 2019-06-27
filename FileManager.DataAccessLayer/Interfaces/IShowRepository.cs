@@ -1,14 +1,15 @@
 ﻿using FileManager.Models;
-using System;
+
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Interfaces
 {
-    public interface IShowRepository : IDisposable
+    public interface IShowRepository
     {
-        Show GetShowById(int id);
+        Task<Show> GetShowByIdAsync(int id);
         IEnumerable<Show> GetShows();
         Show GetShowByName(string name);
-        int SaveShow(Show show);
+        Task<int> SaveShowAsync(Show show);
     }
 }

@@ -1,9 +1,11 @@
 ﻿using FileManager.Models;
 
+using System.Threading.Tasks;
+
 namespace FileManager.DataAccessLayer.Interfaces
 {
     public interface ILogRepository
     {
-        void SaveLog(Log log);
+        Task SaveLogAsync(Log log);
     }
 }

@@ -4,6 +4,7 @@ using FileManager.Web.Services.Interfaces;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Web.Services
 {
@@ -16,12 +17,12 @@ namespace FileManager.Web.Services
             _seasonRepository = seasonRepository;
         }
 
-        public Season GetSeasonById(int id)
+        public async Task<Season> GetSeasonByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid SeasonId");
 
-            return _seasonRepository.GetSeasonById(id);
+            return await _seasonRepository.GetSeasonByIdAsync(id);
         }
 
         public IEnumerable<Season> GetSeasons()
@@ -37,12 +38,12 @@ namespace FileManager.Web.Services
             return _seasonRepository.GetSeasonsByShowId(showId);
         }
 
-        public int SaveSeason(Season season)
+        public async Task<int> SaveSeasonAsync(Season season)
         {
             if (season == null)
                 throw new ArgumentNullException(nameof(season));
 
-            return _seasonRepository.SaveSeason(season);
+            return await _seasonRepository.SaveSeasonAsync(season);
         }
     }
 }

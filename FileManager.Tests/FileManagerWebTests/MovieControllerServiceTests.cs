@@ -5,6 +5,7 @@ using FileManager.Web.Services;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -15,84 +16,84 @@ namespace FileManager.Tests.FileManagerWebTests
         private readonly MovieControllerService _movieControllerService = new MovieControllerService(new MockMovieRepository());
 
         [Fact]
-        public void GetMovieById_GivenInvalidId_ThenThrowsArgumentException()
+        public async Task GetMovieById_GivenInvalidId_ThenThrowsArgumentException()
         {
-            //Arrange
+            // Arrange
             var id = 0;
 
-            //Act
-            var exception = Record.Exception(() => _movieControllerService.GetMovieById(id));
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.GetMovieByIdAsync(id));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentException>(exception);
         }
 
         [Fact]
-        public void GetMovieById_GivenValidId_ThenMovieIsReturned()
+        public async Task GetMovieById_GivenValidId_ThenMovieIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
-            var movie = _movieControllerService.GetMovieById(id);
+            // Act
+            var movie = await _movieControllerService.GetMovieByIdAsync(id);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<Movie>(movie);
         }
 
         [Fact]
         public void GetMovies_ThenReturnsMovieList()
         {
-            //Arrange, Act
+            // Arrange, Act
             var movies = _movieControllerService.GetMovies();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
         }
 
         [Fact]
         public void GetMovieByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
-            //Arrange
+            // Arrange
             var name = string.Empty;
 
-            //Act
+            // Act
             var exception = Record.Exception(() => _movieControllerService.GetMovieByName(name));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
         public void GetMovieByName_GivenValidName_ThenMovieIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test";
 
-            //Act
+            // Act
             var movie = _movieControllerService.GetMovieByName(name);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<Movie>(movie);
         }
 
         [Fact]
-        public void SaveMovie_GivenNullMovie_ThenThrowsArgumentNullReferenceException()
+        public async Task SaveMovie_GivenNullMovie_ThenThrowsArgumentNullReferenceException()
         {
-            //Arrange
+            // Arrange
             Movie movie = null;
 
-            //Act
-            var exception = Record.Exception(() => _movieControllerService.SaveMovie(movie));
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.SaveMovieAsync(movie));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void SaveMovie_GivenNewMovie_ThenDoesNotThrow()
+        public async Task SaveMovie_GivenNewMovie_ThenDoesNotThrow()
         {
-            //Arrange
+            // Arrange
             var movie = new Movie
             {
                 MovieId = 0,
@@ -104,10 +105,10 @@ namespace FileManager.Tests.FileManagerWebTests
                 Path = "Test"
             };
 
-            //Act
-            var exception = Record.Exception(() => _movieControllerService.SaveMovie(movie));
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.SaveMovieAsync(movie));
 
-            //Assert
+            // Assert
             Assert.Null(exception);
         }
     }

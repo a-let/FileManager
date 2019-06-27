@@ -4,6 +4,7 @@ using FileManager.Web.Services;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -14,93 +15,93 @@ namespace FileManager.Tests.FileManagerWebTests
         private readonly SeasonControllerService _seasonControllerService = new SeasonControllerService(new MockSeasonRepository());
 
         [Fact]
-        public void GetSeasonById_GivenInvalidId_ThenThrowsArgumentException()
+        public async Task GetSeasonById_GivenInvalidId_ThenThrowsArgumentException()
         {
-            //Arrange
+            // Arrange
             var id = 0;
 
-            //Act
-            var exception = Record.Exception(() => _seasonControllerService.GetSeasonById(id));
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await _seasonControllerService.GetSeasonByIdAsync(id));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentException>(exception);
         }
 
         [Fact]
-        public void GetSeasonById_GivenValidId_ThenSeasonIsReturned()
+        public async Task GetSeasonById_GivenValidId_ThenSeasonIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
-            var season = _seasonControllerService.GetSeasonById(id);
+            // Act
+            var season = await _seasonControllerService.GetSeasonByIdAsync(id);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<Season>(season);
         }
 
         [Fact]
         public void GetSeasonByShowId_GivenValidId_ThenSeasonListIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
+            // Act
             var seasons = _seasonControllerService.GetSeasonsByShowId(id);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
         }
 
         [Fact]
         public void GetSeasonByShowId_GivenInvalidId_ThenThrowsArgumentException()
         {
-            //Arrange
+            // Arrange
             var id = 0;
 
-            //Act
+            // Act
             var exception = Record.Exception(() => _seasonControllerService.GetSeasonsByShowId(id));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentException>(exception);
         }
 
         [Fact]
         public void GetSeasons_ThenReturnsSeasonList()
         {
-            //Arrange, Act
+            // Arrange, Act
             var seasons = _seasonControllerService.GetSeasons();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
         }
 
         [Fact]
-        public void SaveSeason_GivenNullSeason_ThenThrowsArgumentNullReferenceException()
+        public async Task SaveSeason_GivenNullSeason_ThenThrowsArgumentNullReferenceException()
         {
-            //Arrange
+            // Arrange
             Season season = null;
 
-            //Act
-            var exception = Record.Exception(() => _seasonControllerService.SaveSeason(season));
+            // Act
+            var exception = await Record.ExceptionAsync(async () =>  await _seasonControllerService.SaveSeasonAsync(season));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void SaveSeason_GivenSeason_ThenReturnsSeasonId()
+        public async Task SaveSeason_GivenSeason_ThenReturnsSeasonId()
         {
-            //Arrange
+            // Arrange
             var season = new Season
             {
 
             };
 
-            //Act
-            var seasonId = _seasonControllerService.SaveSeason(season);
+            // Act
+            var seasonId = await _seasonControllerService.SaveSeasonAsync(season);
 
-            //Assert
+            // Assert
             Assert.True(seasonId > 0);
         }
     }

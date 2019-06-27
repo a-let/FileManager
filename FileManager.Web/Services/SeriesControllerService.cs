@@ -4,6 +4,7 @@ using FileManager.Web.Services.Interfaces;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Web.Services
 {
@@ -21,12 +22,12 @@ namespace FileManager.Web.Services
             return _seriesRepository.GetSeries();
         }
 
-        public Series GetSeriesById(int id)
+        public async Task<Series> GetSeriesByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid SeriesId");
 
-            return _seriesRepository.GetSeriesById(id);
+            return await _seriesRepository.GetSeriesByIdAsync(id);
         }
 
         public Series GetSeriesByName(string name)
@@ -37,12 +38,12 @@ namespace FileManager.Web.Services
             return _seriesRepository.GetSeriesByName(name);
         }
 
-        public int SaveSeries(Series series)
+        public async Task<int> SaveSeriesAsync(Series series)
         {
             if (series == null)
                 throw new ArgumentNullException(nameof(series));
 
-            return _seriesRepository.SaveSeries(series);
+            return await _seriesRepository.SaveSeriesAsync(series);
         }
     }
 }

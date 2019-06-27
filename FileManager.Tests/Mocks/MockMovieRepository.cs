@@ -1,40 +1,22 @@
 ﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
+
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.Tests.Mocks
 {
     public class MockMovieRepository : IMovieRepository
     {
-        public Movie GetMovieById(int id)
-        {
-            return new Movie();
-        }
+        public async Task<Movie> GetMovieByIdAsync(int id) => await Task.FromResult(new Movie());
 
-        public Movie GetMovieByName(string name)
-        {
-            return new Movie();
-        }
+        public Movie GetMovieByName(string name) => new Movie();
 
-        public IEnumerable<Movie> GetMovies()
-        {
-            return new List<Movie>();
-        }
+        public IEnumerable<Movie> GetMovies() => new List<Movie>();
 
-        public IQueryable<Movie> GetMoviesBySeriesId(int seriesId)
-        {
-            return new List<Movie>().AsQueryable();
-        }
+        public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId) => new List<Movie>().AsQueryable();
 
-        public int SaveMovie(Movie movie)
-        {
-            return movie != null ? 1 : 0;
-        }
-
-        public void Dispose()
-        {
-            
-        }
+        public async Task<int> SaveMovieAsync(Movie movie) => await Task.FromResult(movie != null ? 1 : 0);
     }
 }

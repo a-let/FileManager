@@ -2,40 +2,26 @@
 using FileManager.Web.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.Tests.Mocks
 {
     public class MockMovieControllerService : IMovieControllerService
     {
-        public Movie GetMovieById(int id)
+        public async Task<Movie> GetMovieByIdAsync(int id) => await Task.FromResult(id != 1 ? null : new Movie
         {
-            return id != 1 ? null : new Movie
-            {
-                MovieId = 1
-            };
-        }
+            MovieId = 1
+        });
 
-        public Movie GetMovieByName(string name)
+        public Movie GetMovieByName(string name) => string.IsNullOrWhiteSpace(name) ? null : new Movie
         {
-            return string.IsNullOrWhiteSpace(name) ? null : new Movie
-            {
-                Name = "Test Movie"
-            };
-        }
+            Name = "Test Movie"
+        };
 
-        public IEnumerable<Movie> GetMovies()
-        {
-            return new List<Movie>();
-        }
+        public IEnumerable<Movie> GetMovies() => new List<Movie>();
 
-        public IQueryable<Movie> GetMoviesBySeriesId(int seriesId)
-        {
-            return new List<Movie>().AsQueryable();
-        }
+        public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId) => new List<Movie>();
 
-        public int SaveMovie(Movie movie)
-        {
-            return movie != null ? 1 : 0;
-        }
+        public async Task<int> SaveMovieAsync(Movie movie) => await Task.FromResult(movie != null ? 1 : 0);
     }
 }

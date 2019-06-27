@@ -3,8 +3,6 @@ using FileManager.Web.Services.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
@@ -18,11 +16,11 @@ namespace FileManager.Web.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserControllerService _userControllerService;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly ITokenGenerator _tokenService;
 
-        public UserController(IUserControllerService userControllerService, ILogger logger,
-            IConfiguration config, ITokenGenerator tokenService)
+        public UserController(IUserControllerService userControllerService,
+            ILog logger, ITokenGenerator tokenService)
         {
             _userControllerService = userControllerService;
             _logger = logger;
@@ -33,7 +31,7 @@ namespace FileManager.Web.Controllers
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<UserDto>))]
         [ProducesResponseType(400)]
-        public ActionResult<IEnumerable<UserDto>> Get()
+        public async Task<ActionResult<IEnumerable<UserDto>>> Get()
         {
             try
             {
@@ -42,7 +40,7 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
@@ -60,7 +58,7 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
@@ -69,7 +67,7 @@ namespace FileManager.Web.Controllers
         [HttpGet("userName/{userName}")]
         [ProducesResponseType(200, Type = typeof(UserDto))]
         [ProducesResponseType(400)]
-        public ActionResult<UserDto> GetByUserName(string userName)
+        public async Task<ActionResult<UserDto>> GetByUserName(string userName)
         {
             try
             {
@@ -78,7 +76,7 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
@@ -97,7 +95,7 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }
@@ -107,7 +105,7 @@ namespace FileManager.Web.Controllers
         [HttpPost("Authenticate")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public IActionResult Authenticate([FromBody]UserDto user)
+        public async Task<IActionResult> Authenticate([FromBody]UserDto user)
         {
             try
             {
@@ -127,7 +125,7 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }
         }

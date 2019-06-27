@@ -61,7 +61,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Act
             var exception = Record.ExceptionAsync(() => seriesService.GetSeriesById(0));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
         }
 
@@ -115,7 +115,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Act
             var exception = Record.ExceptionAsync(() => seriesService.SaveSeries(new Series()));
 
-            //Assert
+            // Assert
             Assert.Null(exception.Result);
         }
 
@@ -133,7 +133,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Act
             var exception = Record.ExceptionAsync(() => seriesService.SaveSeries(null));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
         }
     }

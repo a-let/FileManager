@@ -2,10 +2,10 @@
 using FileManager.Web.Services.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Web.Controllers
 {
@@ -14,9 +14,9 @@ namespace FileManager.Web.Controllers
     public class EpisodeController : Controller
     {
         private readonly IEpisodeControllerService _episodeControllerService;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
-        public EpisodeController(IEpisodeControllerService episodeControllerService, ILogger logger)
+        public EpisodeController(IEpisodeControllerService episodeControllerService, ILog logger)
         {
             _episodeControllerService = episodeControllerService;
             _logger = logger;
@@ -24,7 +24,7 @@ namespace FileManager.Web.Controllers
 
         // GET: api/Episode
         [HttpGet]
-        public ActionResult<IEnumerable<Episode>> Get()
+        public async Task<ActionResult<IEnumerable<Episode>>> Get()
         {
             try
             {
@@ -33,30 +33,30 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }            
         }
 
         // GET: api/Episode/id/5
         [HttpGet("id/{id}")]
-        public ActionResult<Episode> GetById(int id)
+        public async Task<ActionResult<Episode>> GetByIdAsync(int id)
         {
             try
             {
-                var episode = _episodeControllerService.GetEpisodeById(id);
+                var episode = await _episodeControllerService.GetEpisodeByIdAsync(id);
                 return Ok(episode);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }            
         }
 
         // GET: api/Episode/name/Name
         [HttpGet("name/{name}")]
-        public ActionResult<Episode> GetByName(string name)
+        public async Task<ActionResult<Episode>> GetByName(string name)
         {
             try
             {
@@ -65,30 +65,30 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }            
         }
         
         // POST: api/Episode
         [HttpPost]
-        public ActionResult<int> Post([FromBody]Episode episode)
+        public async Task<ActionResult<int>> PostAsync([FromBody]Episode episode)
         {
             try
             {
-                var episodeId = _episodeControllerService.SaveEpisode(episode);
+                var episodeId = await _episodeControllerService.SaveEpisodeAsync(episode);
                 return Ok(episodeId);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }            
         }
         
         // GET: api/Episode/seasonid/5
         [HttpGet("seasonid/{seasonId}")]
-        public ActionResult<IEnumerable<Episode>> GetBySeasonId(int seasonId)
+        public async Task<ActionResult<IEnumerable<Episode>>> GetBySeasonId(int seasonId)
         {
             try
             {
@@ -97,14 +97,14 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, ex.Message);
                 return BadRequest(ex);
             }            
         }
 
         // PUT: api/Episode/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody]string value)
+        public async Task<ActionResult> Put(int id, [FromBody]string value)
         {
             try
             {
@@ -112,14 +112,14 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, null);
                 return BadRequest(ex);
             }            
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
@@ -127,7 +127,7 @@ namespace FileManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                await _logger.LogErrorAsync(ex, "Delete Error");
                 return BadRequest(ex);
             }
         }

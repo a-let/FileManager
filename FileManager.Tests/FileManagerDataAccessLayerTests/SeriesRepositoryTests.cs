@@ -1,7 +1,11 @@
-﻿using FileManager.DataAccessLayer.Repositories;
+﻿using FileManager.DataAccessLayer;
+using FileManager.DataAccessLayer.Repositories;
 using FileManager.Models;
+
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
@@ -9,36 +13,40 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
     [Collection("Database collection")]
     public class SeriesRepositoryTests
     {
-        private readonly SeriesRepository _seriesRepository;
+        private readonly FileManagerContext _context;
 
         public SeriesRepositoryTests(DatabaseFixture dbFixture)
         {
-            _seriesRepository = dbFixture.SeriesRepository;
+            _context = dbFixture.Context;
         }
 
         [Fact]
-        public void GetSeriesById_GivenValidId_ThenSeriesIsReturned()
+        public async Task GetSeriesById_GivenValidId_ThenSeriesIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
-            var series = _seriesRepository.GetSeriesById(id);
+            var seriesRepo = new SeriesRepository(_context);
 
-            //Assert
+            // Act
+            var series = await seriesRepo.GetSeriesByIdAsync(id);
+
+            // Assert
             Assert.Equal(id, series.SeriesId);
         }
 
         [Fact]
         public void GetSeriesByName_GivenValidName_ThenSeriesIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test";
 
-            //Act
-            var series = _seriesRepository.GetSeriesByName(name);
+            var seriesRepo = new SeriesRepository(_context);
 
-            //Assert
+            // Act
+            var series = seriesRepo.GetSeriesByName(name);
+
+            // Assert
             Assert.IsAssignableFrom<Series>(series);
             Assert.Equal(name, series.Name);
         }
@@ -46,17 +54,20 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         [Fact]
         public void GetSeriess_ThenReturnsEpisodeList()
         {
-            //Arrange, Act
-            var seriess = _seriesRepository.GetSeries();
+            // Arrange
+            var seriesRepo = new SeriesRepository(_context);
 
-            //Assert
+            // Act
+            var seriess = seriesRepo.GetSeries();
+
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Series>>(seriess);
         }
 
         [Fact]
-        public void SaveSeries_GivenValidNewSeries_ThenReturnsSeriesId()
+        public async Task SaveSeries_GivenValidNewSeries_ThenReturnsSeriesId()
         {
-            //Arrange
+            // Arrange
             var series = new Series
             {
                 SeriesId = 0,
@@ -64,17 +75,19 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
-            //Act
-            var seriesId = _seriesRepository.SaveSeries(series);
+            var seriesRepo = new SeriesRepository(_context);
 
-            //Assert
+            // Act
+            var seriesId = await seriesRepo.SaveSeriesAsync(series);
+
+            // Assert
             Assert.True(seriesId > 0);
         }
 
-        [Fact(Skip = "Test is just saving a new record. Fix after DAL refactor.")]
-        public void SaveSeries_GivenValidExistingSeries_ThenSeriesIdIsEqual()
+        [Fact]
+        public async Task SaveSeries_GivenValidExistingSeries_ThenSeriesIdIsEqual()
         {
-            //Arrange
+            // Arrange
             var series = new Series
             {
                 SeriesId = 1,
@@ -82,19 +95,21 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
-            //Act
+            var seriesRepo = new SeriesRepository(_context);
+
+            // Act
             series.Path = "New path";
 
-            var seriesId = _seriesRepository.SaveSeries(series);
+            var seriesId = await seriesRepo.SaveSeriesAsync(series);
 
-            //Assert
+            // Assert
             Assert.Equal(series.SeriesId, seriesId);
         }
 
         [Fact]
-        public void SaveSeries_GivenNonExistingSeries_ThenThrowsArgumentNullException()
+        public async Task SaveSeries_GivenNonExistingSeries_ThenThrowsArgumentNullException()
         {
-            //Arrange
+            // Arrange
             var series = new Series
             {
                 SeriesId = 10,
@@ -102,10 +117,12 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
-            //Act
-            var exception = Record.Exception(() => _seriesRepository.SaveSeries(series));
+            var seriesRepo = new SeriesRepository(_context);
 
-            //Assert
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await seriesRepo.SaveSeriesAsync(series));
+
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
     }

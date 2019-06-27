@@ -1,35 +1,25 @@
-﻿using System.Collections.Generic;
-using FileManager.Models;
+﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Tests.Mocks
 {
     public class MockShowControllerService : IShowControllerService
     {
-        public Show GetShowById(int id)
+        public async Task<Show> GetShowByIdAsync(int id) => await Task.FromResult(id != 1 ? null : new Show
         {
-            return id != 1 ? null : new Show
-            {
-                ShowId = 1
-            };
-        }
+            ShowId = 1
+        });
 
-        public Show GetShowByName(string name)
+        public Show GetShowByName(string name) => string.IsNullOrWhiteSpace(name) ? null : new Show
         {
-            return string.IsNullOrWhiteSpace(name) ? null : new Show
-            {
-                Name = "Test Show"
-            };
-        }
+            Name = "Test Show"
+        };
 
-        public IEnumerable<Show> GetShows()
-        {
-            return new List<Show>();
-        }
+        public IEnumerable<Show> GetShows() => new List<Show>();
 
-        public int SaveShow(Show show)
-        {
-            return show != null ? 1 : 0;
-        }
+        public async Task<int> SaveShowAsync(Show show) => await Task.FromResult(show != null ? 1 : 0);
     }
 }

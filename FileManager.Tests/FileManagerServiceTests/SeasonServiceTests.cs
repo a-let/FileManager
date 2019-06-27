@@ -115,7 +115,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Act
             var exception = Record.ExceptionAsync(() => seasonService.SaveSeason(new Season()));
 
-            //Assert
+            // Assert
             Assert.Null(exception.Result);
         }
 
@@ -133,7 +133,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Act
             var exception = Record.ExceptionAsync(() => seasonService.SaveSeason(null));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
         }
     }

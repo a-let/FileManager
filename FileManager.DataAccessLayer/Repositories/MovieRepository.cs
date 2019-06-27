@@ -4,6 +4,7 @@ using FileManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
@@ -16,39 +17,27 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public Movie GetMovieById(int id) => _context.Movie.Find(id);
+        public async Task<Movie> GetMovieByIdAsync(int id) => await _context.Movie.FindAsync(id);
 
         public Movie GetMovieByName(string name) => _context.Movie.Single(m => m.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
         public IEnumerable<Movie> GetMovies() => _context.Movie;
 
-        public IQueryable<Movie> GetMoviesBySeriesId(int seriesId) => _context.Movie.Where(m => m.SeriesId == seriesId);
+        public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId) => _context.Movie.Where(m => m.SeriesId == seriesId);
 
-        public int SaveMovie(Movie movie)
+        public async Task<int> SaveMovieAsync(Movie movie)
         {
             if (movie.MovieId == 0)
-                _context.Movie.Add(movie);
+                await _context.Movie.AddAsync(movie);
             else
             {
-                var m = _context.Movie.Find(movie.MovieId);
+                var m = await _context.Movie.FindAsync(movie.MovieId);
                 _context.Entry(m).CurrentValues.SetValues(movie);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return movie.MovieId;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-                _context.Dispose();
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }

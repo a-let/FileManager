@@ -4,6 +4,7 @@ using FileManager.Web.Services;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -14,90 +15,90 @@ namespace FileManager.Tests.FileManagerWebTests
         private readonly ShowControllerService _showControllerService = new ShowControllerService(new MockShowRepository());
 
         [Fact]
-        public void GetShowById_GivenInvalidId_ThenThrowsArgumentException()
+        public async Task GetShowById_GivenInvalidId_ThenThrowsArgumentException()
         {
-            //Arrange
+            // Arrange
             var id = 0;
 
-            //Act
-            var exception = Record.Exception(() => _showControllerService.GetShowById(id));
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await _showControllerService.GetShowByIdAsync(id));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentException>(exception);
         }
 
         [Fact]
-        public void GetShowById_GivenValidId_ThenShowIsReturned()
+        public async Task GetShowById_GivenValidId_ThenShowIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
-            var show = _showControllerService.GetShowById(id);
+            // Act
+            var show = await _showControllerService.GetShowByIdAsync(id);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<Show>(show);
         }
 
         [Fact]
         public void GetShows_ThenReturnsShowList()
         {
-            //Arrange, Act
+            // Arrange, Act
             var shows = _showControllerService.GetShows();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Show>>(shows);
         }
 
         [Fact]
         public void GetShowByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
-            //Arrange
+            // Arrange
             var name = string.Empty;
 
-            //Act
+            // Act
             var exception = Record.Exception(() => _showControllerService.GetShowByName(name));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
         public void GetShowByName_GivenValidName_ThenShowIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test";
 
-            //Act
+            // Act
             var show = _showControllerService.GetShowByName(name);
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<Show>(show);
         }
 
         [Fact]
-        public void SaveShow_GivenNullShow_ThenThrowsArgumentNullReferenceException()
+        public async Task SaveShow_GivenNullShow_ThenThrowsArgumentNullReferenceException()
         {
-            //Arrange
+            // Arrange
             Show show = null;
 
-            //Act
-            var exception = Record.Exception(() => _showControllerService.SaveShow(show));
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await _showControllerService.SaveShowAsync(show));
 
-            //Assert
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void SaveShow_GivenShow_ThenReturnsShowId()
+        public async Task SaveShow_GivenShow_ThenReturnsShowId()
         {
-            //Arrange
+            // Arrange
             var show = new Show();
 
-            //Act
-            var showId = _showControllerService.SaveShow(show);
+            // Act
+            var showId = await _showControllerService.SaveShowAsync(show);
 
-            //Assert
+            // Assert
             Assert.True(showId > 0);
         }
     }

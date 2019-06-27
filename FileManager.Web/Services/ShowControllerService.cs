@@ -4,6 +4,7 @@ using FileManager.Web.Services.Interfaces;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Web.Services
 {
@@ -16,12 +17,12 @@ namespace FileManager.Web.Services
             _showRepository = showRepository;
         }
 
-        public Show GetShowById(int id)
+        public async Task<Show> GetShowByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid ShowId");
 
-            return _showRepository.GetShowById(id);
+            return await _showRepository.GetShowByIdAsync(id);
         }
 
         public Show GetShowByName(string name)
@@ -37,12 +38,12 @@ namespace FileManager.Web.Services
             return _showRepository.GetShows();
         }
 
-        public int SaveShow(Show show)
+        public async Task<int> SaveShowAsync(Show show)
         {
             if (show == null)
                 throw new ArgumentNullException(nameof(show));
 
-            return _showRepository.SaveShow(show);
+            return await _showRepository.SaveShowAsync(show);
         }
     }
 }

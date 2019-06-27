@@ -1,57 +1,60 @@
-﻿using System.Collections.Generic;
-using Xunit;
-using FileManager.Models;
+﻿using FileManager.Models;
 using FileManager.Tests.Mocks;
 using FileManager.Web.Controllers;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Xunit;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
     public class SeriesControllerTests
     {
-        private readonly SeriesController _seriesController = new SeriesController(new MockSeriesControllerService(), new MockLoggerService());
+        private readonly SeriesController _seriesController = new SeriesController(new MockSeriesControllerService(), new MockLog());
 
         [Fact]
-        public void Get_GivenNoParameter_ThenReturnsListOfSeriess()
+        public async Task Get_GivenNoParameter_ThenReturnsListOfSeriess()
         {
-            //Arrange
+            // Arrange
 
-            //Act
-            var seriess = _seriesController.Get().GetValue();
+            // Act
+            var seriess = (await _seriesController.Get()).GetValue();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Series>>(seriess);
         }
 
         [Fact]
-        public void Get_GivenId_ThenSeriesIsReturned()
+        public async Task Get_GivenId_ThenSeriesIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
-            var series = _seriesController.GetById(id).GetValue();
+            // Act
+            var series = (await _seriesController.GetById(id)).GetValue();
 
-            //Assert
+            // Assert
             Assert.Equal(id, series.SeriesId);
         }
 
         [Fact]
-        public void Get_GivenName_ThenSeriesIsReturned()
+        public async Task Get_GivenName_ThenSeriesIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test Movie";
 
-            //Act
-            var series = _seriesController.GetByName(name).GetValue();
+            // Act
+            var series = (await _seriesController.GetByName(name)).GetValue();
 
-            //Assert
+            // Assert
             Assert.Equal(name, series.Name);
         }
 
         [Fact]
-        public void Save_GivenValidSeries_ThenReturnsSeriesId()
+        public async Task Save_GivenValidSeries_ThenReturnsSeriesId()
         {
-            //Arrange
+            // Arrange
             var series = new Series
             {
                 SeriesId = 1,
@@ -59,10 +62,10 @@ namespace FileManager.Tests.FileManagerWebTests
                 Path = "Test"
             };
 
-            //Act
-            var seriesId = _seriesController.Post(series).GetValue();
+            // Act
+            var seriesId = (await _seriesController.Post(series)).GetValue();
 
-            //Assert
+            // Assert
             Assert.True(seriesId > 0);
         }
     }

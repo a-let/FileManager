@@ -46,7 +46,7 @@ namespace FileManager.Web
                 .AddScoped<IMovieControllerService, MovieControllerService>()
                 .AddScoped<IMovieRepository, MovieRepository>()
                 .AddScoped<ILogRepository, LogRepository>()
-                .AddScoped<ILogger, LoggerService>()
+                .AddScoped<ILog, LoggerService>()
                 .AddScoped<IUserControllerService, UserControllerService>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ICryptographyService, CryptographyService>()

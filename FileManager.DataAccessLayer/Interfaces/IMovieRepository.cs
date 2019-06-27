@@ -1,16 +1,16 @@
 ﻿using FileManager.Models;
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Interfaces
 {
-    public interface IMovieRepository : IDisposable
+    public interface IMovieRepository
     {
-        Movie GetMovieById(int id);
+        Task<Movie> GetMovieByIdAsync(int id);
         IEnumerable<Movie> GetMovies();
         Movie GetMovieByName(string name);
-        int SaveMovie(Movie movie);
-        IQueryable<Movie> GetMoviesBySeriesId(int seriesId);
+        Task<int> SaveMovieAsync(Movie movie);
+        IEnumerable<Movie> GetMoviesBySeriesId(int seriesId);
     }
 }

@@ -1,59 +1,60 @@
-﻿using System.Collections.Generic;
-
-using Xunit;
-
-using FileManager.Models;
+﻿using FileManager.Models;
 using FileManager.Tests.Mocks;
 using FileManager.Web.Controllers;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Xunit;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
     public class ShowControllerTests
     {
-        private readonly ShowController _showController = new ShowController(new MockShowControllerService(), new MockLoggerService());
+        private readonly ShowController _showController = new ShowController(new MockShowControllerService(), new MockLog());
 
         [Fact]
-        public void Get_GivenNoParameter_ThenReturnsListOfShows()
+        public async Task Get_GivenNoParameter_ThenReturnsListOfShows()
         {
-            //Arrange
+            // Arrange
 
-            //Act
-            var shows = _showController.Get().GetValue();
+            // Act
+            var shows = (await _showController.Get()).GetValue();
 
-            //Assert
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Show>>(shows);
         }
 
         [Fact]
-        public void Get_GivenId_ThenShowIsReturned()
+        public async Task Get_GivenId_ThenShowIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
-            var show = _showController.GetById(id).GetValue();
+            // Act
+            var show = (await _showController.GetById(id)).GetValue();
 
-            //Assert
+            // Assert
             Assert.Equal(id, show.ShowId);
         }
 
         [Fact]
-        public void Get_GivenName_ThenShowIsReturned()
+        public async Task Get_GivenName_ThenShowIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test Show";
 
-            //Act
-            var show = _showController.GetByName(name).GetValue();
+            // Act
+            var show = (await _showController.GetByName(name)).GetValue();
 
-            //Assert
+            // Assert
             Assert.Equal(name, show.Name);
         }
 
         [Fact]
-        public void Save_GivenValidShow_ThenReturnsShowId()
+        public async Task Save_GivenValidShow_ThenReturnsShowId()
         {
-            //Arrange
+            // Arrange
             var show = new Show
             {
                 ShowId = 1,
@@ -62,10 +63,10 @@ namespace FileManager.Tests.FileManagerWebTests
                 Path = "Test"
             };
 
-            //Act
-            var showId = _showController.Post(show).GetValue();
+            // Act
+            var showId = (await _showController.Post(show)).GetValue();
 
-            //Assert
+            // Assert
             Assert.True(showId > 0);
         }
     }

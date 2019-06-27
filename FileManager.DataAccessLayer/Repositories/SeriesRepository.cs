@@ -4,6 +4,7 @@ using FileManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
@@ -16,37 +17,25 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public Series GetSeriesById(int id) => _context.Series.Find(id);
+        public async Task<Series> GetSeriesByIdAsync(int id) => await _context.Series.FindAsync(id);
 
         public IEnumerable<Series> GetSeries() => _context.Series;
 
         public Series GetSeriesByName(string name) => _context.Series.Single(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-        public int SaveSeries(Series series)
+        public async Task<int> SaveSeriesAsync(Series series)
         {
             if (series.SeriesId == 0)
-                _context.Series.Add(series);
+                await _context.Series.AddAsync(series);
             else
             {
-                var s = _context.Series.Find(series.SeriesId);
+                var s = await _context.Series.FindAsync(series.SeriesId);
                 _context.Entry(s).CurrentValues.SetValues(series);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return series.SeriesId;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-                _context.Dispose();
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }

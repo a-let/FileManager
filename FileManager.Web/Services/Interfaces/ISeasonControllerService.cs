@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using FileManager.Models;
+﻿using FileManager.Models;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Web.Services.Interfaces
 {
     public interface ISeasonControllerService
     {
-        Season GetSeasonById(int id);
+        Task<Season> GetSeasonByIdAsync(int id);
         IEnumerable<Season> GetSeasons();
         IEnumerable<Season> GetSeasonsByShowId(int showId);
-        int SaveSeason(Season season);
+        Task<int> SaveSeasonAsync(Season season);
     }
 }

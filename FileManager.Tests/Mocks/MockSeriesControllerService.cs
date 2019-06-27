@@ -1,36 +1,25 @@
-﻿using System.Collections.Generic;
-
-using FileManager.Models;
+﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileManager.Tests.Mocks
 {
     public class MockSeriesControllerService : ISeriesControllerService
     {
-        public IEnumerable<Series> GetSeries()
-        {
-            return new List<Series>();
-        }
+        public IEnumerable<Series> GetSeries() => new List<Series>();
 
-        public Series GetSeriesById(int id)
+        public async Task<Series> GetSeriesByIdAsync(int id) => await Task.FromResult(id != 1 ? null : new Series
         {
-            return id != 1 ? null : new Series
-            {
-                SeriesId = 1
-            };
-        }
+            SeriesId = 1
+        });
 
-        public Series GetSeriesByName(string name)
+        public Series GetSeriesByName(string name) => string.IsNullOrWhiteSpace(name) ? null : new Series
         {
-            return string.IsNullOrWhiteSpace(name) ? null : new Series
-            {
-                Name = "Test Movie"
-            };
-        }
+            Name = "Test Movie"
+        };
 
-        public int SaveSeries(Series series)
-        {
-            return series != null ? 1 : 0;
-        }
+        public async Task<int> SaveSeriesAsync(Series series) => await Task.FromResult(series != null ? 1 : 0);
     }
 }

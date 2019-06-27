@@ -1,8 +1,12 @@
-﻿using FileManager.DataAccessLayer.Repositories;
+﻿using FileManager.DataAccessLayer;
+using FileManager.DataAccessLayer.Repositories;
 using FileManager.Models;
 using FileManager.Models.Constants;
+
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Xunit;
 
 namespace FileManager.Tests.FileManagerDataAccessLayerTests
@@ -10,36 +14,40 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
     [Collection("Database collection")]
     public class MovieRepositoryTests
     {
-        private readonly MovieRepository _movieRepository;
+        private readonly FileManagerContext _context;
 
         public MovieRepositoryTests(DatabaseFixture dbFixture)
         {
-            _movieRepository = dbFixture.MovieRepo;
+            _context = dbFixture.Context;
         }
 
         [Fact]
-        public void GetMovieById_GivenValidId_ThenMovieIsReturned()
+        public async Task GetMovieById_GivenValidId_ThenMovieIsReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
-            var movie = _movieRepository.GetMovieById(id);
+            var movieRepo = new MovieRepository(_context);
 
-            //Assert
+            // Act
+            var movie = await movieRepo.GetMovieByIdAsync(id);
+
+            // Assert
             Assert.Equal(id, movie.MovieId);
         }
 
         [Fact]
         public void GetMovieByName_GivenValidName_ThenMovieIsReturned()
         {
-            //Arrange
+            // Arrange
             var name = "Test";
 
-            //Act
-            var movie = _movieRepository.GetMovieByName(name);
+            var movieRepo = new MovieRepository(_context);
 
-            //Assert
+            // Act
+            var movie = movieRepo.GetMovieByName(name);
+
+            // Assert
             Assert.IsAssignableFrom<Movie>(movie);
             Assert.Equal(name, movie.Name);
         }
@@ -47,31 +55,36 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
         [Fact]
         public void GetMovies_ThenReturnsMovieList()
         {
-            //Arrange, Act
-            var movies = _movieRepository.GetMovies();
+            // Arrange
+            var movieRepo = new MovieRepository(_context);
 
-            //Assert
+            // Act
+            var movies = movieRepo.GetMovies();
+
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
         }
 
         [Fact]
         public void GetMoviesBySeriesId_GivenValidSeriesId_ThenMoviesReturned()
         {
-            //Arrange
+            // Arrange
             var id = 1;
 
-            //Act
-            var movies = _movieRepository.GetMoviesBySeriesId(id);
+            var movieRepo = new MovieRepository(_context);
 
-            //Assert
+            // Act
+            var movies = movieRepo.GetMoviesBySeriesId(id);
+
+            // Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
             Assert.NotEmpty(movies);
         }
 
         [Fact]
-        public void SaveMovie_GivenValidNewMovie_ThenReturnsMovieId()
+        public async Task SaveMovie_GivenValidNewMovie_ThenReturnsMovieId()
         {
-            //Arrange
+            // Arrange
             var movie = new Movie
             {
                 MovieId = 0,
@@ -83,20 +96,22 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
-            //Act
-            var movieId = _movieRepository.SaveMovie(movie);
+            var movieRepo = new MovieRepository(_context);
 
-            //Assert
+            // Act
+            var movieId = await movieRepo.SaveMovieAsync(movie);
+
+            // Assert
             Assert.True(movieId > 0);
         }
 
-        [Fact(Skip = "Test is just saving a new record. Fix after DAL refactor.")]
-        public void SaveMovie_GivenValidExistingMovie_ThenMovieIdIsEqual()
+        [Fact]
+        public async Task SaveMovie_GivenValidExistingMovie_ThenMovieIdIsEqual()
         {
-            //Arrange
+            // Arrange
             var movie = new Movie
             {
-                MovieId = 0,
+                MovieId = 1,
                 SeriesId = 1,
                 Category = "Test",
                 IsSeries = false,
@@ -105,19 +120,21 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
-            //Act
-            movie.Name = "Updated Name";
+            var movieRepo = new MovieRepository(_context);
 
-            var movieId = _movieRepository.SaveMovie(movie);
+            // Act
+            movie.Path = "Updated Test Path";
 
-            //Assert
+            var movieId = await movieRepo.SaveMovieAsync(movie);
+
+            // Assert
             Assert.Equal(movie.MovieId, movieId);
         }
 
         [Fact]
-        public void SaveMovie_GivenNonExistingMovie_ThenThrowsArgumentNullException()
+        public async Task SaveMovie_GivenNonExistingMovie_ThenThrowsArgumentNullException()
         {
-            //Arrange
+            // Arrange
             var movie = new Movie
             {
                 MovieId = 10,
@@ -129,10 +146,12 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
                 Path = "Some Path"
             };
 
-            //Act
-            var exception = Record.Exception(() => _movieRepository.SaveMovie(movie));
+            var movieRepo = new MovieRepository(_context);
 
-            //Assert
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await movieRepo.SaveMovieAsync(movie));
+
+            // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
     }
