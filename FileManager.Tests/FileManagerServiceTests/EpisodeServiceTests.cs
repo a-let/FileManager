@@ -23,7 +23,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodes());
+            var exception = Record.ExceptionAsync(() => episodeService.GetAsync());
 
             // Assert
             Assert.Null(exception.Result);
@@ -41,7 +41,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodeById(1));
+            var exception = Record.ExceptionAsync(() => episodeService.GetAsync(1));
 
             // Assert
             Assert.Null(exception.Result);
@@ -59,7 +59,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodeById(0));
+            var exception = Record.ExceptionAsync(() => episodeService.GetAsync(0));
 
             // Assert
             Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
@@ -77,7 +77,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodeByName("Test Name"));
+            var exception = Record.ExceptionAsync(() => episodeService.GetAsync("Test Name"));
 
             // Assert
             Assert.Null(exception.Result);
@@ -95,7 +95,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodeByName(""));
+            var exception = Record.ExceptionAsync(() => episodeService.GetAsync(""));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
@@ -115,7 +115,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Act
             var episode = new Episode();
 
-            var exception = Record.ExceptionAsync(() => episodeService.SaveEpisode(episode));
+            var exception = Record.ExceptionAsync(() => episodeService.SaveAsync(episode));
 
             // Assert
             Assert.Null(exception.Result);
@@ -133,7 +133,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.SaveEpisode(null));
+            var exception = Record.ExceptionAsync(() => episodeService.SaveAsync(null));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception.Result.InnerException);

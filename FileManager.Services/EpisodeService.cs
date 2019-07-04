@@ -3,34 +3,28 @@ using FileManager.Services.Interfaces;
 
 using Microsoft.Extensions.Configuration;
 
-using Newtonsoft.Json;
-
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Text;
 
 namespace FileManager.Services
 {
-    public class EpisodeService : IEpisodeService
+    public class EpisodeService : ServiceBase, IEpisodeService
     {
         private readonly IConfigurationSection _episodeAddresses;
-        private readonly HttpClient _httpClient;
 
-        public EpisodeService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public EpisodeService(IConfiguration configuration, IHttpClientFactory httpClientFactory) :
+            base(httpClientFactory, "FileManager")
         {
             _episodeAddresses = configuration.GetSection("EpisodeAddresses");
-            _httpClient = httpClientFactory.CreateClient("FileManager");
         }
 
-        public async Task<IEnumerable<Episode>> GetEpisodes()
+        public async Task<IEnumerable<Episode>> GetAsync()
         {
             try
             {
-                var message = await _httpClient.GetAsync(_episodeAddresses["GetEpisodesAddress"]);
-                var episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(await message.Content.ReadAsStringAsync());
-
+                var episodeList = await GetAsync<IEnumerable<Episode>>(_episodeAddresses["GetEpisodesAddress"]);
                 return episodeList;
             }
             catch(Exception ex)
@@ -39,16 +33,14 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<Episode> GetEpisodeById(int id)
+        public async Task<Episode> GetAsync(int id)
         {
             try
             {
                 if (id <= 0)
                     throw new ArgumentOutOfRangeException("EpisodeId cannot be less than 1");
 
-                var message = await _httpClient.GetAsync($"{_episodeAddresses["GetEpisodeByIdAddress"]}/{id}");
-                var episode = JsonConvert.DeserializeObject<Episode>(await message.Content.ReadAsStringAsync());
-
+                var episode = await GetAsync<Episode>($"{_episodeAddresses["GetEpisodeByIdAddress"]}/{id}");
                 return episode;
             }
             catch (Exception ex)
@@ -57,16 +49,14 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<Episode> GetEpisodeByName(string name)
+        public async Task<Episode> GetAsync(string name)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(name))
                     throw new ArgumentNullException(nameof(name));
 
-                var message = await _httpClient.GetAsync($"{_episodeAddresses["GetEpisodeByNameAddress"]}/{name}");
-                var episode = JsonConvert.DeserializeObject<Episode>(await message.Content.ReadAsStringAsync());
-
+                var episode = await GetAsync<Episode>($"{_episodeAddresses["GetEpisodeByNameAddress"]}/{name}");
                 return episode;
             }
             catch (Exception ex)
@@ -75,17 +65,14 @@ namespace FileManager.Services
             }
         }
 
-        public async Task<int> SaveEpisode(Episode episode)
+        public async Task<int> SaveAsync(Episode episode)
         {
             try
             {
                 if (episode == null)
                     throw new ArgumentNullException(nameof(episode));
 
-                var content = new StringContent(JsonConvert.SerializeObject(episode), Encoding.UTF8, "application/json");
-                var message = await _httpClient.PostAsync(_episodeAddresses["SaveEpisodeAddress"], content);
-                var id = JsonConvert.DeserializeObject<int>(await message.Content.ReadAsStringAsync());
-
+                var id = await PostAsync<int>(_episodeAddresses["SaveEpisodeAddress"], episode);
                 return id;
             }
             catch(Exception ex)
@@ -102,9 +89,7 @@ namespace FileManager.Services
                 if (seasonId <= 0)
                     throw new ArgumentOutOfRangeException("SeasonId cannot be less than 1");
 
-                var message = await _httpClient.GetAsync($"{_episodeAddresses["GetEpisodeBySeasonIdAddress"]}/{seasonId}");
-                var episodeList = JsonConvert.DeserializeObject<IEnumerable<Episode>>(await message.Content.ReadAsStringAsync());
-
+                var episodeList = await GetAsync<IEnumerable<Episode>>($"{_episodeAddresses["GetEpisodeBySeasonIdAddress"]}/{seasonId}");
                 return episodeList;
             }
             catch (Exception ex)

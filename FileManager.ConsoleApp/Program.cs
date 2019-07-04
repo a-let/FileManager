@@ -29,20 +29,20 @@ namespace FileManager.ConsoleApp
         {
             var episodeService = _services.GetService<IEpisodeService>();
                         
-            var episodeById = episodeService.GetEpisodeById(2).Result;
-            var episodeByName = episodeService.GetEpisodeByName("string").Result;
+            var episodeById = episodeService.GetAsync(2).Result;
+            var episodeByName = episodeService.GetAsync("string").Result;
 
             var newEpisode = new Episode
             {
                 EpisodeId = 0,
                 SeasonId = 2,
-                Name = "New episode from console via service",
+                Name = $"New episode from console via service - {DateTime.Now.ToShortDateString()}",
                 EpisodeNumber = 1,
                 Format = FileFormatTypes.MP4,
                 Path = @"C:\Temp"
             };    
             
-            var episodeSaved = episodeService.SaveEpisode(newEpisode).Result;
+            var episodeSaved = episodeService.SaveAsync(newEpisode).Result;
             var episodesBySeasonId = episodeService.GetEpisodesBySeasonId(1).Result;
             
             Console.WriteLine("Get by id...");
@@ -52,7 +52,7 @@ namespace FileManager.ConsoleApp
             Console.WriteLine("Saved...");
             Console.WriteLine($"{episodeSaved}");
 
-            var episodeList = episodeService.GetEpisodes().Result;
+            var episodeList = episodeService.GetAsync().Result;
 
             Console.WriteLine("Get episodes...");
             foreach (var episode in episodeList)
