@@ -23,7 +23,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.GetSeries());
+            var exception = Record.ExceptionAsync(() => seriesService.GetAsync());
 
             // Assert
             Assert.Null(exception.Result);
@@ -41,7 +41,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.GetSeriesById(1));
+            var exception = Record.ExceptionAsync(() => seriesService.GetAsync(1));
 
             // Assert
             Assert.Null(exception.Result);
@@ -59,7 +59,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.GetSeriesById(0));
+            var exception = Record.ExceptionAsync(() => seriesService.GetAsync(0));
 
             // Assert
             Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
@@ -77,7 +77,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.GetSeriesByName("Test"));
+            var exception = Record.ExceptionAsync(() => seriesService.GetAsync("Test"));
 
             // Assert
             Assert.Null(exception.Result);
@@ -95,7 +95,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.GetSeriesByName(string.Empty));
+            var exception = Record.ExceptionAsync(() => seriesService.GetAsync(string.Empty));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
@@ -113,7 +113,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.SaveSeries(new Series()));
+            var exception = Record.ExceptionAsync(() => seriesService.SaveAsync(new Series()));
 
             // Assert
             Assert.Null(exception.Result);
@@ -131,7 +131,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.SaveSeries(null));
+            var exception = Record.ExceptionAsync(() => seriesService.SaveAsync(null));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception.Result.InnerException);

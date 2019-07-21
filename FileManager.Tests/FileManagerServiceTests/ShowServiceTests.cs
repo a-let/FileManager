@@ -23,7 +23,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.GetShowById(1));
+            var exception = Record.ExceptionAsync(() => showService.GetAsync(1));
 
             // Assert
             Assert.Null(exception.Result);
@@ -41,7 +41,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.GetShowById(0));
+            var exception = Record.ExceptionAsync(() => showService.GetAsync(0));
 
             // Assert
             Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
@@ -59,7 +59,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.GetShowByName("Test"));
+            var exception = Record.ExceptionAsync(() => showService.GetAsync("Test"));
 
             // Assert
             Assert.Null(exception.Result);
@@ -77,7 +77,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.GetShowByName(string.Empty));
+            var exception = Record.ExceptionAsync(() => showService.GetAsync(string.Empty));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
@@ -95,7 +95,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.GetShows());
+            var exception = Record.ExceptionAsync(() => showService.GetAsync());
 
             // Assert
             Assert.Null(exception.Result);
@@ -113,7 +113,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.SaveShow(new Show()));
+            var exception = Record.ExceptionAsync(() => showService.SaveAsync(new Show()));
 
             // Assert
             Assert.Null(exception.Result);
@@ -131,7 +131,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.SaveShow(null));
+            var exception = Record.ExceptionAsync(() => showService.SaveAsync(null));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception.Result.InnerException);

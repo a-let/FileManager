@@ -23,7 +23,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.GetSeasonById(1));
+            var exception = Record.ExceptionAsync(() => seasonService.GetAsync(1));
 
             // Assert
             Assert.Null(exception.Result);
@@ -41,7 +41,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.GetSeasonById(0));
+            var exception = Record.ExceptionAsync(() => seasonService.GetAsync(0));
 
             // Assert
             Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
@@ -59,7 +59,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.GetSeasons());
+            var exception = Record.ExceptionAsync(() => seasonService.GetAsync());
 
             // Assert
             Assert.Null(exception.Result);
@@ -113,7 +113,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.SaveSeason(new Season()));
+            var exception = Record.ExceptionAsync(() => seasonService.SaveAsync(new Season()));
 
             // Assert
             Assert.Null(exception.Result);
@@ -131,7 +131,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.SaveSeason(null));
+            var exception = Record.ExceptionAsync(() => seasonService.SaveAsync(null));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception.Result.InnerException);

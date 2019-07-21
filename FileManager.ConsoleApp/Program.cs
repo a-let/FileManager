@@ -121,8 +121,8 @@ namespace FileManager.ConsoleApp
                 Path = "New season path from console via service"
             };
 
-            var seasonSaved = seasonService.SaveSeason(newSeason).Result;
-            var seasonById = seasonService.GetSeasonById(2).Result;
+            var seasonSaved = seasonService.SaveAsync(newSeason).Result;
+            var seasonById = seasonService.GetAsync(2).Result;
             var seasonByShowId = seasonService.GetSeasonsByShowId(2).Result;
 
             Console.WriteLine("Saved...");
@@ -132,7 +132,7 @@ namespace FileManager.ConsoleApp
             Console.WriteLine($"{seasonById.SeasonId} - {seasonById.Path}");
 
             Console.WriteLine("Get seasons...");
-            foreach (var season in seasonService.GetSeasons().Result)
+            foreach (var season in seasonService.GetAsync().Result)
             {
                 Console.WriteLine($"{season.SeasonId} - {season.Path}");
             }
@@ -155,9 +155,9 @@ namespace FileManager.ConsoleApp
                 Path = @"C:\Temp"
             };
 
-            var seriesSave = seriesService.SaveSeries(newSeries).Result;
-            var seriesById = seriesService.GetSeriesById(1).Result;
-            var seriesByName = seriesService.GetSeriesByName("Test Series").Result;
+            var seriesSave = seriesService.SaveAsync(newSeries).Result;
+            var seriesById = seriesService.GetAsync(1).Result;
+            var seriesByName = seriesService.GetAsync("Test Series").Result;
 
             Console.WriteLine("Saved...");
             Console.WriteLine($"{seriesSave}");
@@ -168,7 +168,7 @@ namespace FileManager.ConsoleApp
             Console.WriteLine($"{seriesByName.SeriesId} - {seriesByName.Name}");
 
             Console.WriteLine("Get series...");
-            foreach (var series in seriesService.GetSeries().Result)
+            foreach (var series in seriesService.GetAsync().Result)
             {
                 Console.WriteLine($"{series.SeriesId} - {series.Name}");
             }
@@ -186,9 +186,9 @@ namespace FileManager.ConsoleApp
                 Path = @"C:\Temp"
             };
 
-            var showSaved = showService.SaveShow(newShow).Result;
-            var showById = showService.GetShowById(1).Result;
-            var showByName = showService.GetShowByName("Test Show").Result;
+            var showSaved = showService.SaveAsync(newShow).Result;
+            var showById = showService.GetAsync(1).Result;
+            var showByName = showService.GetAsync("Test Show").Result;
 
             Console.WriteLine("Get by id...");
             Console.WriteLine($"{showById.ShowId} - {showById.Name}");
@@ -199,7 +199,7 @@ namespace FileManager.ConsoleApp
             Console.WriteLine($"{showSaved}");
 
             Console.WriteLine("Get shows...");
-            foreach (var show in showService.GetShows().Result)
+            foreach (var show in showService.GetAsync().Result)
             {
                 Console.WriteLine($"{show.ShowId} - {show.Name}");
             }

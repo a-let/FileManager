@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace FileManager.Services.Interfaces
 {
-    public interface ISeasonService
+    public interface ISeasonService : IService<Season>
     {
-        Task<Season> GetSeasonById(int id);
-        Task<IEnumerable<Season>> GetSeasons();
         Task<IEnumerable<Season>> GetSeasonsByShowId(int showId);
-        Task<int> SaveSeason(Season season);
+        Task<int> SaveAsync(Season season);
     }
 }
