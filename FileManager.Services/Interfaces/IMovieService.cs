@@ -5,12 +5,8 @@ using System.Threading.Tasks;
 
 namespace FileManager.Services.Interfaces
 {
-    public interface IMovieService
+    public interface IMovieService : IService<Movie>
     {
-        Task<IEnumerable<Movie>> GetMovies();
-        Task<Movie> GetMovieById(int id);
-        Task<Movie> GetMovieByName(string name);
-        Task<int> SaveMovie(Movie movie);
         Task<IEnumerable<Movie>> GetMoviesBySeriesId(int seriesId);
     }
 }

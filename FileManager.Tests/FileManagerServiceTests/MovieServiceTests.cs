@@ -23,7 +23,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetMovies());
+            var exception = Record.ExceptionAsync(() => movieService.GetAsync());
 
             // Assert
             Assert.Null(exception.Result);
@@ -41,7 +41,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetMovieById(1));
+            var exception = Record.ExceptionAsync(() => movieService.GetAsync(1));
 
             // Assert
             Assert.Null(exception.Result);
@@ -59,7 +59,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetMovieById(0));
+            var exception = Record.ExceptionAsync(() => movieService.GetAsync(0));
 
             // Assert
             Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
@@ -77,7 +77,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetMovieByName("Test Name"));
+            var exception = Record.ExceptionAsync(() => movieService.GetAsync("Test Name"));
 
             // Assert
             Assert.Null(exception.Result);
@@ -95,7 +95,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetMovieByName(""));
+            var exception = Record.ExceptionAsync(() => movieService.GetAsync(""));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
@@ -115,7 +115,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             // Arrange
             var movie = new Movie();
 
-            var exception = Record.ExceptionAsync(() => movieService.SaveMovie(movie));
+            var exception = Record.ExceptionAsync(() => movieService.SaveAsync(movie));
 
             // Assert
             Assert.Null(exception.Result);
@@ -133,7 +133,7 @@ namespace FileManager.Tests.FileManagerServiceTests
             var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.SaveMovie(null));
+            var exception = Record.ExceptionAsync(() => movieService.SaveAsync(null));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
