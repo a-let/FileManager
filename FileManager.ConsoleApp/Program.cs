@@ -75,7 +75,7 @@ namespace FileManager.ConsoleApp
             {
                 MovieId = 0,
                 SeriesId = 2,
-                Name = "New movie from console via service",
+                Name = $"New movie from console via service - {DateTime.Now.ToShortDateString()}",
                 IsSeries = false,
                 Format = FileFormatTypes.MP4,
                 Category = "Testing",
@@ -118,7 +118,7 @@ namespace FileManager.ConsoleApp
                 SeasonId = 0,
                 ShowId = 1,
                 SeasonNumber = 1,
-                Path = "New season path from console via service"
+                Path = $"New season path from console via service - {DateTime.Now.ToShortDateString()}"
             };
 
             var seasonSaved = seasonService.SaveAsync(newSeason).Result;
@@ -151,7 +151,7 @@ namespace FileManager.ConsoleApp
             var newSeries = new Series
             {
                 SeriesId = 0,
-                Name = "New series path from console via service",
+                Name = $"New series path from console via service - {DateTime.Now.ToShortDateString()}",
                 Path = @"C:\Temp"
             };
 
@@ -181,7 +181,7 @@ namespace FileManager.ConsoleApp
             var newShow = new Show
             {
                 ShowId = 0,
-                Name = "New show from console via service",
+                Name = $"New show from console via service - {DateTime.Now.ToShortDateString()}",
                 Category = "Testing",
                 Path = @"C:\Temp"
             };
