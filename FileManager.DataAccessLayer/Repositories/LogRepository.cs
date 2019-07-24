@@ -1,6 +1,4 @@
-﻿using FileManager.DataAccessLayer.Interfaces;
-using FileManager.Models;
-
+﻿using Logging;
 using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories

@@ -1,5 +1,6 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
+using Logging;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +15,9 @@ namespace FileManager.Web.Controllers
     public class SeasonController : Controller
     {
         private readonly ISeasonControllerService _seasonControllerService;
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
 
-        public SeasonController(ISeasonControllerService seasonControllerService, ILog logger)
+        public SeasonController(ISeasonControllerService seasonControllerService, ILogger logger)
         {
             _seasonControllerService = seasonControllerService;
             _logger = logger;

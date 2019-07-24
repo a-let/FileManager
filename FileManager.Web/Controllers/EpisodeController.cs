@@ -1,6 +1,8 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
 
+using Logging;
+
 using Microsoft.AspNetCore.Mvc;
 
 using System;
@@ -14,9 +16,9 @@ namespace FileManager.Web.Controllers
     public class EpisodeController : Controller
     {
         private readonly IEpisodeControllerService _episodeControllerService;
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
 
-        public EpisodeController(IEpisodeControllerService episodeControllerService, ILog logger)
+        public EpisodeController(IEpisodeControllerService episodeControllerService, ILogger logger)
         {
             _episodeControllerService = episodeControllerService;
             _logger = logger;

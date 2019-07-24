@@ -1,13 +1,11 @@
-﻿using FileManager.Web.Services.Interfaces;
-
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 using System;
 using System.Threading.Tasks;
 
 namespace FileManager.Tests.Mocks
 {
-    public class MockLog : ILog
+    public class MockLog : Logging.ILogger
     {
         public bool IsEnabled => throw new NotImplementedException();
 

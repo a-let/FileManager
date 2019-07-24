@@ -1,5 +1,7 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
+using Logging;
+
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +16,9 @@ namespace FileManager.Web.Controllers
     public class ShowController : Controller
     {
         private readonly IShowControllerService _showControllerService;
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
 
-        public ShowController(IShowControllerService showControllerService, ILog logger)
+        public ShowController(IShowControllerService showControllerService, ILogger logger)
         {
             _showControllerService = showControllerService;
             _logger = logger;
