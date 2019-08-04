@@ -1,61 +1,61 @@
 ﻿using FileManager.Models;
 using FileManager.Services.Interfaces;
 
-using Microsoft.Extensions.Configuration;
+using Logging;
 
-using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FileManager.Services
 {
-    public class SeasonService : ISeasonService
+    public class SeasonService : ServiceBase, ISeasonService
     {
         private readonly IConfigurationSection _seasonAddresses;
-        private readonly HttpClient _httpClient;
+        private readonly ILogger _logger;
 
-        public SeasonService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public SeasonService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger) :
+            base(httpClientFactory, "FileManager")
         {
             _seasonAddresses = configuration.GetSection("SeasonAddresses");
-            _httpClient = httpClientFactory.CreateClient("FileManager");
+            _logger = logger;
         }
 
-        public async Task<Season> GetSeasonById(int id)
+        public async Task<Season> GetAsync(int id)
         {
             try
             {
                 if (id <= 0)
                     throw new ArgumentOutOfRangeException("SeasonId cannot be less than 1");
 
-                var message = await _httpClient.GetAsync($"{_seasonAddresses["GetSeasonByIdAddress"]}/{id}");
-                var season = JsonConvert.DeserializeObject<Season>(await message.Content.ReadAsStringAsync());
-
+                var season = await GetAsync<Season>($"{_seasonAddresses["GetSeasonByIdAddress"]}/{id}");
                 return season;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting season. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting season");
+                throw;
             }
         }
 
-        public async Task<IEnumerable<Season>> GetSeasons()
+        public async Task<IEnumerable<Season>> GetAsync()
         {
             try
             {
-                var message = await _httpClient.GetAsync(_seasonAddresses["GetSeasonsAddress"]);
-                var seasonList = JsonConvert.DeserializeObject<IEnumerable<Season>>(await message.Content.ReadAsStringAsync());
-
+                var seasonList = await GetAsync<IEnumerable<Season>>(_seasonAddresses["GetSeasonsAddress"]);
                 return seasonList;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting seasons. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting seasons");
+                throw;
             }
         }
+
+        public Task<Season> GetAsync(string name) => throw new NotImplementedException();
 
         public async Task<IEnumerable<Season>> GetSeasonsByShowId(int showId)
         {
@@ -64,33 +64,30 @@ namespace FileManager.Services
                 if (showId <= 0)
                     throw new ArgumentOutOfRangeException("SeasonId cannot be less than 1");
 
-                var message = await _httpClient.GetAsync($"{_seasonAddresses["GetSeasonsByShowIdAddress"]}/{showId}");
-                var seasonList = JsonConvert.DeserializeObject<IEnumerable<Season>>(await message.Content.ReadAsStringAsync());
-
+                var seasonList = await GetAsync<IEnumerable<Season>>($"{_seasonAddresses["GetSeasonsByShowIdAddress"]}/{showId}");
                 return seasonList;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting seasons. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting seasons");
+                throw;
             }
         }
 
-        public async Task<int> SaveSeason(Season season)
+        public async Task<int> SaveAsync(Season season)
         {
             try
             {
                 if (season == null)
                     throw new ArgumentNullException(nameof(season));
 
-                var content = new StringContent(JsonConvert.SerializeObject(season), Encoding.UTF8, "application/json");
-                var message = await _httpClient.PostAsync(_seasonAddresses["SaveSeasonAddress"], content);
-                var success = JsonConvert.DeserializeObject<int>(await message.Content.ReadAsStringAsync());
-
-                return success;
+                var id = await PostAsync<int>(_seasonAddresses["SaveSeasonAddress"], season);
+                return id;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error saving season. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error saving season");
+                throw;
             }
         }
     }

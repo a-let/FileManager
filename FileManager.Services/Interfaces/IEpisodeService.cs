@@ -5,12 +5,8 @@ using System.Threading.Tasks;
 
 namespace FileManager.Services.Interfaces
 {
-    public interface IEpisodeService
+    public interface IEpisodeService : IService<Episode>
     {
-        Task<IEnumerable<Episode>> GetEpisodes();
-        Task<Episode> GetEpisodeById(int id);
-        Task<Episode> GetEpisodeByName(string name);
-        Task<int> SaveEpisode(Episode episode);
         Task<IEnumerable<Episode>> GetEpisodesBySeasonId(int seasonId);
     }
 }

@@ -1,12 +1,11 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
+using Logging;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileManager.Web.Controllers
@@ -16,9 +15,9 @@ namespace FileManager.Web.Controllers
     public class MovieController : Controller
     {
         private readonly IMovieControllerService _movieControllerService;
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
 
-        public MovieController(IMovieControllerService movieControllerService, ILog logger)
+        public MovieController(IMovieControllerService movieControllerService, ILogger logger)
         {
             _movieControllerService = movieControllerService;
             _logger = logger;

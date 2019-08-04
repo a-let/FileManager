@@ -1,77 +1,74 @@
 ﻿using FileManager.Models;
 using FileManager.Services.Interfaces;
 
-using Microsoft.Extensions.Configuration;
+using Logging;
 
-using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Text;
 using System.Net.Http;
 
 namespace FileManager.Services
 {
-    public class MovieService : IMovieService
+    public class MovieService : ServiceBase, IMovieService
     {        
         private readonly IConfigurationSection _movieAddresses;
-        private readonly HttpClient _httpClient;
+        private readonly ILogger _logger;
 
-        public MovieService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public MovieService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger) :
+            base(httpClientFactory, "FileManager")
         {
             _movieAddresses = configuration.GetSection("MovieAddresses");
-            _httpClient = httpClientFactory.CreateClient("FileManager");
+            _logger = logger;
         }
 
-        public async Task<Movie> GetMovieById(int id)
+        public async Task<Movie> GetAsync(int id)
         {
             try
             {
                 if (id <= 0)
                     throw new ArgumentOutOfRangeException("MovieId cannot be less than 1");
 
-                var message = await _httpClient.GetAsync($"{_movieAddresses["GetMovieByIdAddress"]}/{id}");
-                var movie = JsonConvert.DeserializeObject<Movie>(await message.Content.ReadAsStringAsync());
-                                
+                var movie = await GetAsync<Movie>($"{_movieAddresses["GetMovieByIdAddress"]}/{id}");
                 return movie;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting movie");
+                throw;
             }
         }
 
-        public async Task<Movie> GetMovieByName(string name)
+        public async Task<Movie> GetAsync(string name)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(name))
                     throw new ArgumentNullException(nameof(name));
 
-                var message = await _httpClient.GetAsync($"{_movieAddresses["GetMovieByNameAddress"]}/{name}");
-                var movie = JsonConvert.DeserializeObject<Movie>(await message.Content.ReadAsStringAsync());
-
+                var movie = await GetAsync<Movie>($"{_movieAddresses["GetMovieByNameAddress"]}/{name}");
                 return movie;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting movie");
+                throw;
             }
         }
 
-        public async Task<IEnumerable<Movie>> GetMovies()
+        public async Task<IEnumerable<Movie>> GetAsync()
         {
             try
             {
-                var message = await _httpClient.GetAsync(_movieAddresses["GetMoviesAddress"]);
-                var movieList = JsonConvert.DeserializeObject<IEnumerable<Movie>>(await message.Content.ReadAsStringAsync());
-
+                var movieList = await GetAsync<IEnumerable<Movie>>(_movieAddresses["GetMoviesAddress"]);
                 return movieList;
             }
             catch(Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movies. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting movies");
+                throw;
             }
         }
 
@@ -82,33 +79,30 @@ namespace FileManager.Services
                 if (seriesId <= 0)
                     throw new ArgumentOutOfRangeException("SeriesId cannot be less than 1");
 
-                var message = await _httpClient.GetAsync($"{_movieAddresses["GetMoviesBySeriesIdAddress"]}/{seriesId}");
-                var movieList = JsonConvert.DeserializeObject<IEnumerable<Movie>>(await message.Content.ReadAsStringAsync());
-
+                var movieList = await GetAsync<IEnumerable<Movie>>($"{_movieAddresses["GetMoviesBySeriesIdAddress"]}/{seriesId}");
                 return movieList;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting movie");
+                throw;
             }
         }
 
-        public async Task<int> SaveMovie(Movie movie)
+        public async Task<int> SaveAsync(Movie movie)
         {
             try
             {
                 if (movie == null)
                     throw new ArgumentNullException(nameof(movie));
 
-                var content = new StringContent(JsonConvert.SerializeObject(movie), Encoding.UTF8, "application/json");
-                var message = await _httpClient.PostAsync(_movieAddresses["SaveMovieAddress"], content);
-                var id = JsonConvert.DeserializeObject<int>(await message.Content.ReadAsStringAsync());
-
+                var id = await PostAsync<int>(_movieAddresses["SaveMovieAddress"], movie);
                 return id;
             }
             catch(Exception ex)
             {
-                throw new InvalidOperationException($"Error saving movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error saving movie");
+                throw;
             }
         }
     }

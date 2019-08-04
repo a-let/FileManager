@@ -1,96 +1,93 @@
 ﻿using FileManager.Models;
 using FileManager.Services.Interfaces;
 
-using Microsoft.Extensions.Configuration;
+using Logging;
 
-using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FileManager.Services
 {
-    public class ShowService : IShowService
+    public class ShowService : ServiceBase, IShowService
     {
         private readonly IConfigurationSection _showAddresses;
-        private readonly HttpClient _httpClient;
+        private readonly ILogger _logger;
 
-        public ShowService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public ShowService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger) :
+            base(httpClientFactory, "FileManager")
         {
             _showAddresses = configuration.GetSection("ShowAddresses");
-            _httpClient = httpClientFactory.CreateClient("FileManager");
+            _logger = logger;
         }
 
-        public async Task<Show> GetShowById(int id)
+        public async Task<Show> GetAsync(int id)
         {
             try
             {
                 if (id <= 0)
                     throw new ArgumentOutOfRangeException("ShowId cannot be less than 1");
 
-                var message = await _httpClient.GetAsync($"{_showAddresses["GetShowByIdAddress"]}/{id}");
-                var show = JsonConvert.DeserializeObject<Show>(await message.Content.ReadAsStringAsync());
+                var show = await GetAsync<Show>($"{_showAddresses["GetShowByIdAddress"]}/{id}");
 
                 return show;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting show");
+                throw;
             }
         }
 
-        public async Task<Show> GetShowByName(string name)
+        public async Task<Show> GetAsync(string name)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(name))
                     throw new ArgumentNullException(nameof(name));
 
-                var message = await _httpClient.GetAsync($"{_showAddresses["GetShowByNameAddress"]}/{name}");
-                var show = JsonConvert.DeserializeObject<Show>(await message.Content.ReadAsStringAsync());
-
+                var show = await GetAsync<Show>($"{_showAddresses["GetShowByNameAddress"]}/{name}");
                 return show;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting show");
+                throw;
             }
         }
 
-        public async Task<IEnumerable<Show>> GetShows()
+        public async Task<IEnumerable<Show>> GetAsync()
         {
             try
             {
-                var message = await _httpClient.GetAsync(_showAddresses["GetShowsAddress"]);
-                var showList = JsonConvert.DeserializeObject<IEnumerable<Show>>(await message.Content.ReadAsStringAsync());
-
+                var showList = await GetAsync<IEnumerable<Show>>(_showAddresses["GetShowsAddress"]);
                 return showList;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting shows. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting shows");
+                throw;
             }
         }
 
-        public async Task<int> SaveShow(Show show)
+        public async Task<int> SaveAsync(Show show)
         {
             try
             {
                 if (show == null)
                     throw new ArgumentNullException(nameof(show));
 
-                var content = new StringContent(JsonConvert.SerializeObject(show), Encoding.UTF8, "application/json");
-                var message = await _httpClient.PostAsync(_showAddresses["SaveShowAddress"], content);
-                var id = JsonConvert.DeserializeObject<int>(await message.Content.ReadAsStringAsync());
+                var id = await PostAsync<int>(_showAddresses["SaveShowAddress"], show);
 
                 return id;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error saving show. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error saving show");
+                throw;
             }
         }
     }

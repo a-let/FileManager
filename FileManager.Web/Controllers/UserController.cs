@@ -1,5 +1,6 @@
 ﻿using FileManager.Models.Dtos;
 using FileManager.Web.Services.Interfaces;
+using Logging;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,11 @@ namespace FileManager.Web.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserControllerService _userControllerService;
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
         private readonly ITokenGenerator _tokenService;
 
         public UserController(IUserControllerService userControllerService,
-            ILog logger, ITokenGenerator tokenService)
+            ILogger logger, ITokenGenerator tokenService)
         {
             _userControllerService = userControllerService;
             _logger = logger;

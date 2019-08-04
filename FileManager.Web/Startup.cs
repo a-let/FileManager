@@ -4,19 +4,21 @@ using FileManager.DataAccessLayer.Repositories;
 using FileManager.Web.Services;
 using FileManager.Web.Services.Interfaces;
 
+using Logging;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,8 +47,6 @@ namespace FileManager.Web
                 .AddScoped<IShowRepository, ShowRepository>()
                 .AddScoped<IMovieControllerService, MovieControllerService>()
                 .AddScoped<IMovieRepository, MovieRepository>()
-                .AddScoped<ILogRepository, LogRepository>()
-                .AddScoped<ILog, LoggerService>()
                 .AddScoped<IUserControllerService, UserControllerService>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ICryptographyService, CryptographyService>()
@@ -72,6 +72,8 @@ namespace FileManager.Web
                 .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b=> b.MigrationsAssembly("FileManager.DataAccessLayer")))
                 .AddMvc();
 
+            services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -89,8 +91,8 @@ namespace FileManager.Web
 
                         if (user == null)
                         {
-                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
-                            logger.LogInformation("Login Failed");
+                            var logger = context.HttpContext.RequestServices.GetRequiredService<Logging.ILogger>();
+                            logger.LogInfoAsync("Login Failed");
                             context.Fail("Login Failed");
                         }                            
 
@@ -98,8 +100,8 @@ namespace FileManager.Web
                     },
                     OnAuthenticationFailed = context =>
                     {
-                        var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
-                        logger.LogError(context.Exception, $"Authentication Failed - {context.Exception.Message}");
+                        var logger = context.HttpContext.RequestServices.GetRequiredService<Logging.ILogger>();
+                        logger.LogErrorAsync(context.Exception, $"Authentication Failed - {context.Exception.Message}");
                         return Task.CompletedTask;
                     }
                 };
