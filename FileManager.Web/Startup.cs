@@ -1,6 +1,7 @@
 ﻿using FileManager.DataAccessLayer;
 using FileManager.DataAccessLayer.Interfaces;
 using FileManager.DataAccessLayer.Repositories;
+using FileManager.Web.HealthChecks;
 using FileManager.Web.Services;
 using FileManager.Web.Services.Interfaces;
 
@@ -74,6 +75,9 @@ namespace FileManager.Web
 
             services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
 
+            services.AddHealthChecks()
+                .AddCheck("Database", new DatabaseHealthCheck(_configuration["FileManagerConnectionString"]));
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -135,7 +139,7 @@ namespace FileManager.Web
             EnableSwagger(app);
 
             app.UseStaticFiles();
-
+            app.UseHealthChecks("/health");
             app.UseAuthentication();
 
             app.UseMvc(routes =>
