@@ -1,6 +1,8 @@
 ﻿using FileManager.Models;
 using FileManager.Services.Interfaces;
 
+using Logging;
+
 using Microsoft.Extensions.Configuration;
 
 using System;
@@ -13,11 +15,13 @@ namespace FileManager.Services
     public class MovieService : ServiceBase, IMovieService
     {        
         private readonly IConfigurationSection _movieAddresses;
+        private readonly ILogger _logger;
 
-        public MovieService(IConfiguration configuration, IHttpClientFactory httpClientFactory) :
+        public MovieService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger) :
             base(httpClientFactory, "FileManager")
         {
             _movieAddresses = configuration.GetSection("MovieAddresses");
+            _logger = logger;
         }
 
         public async Task<Movie> GetAsync(int id)
@@ -32,7 +36,8 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting movie");
+                throw;
             }
         }
 
@@ -48,7 +53,8 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting movie");
+                throw;
             }
         }
 
@@ -61,7 +67,8 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movies. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting movies");
+                throw;
             }
         }
 
@@ -77,7 +84,8 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting movie");
+                throw;
             }
         }
 
@@ -93,7 +101,8 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                throw new InvalidOperationException($"Error saving movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error saving movie");
+                throw;
             }
         }
     }

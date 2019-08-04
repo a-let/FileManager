@@ -1,6 +1,8 @@
 ﻿using FileManager.Models;
 using FileManager.Services.Interfaces;
 
+using Logging;
+
 using Microsoft.Extensions.Configuration;
 
 using System;
@@ -13,11 +15,13 @@ namespace FileManager.Services
     public class SeriesService : ServiceBase, ISeriesService
     {
         private readonly IConfigurationSection _seriesAddresses;
+        private readonly ILogger _logger;
 
-        public SeriesService(IConfiguration configuration, IHttpClientFactory httpClientFactory) : 
+        public SeriesService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger) : 
             base(httpClientFactory, "FileManager")
         {
             _seriesAddresses = configuration.GetSection("SeriesAddresses");
+            _logger = logger;
         }
 
         public async Task<IEnumerable<Series>> GetAsync()
@@ -29,7 +33,8 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting seriess. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting series");
+                throw;
             }
         }
 
@@ -45,7 +50,8 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting series. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting series");
+                throw;
             }
         }
 
@@ -61,7 +67,8 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting series. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting series");
+                throw;
             }
         }
 
@@ -77,7 +84,8 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error saving series. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error saving series");
+                throw;
             }
         }
     }

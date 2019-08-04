@@ -4,6 +4,7 @@ using FileManager.Tests.Mocks;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -12,7 +13,7 @@ namespace FileManager.Tests.FileManagerServiceTests
     public class SeriesServiceTests
     {
         [Fact]
-        public void GetSeries_ThenDoesNotThrow()
+        public async Task GetSeries_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -20,17 +21,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Series>())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.GetAsync());
+            var exception = await Record.ExceptionAsync(async () => await seriesService.GetAsync());
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetSeriesById_GivenValidId_ThenDoesNotThrow()
+        public async Task GetSeriesById_GivenValidId_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -38,17 +39,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Season())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.GetAsync(1));
+            var exception = await Record.ExceptionAsync(async () => await seriesService.GetAsync(1));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetSeriesById_GivenIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
+        public async Task GetSeriesById_GivenIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -56,17 +57,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.GetAsync(0));
+            var exception = await Record.ExceptionAsync(async () => await seriesService.GetAsync(0));
 
             // Assert
-            Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentOutOfRangeException>(exception);
         }
 
         [Fact]
-        public void GetSeriesByName_GivenValidName_ThenDoesNotThrow()
+        public async Task GetSeriesByName_GivenValidName_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -74,17 +75,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Season())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.GetAsync("Test"));
+            var exception = await Record.ExceptionAsync(async () => await seriesService.GetAsync("Test"));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetSeriesByName_GivenInvalidName_ThenThrowsArgumentNullException()
+        public async Task GetSeriesByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -92,17 +93,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.GetAsync(string.Empty));
+            var exception = await Record.ExceptionAsync(async () => await seriesService.GetAsync(string.Empty));
 
             // Assert
-            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void SaveSeries_GivenValidSeries_ThenDoesNotThrow()
+        public async Task SaveSeries_GivenValidSeries_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -110,17 +111,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.SaveAsync(new Series()));
+            var exception = await Record.ExceptionAsync(async () => await seriesService.SaveAsync(new Series()));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void SaveSeries_GivenInvalidSeries_ThenThrowsArgumentNullException()
+        public async Task SaveSeries_GivenInvalidSeries_ThenThrowsArgumentNullException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -128,13 +129,13 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory);
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seriesService.SaveAsync(null));
+            var exception = await Record.ExceptionAsync(async () => await seriesService.SaveAsync(null));
 
             // Assert
-            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentNullException>(exception);
         }
     }
 }

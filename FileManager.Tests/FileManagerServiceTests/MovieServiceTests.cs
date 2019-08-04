@@ -4,6 +4,7 @@ using FileManager.Tests.Mocks;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -12,7 +13,7 @@ namespace FileManager.Tests.FileManagerServiceTests
     public class MovieServiceTests
     {
         [Fact]
-        public void GetMovies_ThenDoesNotThrow()
+        public async Task GetMovies_ThenDoesNotThrow()
         {
             // Act
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -20,17 +21,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Movie>())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetAsync());
+            var exception = await Record.ExceptionAsync(async () => await movieService.GetAsync());
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetMovieById_GivenValidId_ThenDoesNotThrow()
+        public async Task GetMovieById_GivenValidId_ThenDoesNotThrow()
         {
             // Act
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -38,17 +39,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Movie())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetAsync(1));
+            var exception = await Record.ExceptionAsync(async () => await movieService.GetAsync(1));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetMovieById_GivenIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
+        public async Task GetMovieById_GivenIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
         {
             // Act
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -56,17 +57,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetAsync(0));
+            var exception = await Record.ExceptionAsync(async () => await movieService.GetAsync(0));
 
             // Assert
-            Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentOutOfRangeException>(exception);
         }
 
         [Fact]
-        public void GetMovieByName_GivenValidName_ThenDoesNotThrow()
+        public async Task GetMovieByName_GivenValidName_ThenDoesNotThrow()
         {
             // Act
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -74,17 +75,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Movie())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetAsync("Test Name"));
+            var exception = await Record.ExceptionAsync(async () => await movieService.GetAsync("Test Name"));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetMovieByName_GivenInvalidName_ThenThrowsArgumentNullException()
+        public async Task GetMovieByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
             // Act
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -92,17 +93,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetAsync(""));
+            var exception = await Record.ExceptionAsync(async () => await movieService.GetAsync(""));
 
             // Assert
-            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void SaveMovie_GivenValidMovie_ThenDoesNotThrow()
+        public async Task SaveMovie_GivenValidMovie_ThenDoesNotThrow()
         {
             // Act
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -110,19 +111,19 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Arrange
             var movie = new Movie();
 
-            var exception = Record.ExceptionAsync(() => movieService.SaveAsync(movie));
+            var exception = await Record.ExceptionAsync(async () => await movieService.SaveAsync(movie));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void SaveMovie_GivenNullMovie_ThenThrowsArgumentNullException()
+        public async Task SaveMovie_GivenNullMovie_ThenThrowsArgumentNullException()
         {
             // Act
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -130,17 +131,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.SaveAsync(null));
+            var exception = await Record.ExceptionAsync(async () => await movieService.SaveAsync(null));
 
             // Assert
-            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void GetMoviesBySeasonId_GivenValidSeasonId_ThenDoesNotThrow()
+        public async Task GetMoviesBySeasonId_GivenValidSeasonId_ThenDoesNotThrow()
         {
             // Act
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -148,17 +149,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Movie>())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetMoviesBySeriesId(1));
+            var exception = await Record.ExceptionAsync(async () => await movieService.GetMoviesBySeriesId(1));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetMoviesBySeriesId_GivenSeriesIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
+        public async Task GetMoviesBySeriesId_GivenSeriesIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
         {
             // Act
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -166,13 +167,13 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory);
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Arrange
-            var exception = Record.ExceptionAsync(() => movieService.GetMoviesBySeriesId(0));
+            var exception = await Record.ExceptionAsync(async () => await movieService.GetMoviesBySeriesId(0));
 
             // Assert
-            Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentOutOfRangeException>(exception);
         }
     }
 }

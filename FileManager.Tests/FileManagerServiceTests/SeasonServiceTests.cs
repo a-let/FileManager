@@ -4,6 +4,7 @@ using FileManager.Tests.Mocks;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -12,7 +13,7 @@ namespace FileManager.Tests.FileManagerServiceTests
     public class SeasonServiceTests
     {
         [Fact]
-        public void GetBySeasonId_GivenValidSeasonId_ThenDoesNotThrow()
+        public async Task GetBySeasonId_GivenValidSeasonId_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -20,17 +21,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Season())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.GetAsync(1));
+            var exception = await Record.ExceptionAsync(async () => await seasonService.GetAsync(1));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetBySeasonId_GivenIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
+        public async Task GetBySeasonId_GivenIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -38,17 +39,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.GetAsync(0));
+            var exception = await Record.ExceptionAsync(async () => await seasonService.GetAsync(0));
 
             // Assert
-            Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentOutOfRangeException>(exception);
         }
 
         [Fact]
-        public void GetSeasons_ThenDoesNotThrow()
+        public async Task GetSeasons_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -56,17 +57,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Season>())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.GetAsync());
+            var exception = await Record.ExceptionAsync(async () => await seasonService.GetAsync());
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetSeasonsByShowId_GivenValidShowId_ThenDoesNotThrow()
+        public async Task GetSeasonsByShowId_GivenValidShowId_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -74,17 +75,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Season>())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.GetSeasonsByShowId(1));
+            var exception = await Record.ExceptionAsync(async () => await seasonService.GetSeasonsByShowId(1));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetSeasonByShowId_GivenShowIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
+        public async Task GetSeasonByShowId_GivenShowIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -92,17 +93,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.GetSeasonsByShowId(0));
+            var exception = await Record.ExceptionAsync(async () => await seasonService.GetSeasonsByShowId(0));
 
             // Assert
-            Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentOutOfRangeException>(exception);
         }
 
         [Fact]
-        public void SaveSeason_GivenVaildSeason_ThenDoesNotThrow()
+        public async Task SaveSeason_GivenVaildSeason_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -110,17 +111,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.SaveAsync(new Season()));
+            var exception = await Record.ExceptionAsync(async () => await seasonService.SaveAsync(new Season()));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void SaveSeason_GivenNullSeason_ThenThrowsArgumentNullException()
+        public async Task SaveSeason_GivenNullSeason_ThenThrowsArgumentNullException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -128,13 +129,13 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory);
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => seasonService.SaveAsync(null));
+            var exception = await Record.ExceptionAsync(async () => await seasonService.SaveAsync(null));
 
             // Assert
-            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentNullException>(exception);
         }
     }
 }

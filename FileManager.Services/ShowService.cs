@@ -1,6 +1,8 @@
 ﻿using FileManager.Models;
 using FileManager.Services.Interfaces;
 
+using Logging;
+
 using Microsoft.Extensions.Configuration;
 
 using System;
@@ -13,11 +15,13 @@ namespace FileManager.Services
     public class ShowService : ServiceBase, IShowService
     {
         private readonly IConfigurationSection _showAddresses;
+        private readonly ILogger _logger;
 
-        public ShowService(IConfiguration configuration, IHttpClientFactory httpClientFactory) :
+        public ShowService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger) :
             base(httpClientFactory, "FileManager")
         {
             _showAddresses = configuration.GetSection("ShowAddresses");
+            _logger = logger;
         }
 
         public async Task<Show> GetAsync(int id)
@@ -33,7 +37,8 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting show");
+                throw;
             }
         }
 
@@ -49,7 +54,8 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting movie. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting show");
+                throw;
             }
         }
 
@@ -62,7 +68,8 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error getting shows. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error getting shows");
+                throw;
             }
         }
 
@@ -79,7 +86,8 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error saving show. {ex.Message}", ex);
+                await _logger.LogErrorAsync(ex, "Error saving show");
+                throw;
             }
         }
     }

@@ -4,6 +4,7 @@ using FileManager.Tests.Mocks;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -12,7 +13,7 @@ namespace FileManager.Tests.FileManagerServiceTests
     public class ShowServiceTests
     {
         [Fact]
-        public void GetShowById_GivenValidId_ThenDoesNotThrow()
+        public async Task GetShowById_GivenValidId_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -20,17 +21,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Show())
             };
 
-            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.GetAsync(1));
+            var exception = await Record.ExceptionAsync(async () => await showService.GetAsync(1));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetShowById_GivenInvalidId_ThenThrowsArgumentOutOfRangeException()
+        public async Task GetShowById_GivenInvalidId_ThenThrowsArgumentOutOfRangeException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -38,17 +39,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.GetAsync(0));
+            var exception = await Record.ExceptionAsync(async () => await showService.GetAsync(0));
 
             // Assert
-            Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentOutOfRangeException>(exception);
         }
 
         [Fact]
-        public void GetShowByName_GivenValidName_ThenDoesNotThrow()
+        public async Task GetShowByName_GivenValidName_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -56,17 +57,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Show())
             };
 
-            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.GetAsync("Test"));
+            var exception = await Record.ExceptionAsync(async () => await showService.GetAsync("Test"));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetShowByName_GivenInvalidName_ThenDoesNotThrow()
+        public async Task GetShowByName_GivenInvalidName_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -74,17 +75,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.GetAsync(string.Empty));
+            var exception = await Record.ExceptionAsync(async () => await showService.GetAsync(string.Empty));
 
             // Assert
-            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void GetShows_ThenDoesNotThrow()
+        public async Task GetShows_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -92,17 +93,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Show>())
             };
 
-            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.GetAsync());
+            var exception = await Record.ExceptionAsync(async () => await showService.GetAsync());
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void SaveShow_GivenVaildShow_ThenDoesNotThrow()
+        public async Task SaveShow_GivenVaildShow_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -110,17 +111,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
             };
 
-            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.SaveAsync(new Show()));
+            var exception = await Record.ExceptionAsync(async () => await showService.SaveAsync(new Show()));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void SaveShow_GivenInvaildShow_ThenThrowsArgumentNullException()
+        public async Task SaveShow_GivenInvaildShow_ThenThrowsArgumentNullException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -128,13 +129,13 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Show())
             };
 
-            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory);
+            var showService = new ShowService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => showService.SaveAsync(null));
+            var exception = await Record.ExceptionAsync(async () => await showService.SaveAsync(null));
 
             // Assert
-            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentNullException>(exception);
         }
     }
 }

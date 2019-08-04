@@ -4,6 +4,7 @@ using FileManager.Tests.Mocks;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -12,7 +13,7 @@ namespace FileManager.Tests.FileManagerServiceTests
     public class EpisodeServiceTests
     {
         [Fact]
-        public void GetEpisodes_ThenDoesNotThrow()
+        public async Task GetEpisodes_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -20,17 +21,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Episode>())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetAsync());
+            var exception = await Record.ExceptionAsync(async () => await episodeService.GetAsync());
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetEpisodeById_GivenValidId_ThenDoesNotThrow()
+        public async Task GetEpisodeById_GivenValidId_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -38,17 +39,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Episode())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetAsync(1));
+            var exception = await Record.ExceptionAsync(async () => await episodeService.GetAsync(1));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetEpisodeById_GivenIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
+        public async Task GetEpisodeById_GivenIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -56,17 +57,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetAsync(0));
+            var exception = await Record.ExceptionAsync(async () => await episodeService.GetAsync(0));
 
             // Assert
-            Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentOutOfRangeException>(exception);
         }
 
         [Fact]
-        public void GetEpisodeByName_GivenValidName_ThenDoesNotThrow()
+        public async Task GetEpisodeByName_GivenValidName_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -74,17 +75,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Episode { Name = "Test Name"})
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetAsync("Test Name"));
+            var exception = await Record.ExceptionAsync(async () => await episodeService.GetAsync("Test Name"));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetEpisodeByName_GivenInvalidName_ThenThrowsArgumentNullException()
+        public async Task GetEpisodeByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -92,17 +93,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetAsync(""));
+            var exception = await Record.ExceptionAsync(async () => await episodeService.GetAsync(""));
 
             // Assert
-            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void SaveEpisode_GivenValidEpisode_ThenDoesNotThrow()
+        public async Task SaveEpisode_GivenValidEpisode_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -110,19 +111,19 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
             var episode = new Episode();
 
-            var exception = Record.ExceptionAsync(() => episodeService.SaveAsync(episode));
+            var exception = await Record.ExceptionAsync(async () => await episodeService.SaveAsync(episode));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void SaveEpisode_GivenNullEpisode_ThenThrowsArgumentNullException()
+        public async Task SaveEpisode_GivenNullEpisode_ThenThrowsArgumentNullException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -130,17 +131,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.SaveAsync(null));
+            var exception = await Record.ExceptionAsync(async () => await episodeService.SaveAsync(null));
 
             // Assert
-            Assert.IsType<ArgumentNullException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void GetEpisodesBySeasonId_GivenValidSeasonId_ThenDoesNotThrow()
+        public async Task GetEpisodesBySeasonId_GivenValidSeasonId_ThenDoesNotThrow()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -148,17 +149,17 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Episode>())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodesBySeasonId(1));
+            var exception = await Record.ExceptionAsync(async () => await episodeService.GetEpisodesBySeasonId(1));
 
             // Assert
-            Assert.Null(exception.Result);
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void GetEpisodesBySeasonId_GivenSeasonIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
+        public async Task GetEpisodesBySeasonId_GivenSeasonIdLessThanOne_ThenThrowsArgumentOutOfRangeException()
         {
             // Arrange
             var mockHttpClientFactory = new MockHttpClientFactory
@@ -166,13 +167,13 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory);
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
 
             // Act
-            var exception = Record.ExceptionAsync(() => episodeService.GetEpisodesBySeasonId(0));
+            var exception = await Record.ExceptionAsync(async () => await episodeService.GetEpisodesBySeasonId(0));
 
             // Assert
-            Assert.IsType<ArgumentOutOfRangeException>(exception.Result.InnerException);
+            Assert.IsType<ArgumentOutOfRangeException>(exception);
         }
     }
 }
