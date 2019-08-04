@@ -18,6 +18,7 @@ using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,7 +47,6 @@ namespace FileManager.Web
                 .AddScoped<IShowRepository, ShowRepository>()
                 .AddScoped<IMovieControllerService, MovieControllerService>()
                 .AddScoped<IMovieRepository, MovieRepository>()
-                .AddScoped<ILogRepository, LogRepository>()
                 .AddScoped<IUserControllerService, UserControllerService>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ICryptographyService, CryptographyService>()
@@ -72,7 +72,7 @@ namespace FileManager.Web
                 .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b=> b.MigrationsAssembly("FileManager.DataAccessLayer")))
                 .AddMvc();
 
-            services.ConfigureLogging();
+            services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
 
             services.AddAuthentication(x =>
             {

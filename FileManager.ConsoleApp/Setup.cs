@@ -1,12 +1,15 @@
 ﻿using FileManager.Services;
 using FileManager.Services.Interfaces;
 
+using Logging;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.IO;
 using System.Net.Http.Headers;
+using System.Reflection;
 
 namespace FileManager.ConsoleApp
 {
@@ -23,6 +26,8 @@ namespace FileManager.ConsoleApp
                 .AddSingleton<ISeasonService, SeasonService>()
                 .AddSingleton<ISeriesService, SeriesService>()
                 .AddSingleton<IShowService, ShowService>();
+
+            services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
 
             services.AddHttpClient("FileManager", c =>
             {
