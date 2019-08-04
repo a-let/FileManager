@@ -1,14 +1,16 @@
 ﻿using FileManager.DataAccessLayer;
 using FileManager.DataAccessLayer.Interfaces;
 using FileManager.DataAccessLayer.Repositories;
-using FileManager.Web.HealthChecks;
 using FileManager.Web.Services;
 using FileManager.Web.Services.Interfaces;
+
+using HealthChecks.UI.Client;
 
 using Logging;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -75,8 +77,7 @@ namespace FileManager.Web
 
             services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
 
-            services.AddHealthChecks()
-                .AddCheck("Database", new DatabaseHealthCheck(_configuration["FileManagerConnectionString"]));
+            services.AddCustomHealthChecks(_configuration);
 
             services.AddAuthentication(x =>
             {
@@ -139,7 +140,14 @@ namespace FileManager.Web
             EnableSwagger(app);
 
             app.UseStaticFiles();
-            app.UseHealthChecks("/health");
+
+            app.UseHealthChecks("/health", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+            app.UseHealthChecksUI(config => config.UIPath = "/health-ui");
+
             app.UseAuthentication();
 
             app.UseMvc(routes =>
