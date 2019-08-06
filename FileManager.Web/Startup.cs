@@ -8,22 +8,18 @@ using HealthChecks.UI.Client;
 
 using Logging;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileManager.Web
 {
@@ -76,52 +72,8 @@ namespace FileManager.Web
                 .AddMvc();
 
             services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
-
             services.AddCustomHealthChecks(_configuration);
-
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.Events = new JwtBearerEvents
-                {
-                    OnTokenValidated = context =>
-                    {
-                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserControllerService>();
-                        var userName = context.Principal.Identity.Name;
-                        var user = userService.GetUserByUserName(userName);
-
-                        if (user == null)
-                        {
-                            var logger = context.HttpContext.RequestServices.GetRequiredService<Logging.ILogger>();
-                            logger.LogInfoAsync("Login Failed");
-                            context.Fail("Login Failed");
-                        }                            
-
-                        return Task.CompletedTask;
-                    },
-                    OnAuthenticationFailed = context =>
-                    {
-                        var logger = context.HttpContext.RequestServices.GetRequiredService<Logging.ILogger>();
-                        logger.LogErrorAsync(context.Exception, $"Authentication Failed - {context.Exception.Message}");
-                        return Task.CompletedTask;
-                    }
-                };
-
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Secret"])),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-
-            });
+            services.AddCustomAuthentication(_configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
