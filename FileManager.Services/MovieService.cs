@@ -12,7 +12,7 @@ using System.Net.Http;
 
 namespace FileManager.Services
 {
-    public class MovieService : ServiceBase, IMovieService
+    internal class MovieService : ServiceBase, IMovieService
     {        
         private readonly IConfigurationSection _movieAddresses;
         private readonly ILogger _logger;

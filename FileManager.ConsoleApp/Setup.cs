@@ -21,8 +21,8 @@ namespace FileManager.ConsoleApp
         {
             var services = new ServiceCollection()
                 .AddSingleton<IConfiguration, ConfigurationRoot>(configuration => (ConfigurationRoot)GetConfiguration())
-                .AddSingleton<IEpisodeService, EpisodeService>()
-                .AddSingleton<IMovieService, MovieService>()
+                //.AddSingleton<IEpisodeService, EpisodeService>()
+                //.AddSingleton<IMovieService, MovieService>()
                 .AddSingleton<ISeasonService, SeasonService>()
                 .AddSingleton<ISeriesService, SeriesService>()
                 .AddSingleton<IShowService, ShowService>();

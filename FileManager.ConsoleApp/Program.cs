@@ -5,6 +5,8 @@ using FileManager.Models.Constants;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
+using FileManager.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace FileManager.ConsoleApp
 {
@@ -14,11 +16,24 @@ namespace FileManager.ConsoleApp
 
         public static void Main(string[] args)
         {
-            EpisodeTest();
-            MovieTest();
-            SeasonTest();
-            SeriesTest();
-            ShowTest();
+            var logger = _services.GetService<Logging.ILogger>();
+            var httpFact = _services.GetService<System.Net.Http.IHttpClientFactory>();
+            var congif = _services.GetService<IConfiguration>();
+
+            //var episodeService = new FileManager<Episode>(congif, httpFact, logger).CreateService();
+            //var movieService = new FileManager<Movie>(congif, httpFact, logger).CreateService();
+
+            var factory = new FileManager.Services.FIleManagerClient(congif, httpFact, logger);
+            var episodeService = factory.EpisodeService;
+            var movieService = factory.MovieService;
+
+            var episodes = episodeService.GetAsync().Result;
+
+            //EpisodeTest();
+            //MovieTest();
+            //SeasonTest();
+            //SeriesTest();
+            //ShowTest();
 
             Console.Read();
 
