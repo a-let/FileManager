@@ -16,7 +16,14 @@ namespace FileManager.Services
     public class FIleManagerClient : IFileManagerClient
     {
         private readonly IList<object> _factories;
-        private string[] _services = new[] { "Episode", "Movie" };
+        private string[] _services = new[] 
+        {
+            nameof(Episode),
+            nameof(Movie),
+            nameof(Season),
+            nameof(Series),
+            nameof(Show)
+        };
 
         public FIleManagerClient(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger)
         {
@@ -34,6 +41,12 @@ namespace FileManager.Services
         public IEpisodeService EpisodeService => (IEpisodeService)CreateService<Episode>();
 
         public IMovieService MovieService => (IMovieService)CreateService<Movie>();
+
+        public ISeasonService SeasonService => (ISeasonService)CreateService<Season>();
+
+        public ISeriesService SeriesService => (ISeriesService)CreateService<Series>();
+
+        public IShowService ShowService => (IShowService)CreateService<Show>();
 
         private IService<T> CreateService<T>() => ((FileManagerFactory<T>)_factories
             .Single(x => x.GetType() == Type.GetType($"FileManager.Services.{typeof(T).Name}Factory"))).Create();
