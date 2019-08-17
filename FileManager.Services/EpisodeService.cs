@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FileManager.Services
 {
-    public class EpisodeService : ServiceBase, IEpisodeService
+    internal class EpisodeService : ServiceBase, IEpisodeService
     {
         private readonly IConfigurationSection _episodeAddresses;
         private readonly ILogger _logger;
