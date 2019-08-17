@@ -5,12 +5,15 @@ using FileManager.Models.Constants;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
+using FileManager.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace FileManager.ConsoleApp
 {
     public  class Program
     {
         private static readonly ServiceProvider _services = Setup.CreateServices();
+        private static readonly IFileManagerClient _client = _services.GetService<IFileManagerClient>();
 
         public static void Main(string[] args)
         {
@@ -27,7 +30,7 @@ namespace FileManager.ConsoleApp
 
         private static void EpisodeTest()
         {
-            var episodeService = _services.GetService<IEpisodeService>();
+            var episodeService = _client.EpisodeService;
                         
             var episodeById = episodeService.GetAsync(2).Result;
             var episodeByName = episodeService.GetAsync("string").Result;
@@ -69,7 +72,7 @@ namespace FileManager.ConsoleApp
 
         private static void MovieTest()
         {
-            var movieService = _services.GetService<IMovieService>();    
+            var movieService = _client.MovieService;    
 
             var newMovie = new Movie
             {
@@ -111,7 +114,7 @@ namespace FileManager.ConsoleApp
 
         private static void SeasonTest()
         {
-            var seasonService = _services.GetService<ISeasonService>();
+            var seasonService = _client.SeasonService;
 
             var newSeason = new Season
             {
@@ -146,7 +149,7 @@ namespace FileManager.ConsoleApp
 
         private static void SeriesTest()
         {
-            var seriesService = _services.GetService<ISeriesService>();
+            var seriesService = _client.SeriesService;
 
             var newSeries = new Series
             {
@@ -176,7 +179,7 @@ namespace FileManager.ConsoleApp
 
         private static void ShowTest()
         {
-            var showService = _services.GetService<IShowService>();
+            var showService = _client.ShowService;
 
             var newShow = new Show
             {
