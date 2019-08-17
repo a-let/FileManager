@@ -1,6 +1,6 @@
 ﻿using FileManager.Services.Interfaces;
 
-namespace FileManager.Services
+namespace FileManager.Services.Factories
 {
     internal abstract class FileManagerFactory<T>
     {
