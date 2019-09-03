@@ -5,8 +5,6 @@ using FileManager.Models.Constants;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
-using FileManager.Services;
-using Microsoft.Extensions.Configuration;
 
 namespace FileManager.ConsoleApp
 {

@@ -33,7 +33,7 @@ namespace FileManager.Services
             foreach (var service in _services)
             {
                 var factory = Activator
-                    .CreateInstance(Type.GetType($"FileManager.Services.{service}Factory"), configuration, httpClientFactory, logger);
+                    .CreateInstance(Type.GetType($"FileManager.Services.Factories.{service}Factory"), configuration, httpClientFactory, logger);
 
                 _factories.Add(factory);
             }
@@ -50,6 +50,6 @@ namespace FileManager.Services
         public IShowService ShowService => (IShowService)CreateService<Show>();
 
         private IService<T> CreateService<T>() => ((FileManagerFactory<T>)_factories
-            .Single(x => x.GetType() == Type.GetType($"FileManager.Services.{typeof(T).Name}Factory"))).Create();
+            .Single(x => x.GetType() == Type.GetType($"FileManager.Services.Factories.{typeof(T).Name}Factory"))).Create();
     }
 }
