@@ -33,7 +33,7 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting episodes");
+                await _logger.LogErrorAsync(ex, $"Error getting episodes - {ex.Message}");
                 throw;
             }
         }
@@ -50,7 +50,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting episode");
+                await _logger.LogErrorAsync(ex, $"Error getting episode - {ex.Message}");
                 throw;
             }
         }
@@ -67,7 +67,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting episodes");
+                await _logger.LogErrorAsync(ex, $"Error getting episodes - {ex.Message}");
                 throw;
             }
         }
@@ -84,7 +84,7 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error saving episode");
+                await _logger.LogErrorAsync(ex, $"Error saving episode - {ex.Message}");
                 throw;
             }
             
@@ -102,7 +102,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting episodes");
+                await _logger.LogErrorAsync(ex, $"Error getting episodes - {ex.Message}");
                 throw;
             }
         }
