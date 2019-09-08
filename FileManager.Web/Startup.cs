@@ -1,6 +1,7 @@
 ﻿using FileManager.DataAccessLayer;
 using FileManager.DataAccessLayer.Interfaces;
 using FileManager.DataAccessLayer.Repositories;
+using FileManager.Web.Middlewares;
 using FileManager.Web.Services;
 using FileManager.Web.Services.Interfaces;
 
@@ -15,10 +16,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using Swashbuckle.AspNetCore.Filters;
-using Swashbuckle.AspNetCore.Swagger;
-
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace FileManager.Web
@@ -50,46 +47,22 @@ namespace FileManager.Web
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ICryptographyService, CryptographyService>()
                 .AddScoped<ITokenGenerator, TokenGenerator>()
-                .AddSwaggerGen(c =>
-                {
-                    c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" });
-                    c.AddSecurityDefinition("Bearer", 
-                        new ApiKeyScheme
-                        {
-                            In = "header",
-                            Description = "Please enter JWT with Bearer into field",
-                            Name = "Authorization",
-                            Type = "apiKey"
-                        });
-                    c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
-                    {
-                        { "Bearer", new string[] { } },
-                    });
-                    c.ExampleFilters();
-                })
-                .AddSwaggerExamplesFromAssemblyOf<Startup>()
                 .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b=> b.MigrationsAssembly("FileManager.DataAccessLayer")))
                 .AddMvc();
 
             services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
             services.AddCustomHealthChecks(_configuration);
             services.AddCustomAuthentication(_configuration);
+            services.AddCustomSwagger(_configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseBrowserLink();
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+            app.UseCustomExceptionHandler();
 
-            EnableSwagger(app);
+            if (!env.IsProduction())
+                app.EnableSwagger();
 
             app.UseStaticFiles();
 
@@ -107,16 +80,6 @@ namespace FileManager.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-            });
-        }
-
-        private void EnableSwagger(IApplicationBuilder app)
-        {
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "FileManger V1");
             });
         }
     }
