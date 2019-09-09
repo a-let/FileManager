@@ -1,8 +1,9 @@
-﻿
-using Logging;
+﻿using Logging;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+
+using Newtonsoft.Json;
 
 using System;
 using System.Linq;
@@ -12,19 +13,24 @@ namespace FileManager.Web.Middlewares
 {
     public class CustomExceptionHandlerAsync
     {
-        private readonly RequestDelegate _next;
-        private readonly Type[] _exceptionTypes = new[] {typeof(ArgumentException), typeof(ArgumentNullException), typeof(NotImplementedException) };
-
-        public CustomExceptionHandlerAsync(RequestDelegate next)
+        private readonly RequestDelegate _request;
+        private readonly Type[] _allowedExceptionTypes = new[] 
         {
-            _next = next;
+            typeof(ArgumentException),
+            typeof(ArgumentNullException),
+            typeof(NotImplementedException)
+        };
+
+        public CustomExceptionHandlerAsync(RequestDelegate request)
+        {
+            _request = request;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await _next.Invoke(context);
+                await _request.Invoke(context);
             }
             catch (Exception ex)
             {
@@ -35,16 +41,18 @@ namespace FileManager.Web.Middlewares
         private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
             var response = context.Response;
-            //response.ContentType = "application/json";
+            response.ContentType = "application/json";
             response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
 
-            if (_exceptionTypes.Contains(ex.GetType()))
-                await response.WriteAsync(ex.Message);
-            else
-                await response.WriteAsync("Error occured");
+            if (!_allowedExceptionTypes.Contains(ex.GetType()))
+                await response.WriteAsync(CreateMessage("Error occured"));
+
+            await response.WriteAsync(CreateMessage(ex.Message));
 
             var logger = context.RequestServices.GetRequiredService<ILogger>();
             await logger.LogErrorAsync(ex, ex.Message);
         }
+
+        private string CreateMessage(string messageText) => JsonConvert.SerializeObject(new { Message = messageText });
     }
 }

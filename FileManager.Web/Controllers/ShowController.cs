@@ -1,6 +1,5 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
-using Logging;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,106 +14,56 @@ namespace FileManager.Web.Controllers
     public class ShowController : Controller
     {
         private readonly IShowControllerService _showControllerService;
-        private readonly ILogger _logger;
 
-        public ShowController(IShowControllerService showControllerService, ILogger logger)
+        public ShowController(IShowControllerService showControllerService)
         {
             _showControllerService = showControllerService;
-            _logger = logger;
         }
 
         // GET: api/Show
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Show>>> Get()
         {
-            try
-            {
-                var shows = _showControllerService.GetShows();
-                return Ok(shows);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var shows = _showControllerService.GetShows();
+            return Ok(shows);
         }
 
         // GET: api/Show/5
         [HttpGet("id/{id}")]
         public async Task<ActionResult<Show>> GetById(int id)
         {
-            try
-            {
-                var show = await _showControllerService.GetShowByIdAsync(id);
-                return Ok(show);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var show = await _showControllerService.GetShowByIdAsync(id);
+            return Ok(show);
         }
 
         // GET: api/Show/name/Name
         [HttpGet("name/{name}")]
         public async Task<ActionResult<Show>> GetByName(string name)
         {
-            try
-            {
-                var show = _showControllerService.GetShowByName(name);
-                return Ok(show);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var show = _showControllerService.GetShowByName(name);
+            return Ok(show);
         }
         
         // POST: api/Show
         [HttpPost]
         public async Task<ActionResult<int>> Post([FromBody]Show show)
         {
-            try
-            {
-                var showId = await _showControllerService.SaveShowAsync(show);
-                return Ok(showId);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var showId = await _showControllerService.SaveShowAsync(show);
+            return Ok(showId);
         }
         
         // PUT: api/Show/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody]string value)
         {
-            try
-            {
-                throw new NotImplementedException();
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            throw new NotImplementedException();
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            try
-            {
-                throw new NotImplementedException();
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            throw new NotImplementedException();
         }
     }
 }
