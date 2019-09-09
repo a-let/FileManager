@@ -1,4 +1,4 @@
-﻿using FileManager.Services.Interfaces;
+﻿using FileManager.Interfaces;
 using FileManager.Models;
 using FileManager.Models.Constants;
 

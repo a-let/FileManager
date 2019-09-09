@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace FileManager.Services.Interfaces
+namespace FileManager.Interfaces
 {
     public interface IService<T>
     {

@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FileManager.Interfaces\FileManager.Interfaces.csproj" />
     <ProjectReference Include="..\FileManager.Models\FileManager.Models.csproj" />
   </ItemGroup>
 

@@ -1,5 +1,5 @@
-﻿using FileManager.Services;
-using FileManager.Services.Interfaces;
+﻿using FileManager.Interfaces;
+using FileManager.Services;
 
 using Logging;
 

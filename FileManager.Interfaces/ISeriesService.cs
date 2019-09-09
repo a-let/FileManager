@@ -1,6 +1,6 @@
 ﻿using FileManager.Models;
 
-namespace FileManager.Services.Interfaces
+namespace FileManager.Interfaces
 {
     public interface ISeriesService : IService<Series>
     {

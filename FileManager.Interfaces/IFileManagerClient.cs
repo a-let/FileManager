@@ -1,4 +1,4 @@
-﻿namespace FileManager.Services.Interfaces
+﻿namespace FileManager.Interfaces
 {
     public interface IFileManagerClient
     {

@@ -69,3 +69,5 @@
 /.vs/FileManager/config/applicationhost.config
 /obj/FileManager.EntityFrameworkCore.targets
 /FileManager.Web/healthchecksdb
+/FileManager.Interfaces/bin/Debug/netcoreapp2.2
+/FileManager.Interfaces/obj

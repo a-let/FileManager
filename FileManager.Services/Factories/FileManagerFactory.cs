@@ -1,4 +1,4 @@
-﻿using FileManager.Services.Interfaces;
+﻿using FileManager.Interfaces;
 
 namespace FileManager.Services.Factories
 {
