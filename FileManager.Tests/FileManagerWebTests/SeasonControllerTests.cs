@@ -11,7 +11,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class SeasonControllerTests
     {
-        private readonly SeasonController _seasonController = new SeasonController(new MockSeasonControllerService(), new MockLog());
+        private readonly SeasonController _seasonController = new SeasonController(new MockSeasonControllerService());
 
         [Fact]
         public async Task Get_GivenNoParameter_ThenReturnsListOfSeasons()

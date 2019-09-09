@@ -12,7 +12,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class MovieControllerTests
     {
-        private readonly MovieController _movieController = new MovieController(new MockMovieControllerService(), new MockLog());
+        private readonly MovieController _movieController = new MovieController(new MockMovieControllerService());
 
         [Fact]
         public async Task Get_GivenNoParameter_ThenReturnsListOfMovies()

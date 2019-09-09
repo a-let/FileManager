@@ -11,7 +11,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class SeriesControllerTests
     {
-        private readonly SeriesController _seriesController = new SeriesController(new MockSeriesControllerService(), new MockLog());
+        private readonly SeriesController _seriesController = new SeriesController(new MockSeriesControllerService());
 
         [Fact]
         public async Task Get_GivenNoParameter_ThenReturnsListOfSeriess()

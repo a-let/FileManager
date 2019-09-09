@@ -12,7 +12,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class EpisodeControllerTests
     {
-        private readonly EpisodeController _episodeController = new EpisodeController(new MockEpisodeControllerService(), new MockLog());
+        private readonly EpisodeController _episodeController = new EpisodeController(new MockEpisodeControllerService());
 
         [Fact]
         public async Task Get_GivenNoParameter_ThenReturnsListOfEpisodes()

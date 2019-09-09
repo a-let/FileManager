@@ -9,7 +9,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class UserControllerTests
     {
-        private readonly UserController _userController = new UserController(new MockUserControllerService(), new MockLog(), null);
+        private readonly UserController _userController = new UserController(new MockUserControllerService(), null);
 
         [Fact]
         public async Task Get_ReturnsUserDtoCollection()

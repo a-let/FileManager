@@ -40,7 +40,6 @@ namespace FileManager.Web.Controllers
         [HttpGet("name/{name}")]
         public async Task<ActionResult<Movie>> GetByName(string name)
         {
-            // TODO: Look into non async calls.
             var movie = _movieControllerService.GetMovieByName(name);
             return Ok(movie);
         }
