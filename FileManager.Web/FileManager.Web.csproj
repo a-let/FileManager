@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileManager.DataAccessLayer\FileManager.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\FileManager.Interfaces\FileManager.Interfaces.csproj" />
     <ProjectReference Include="..\FileManager.Models\FileManager.Models.csproj" />
   </ItemGroup>
 

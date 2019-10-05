@@ -24,7 +24,7 @@ namespace FileManager.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Episode>>> Get()
         {
-            var episodes = _episodeControllerService.GetEpisodes();
+            var episodes = await _episodeControllerService.GetAsync();
             return Ok(episodes);
         }
 
@@ -32,7 +32,7 @@ namespace FileManager.Web.Controllers
         [HttpGet("id/{id}")]
         public async Task<ActionResult<Episode>> GetByIdAsync(int id)
         {
-            var episode = await _episodeControllerService.GetEpisodeByIdAsync(id);
+            var episode = await _episodeControllerService.GetAsync(id);
             return Ok(episode);
         }
 
@@ -40,7 +40,7 @@ namespace FileManager.Web.Controllers
         [HttpGet("name/{name}")]
         public async Task<ActionResult<Episode>> GetByName(string name)
         {
-            var episode = _episodeControllerService.GetEpisodeByName(name);
+            var episode = await _episodeControllerService.GetAsync(name);
             return Ok(episode);
         }
         
@@ -48,13 +48,13 @@ namespace FileManager.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> PostAsync([FromBody]Episode episode)
         {
-            var episodeId = await _episodeControllerService.SaveEpisodeAsync(episode);
+            var episodeId = await _episodeControllerService.SaveAsync(episode);
             return Ok(episodeId);
         }
         
         // GET: api/Episode/seasonid/5
         [HttpGet("seasonid/{seasonId}")]
-        public async Task<ActionResult<IEnumerable<Episode>>> GetBySeasonId(int seasonId)
+        public ActionResult<IEnumerable<Episode>> GetBySeasonId(int seasonId)
         {
             var episodes = _episodeControllerService.GetEpisodesBySeasonId(seasonId);
             return Ok(episodes);
