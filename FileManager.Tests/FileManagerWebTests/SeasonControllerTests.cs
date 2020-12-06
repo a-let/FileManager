@@ -39,13 +39,13 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public async Task Get_GivenSeasonId_ThenReturnsListOfSeasons()
+        public void Get_GivenSeasonId_ThenReturnsListOfSeasons()
         {
             // Arrange
             var seasonId = 1;
 
             // Act
-            var seasons = (await _seasonController.GetByShowId(seasonId)).GetValue();
+            var seasons = _seasonController.GetByShowId(seasonId).GetValue();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);

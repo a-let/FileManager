@@ -21,7 +21,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 0;
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await _seasonControllerService.GetSeasonByIdAsync(id));
+            var exception = await Record.ExceptionAsync(async () => await _seasonControllerService.GetAsync(id));
 
             // Assert
             Assert.IsType<ArgumentException>(exception);
@@ -34,7 +34,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             // Act
-            var season = await _seasonControllerService.GetSeasonByIdAsync(id);
+            var season = await _seasonControllerService.GetAsync(id);
 
             // Assert
             Assert.IsAssignableFrom<Season>(season);
@@ -67,10 +67,10 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public void GetSeasons_ThenReturnsSeasonList()
+        public async Task GetSeasons_ThenReturnsSeasonList()
         {
             // Arrange, Act
-            var seasons = _seasonControllerService.GetSeasons();
+            var seasons =await  _seasonControllerService.GetAsync();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
@@ -83,7 +83,7 @@ namespace FileManager.Tests.FileManagerWebTests
             Season season = null;
 
             // Act
-            var exception = await Record.ExceptionAsync(async () =>  await _seasonControllerService.SaveSeasonAsync(season));
+            var exception = await Record.ExceptionAsync(async () =>  await _seasonControllerService.SaveAsync(season));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);
@@ -99,7 +99,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             // Act
-            var seasonId = await _seasonControllerService.SaveSeasonAsync(season);
+            var seasonId = await _seasonControllerService.SaveAsync(season);
 
             // Assert
             Assert.True(seasonId > 0);
