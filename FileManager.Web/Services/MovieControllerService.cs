@@ -17,7 +17,7 @@ namespace FileManager.Web.Services
             _movieRepository = movieRepository;
         }
 
-        public async Task<Movie> GetMovieByIdAsync(int id)
+        public async Task<Movie> GetAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid MovieId");
@@ -25,18 +25,15 @@ namespace FileManager.Web.Services
             return await _movieRepository.GetMovieByIdAsync(id);
         }
 
-        public Movie GetMovieByName(string name)
+        public async Task<Movie> GetAsync(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            return _movieRepository.GetMovieByName(name);
+            return await Task.Run(() => _movieRepository.GetMovieByName(name));
         }
 
-        public IEnumerable<Movie> GetMovies()
-        {
-            return _movieRepository.GetMovies();
-        }
+        public async Task<IEnumerable<Movie>> GetAsync() => await Task.Run(() => _movieRepository.GetMovies());
 
         public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId)
         {
@@ -46,7 +43,7 @@ namespace FileManager.Web.Services
             return _movieRepository.GetMoviesBySeriesId(seriesId);
         }
 
-        public async Task<int> SaveMovieAsync(Movie movie)
+        public async Task<int> SaveAsync(Movie movie)
         {
             if (movie == null)
                 throw new ArgumentNullException(nameof(movie));

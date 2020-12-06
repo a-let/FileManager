@@ -73,3 +73,5 @@
 /FileManager.Interfaces/obj
 /.vs/FileManager/v16/TestStore/0/testlog.manifest
 /.vs/FileManager/v16/TestStore/0/000.testlog
+/.vs/FileManager/v16/TestStore/0/015.testlog
+*.testlog

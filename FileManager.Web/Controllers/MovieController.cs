@@ -24,7 +24,7 @@ namespace FileManager.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Movie>>> Get()
         {
-            var movies = _movieControllerService.GetMovies();
+            var movies = await _movieControllerService.GetAsync();
             return Ok(movies);
         }
 
@@ -32,7 +32,7 @@ namespace FileManager.Web.Controllers
         [HttpGet("id/{id}")]
         public async Task<ActionResult<Movie>> GetById(int id)
         {
-            var movie = await _movieControllerService.GetMovieByIdAsync(id);
+            var movie = await _movieControllerService.GetAsync(id);
             return Ok(movie);
         }
 
@@ -40,7 +40,7 @@ namespace FileManager.Web.Controllers
         [HttpGet("name/{name}")]
         public async Task<ActionResult<Movie>> GetByName(string name)
         {
-            var movie = _movieControllerService.GetMovieByName(name);
+            var movie = await _movieControllerService.GetAsync(name);
             return Ok(movie);
         }
         
@@ -48,13 +48,13 @@ namespace FileManager.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> Post([FromBody]Movie movie)
         {
-            var movieId = await _movieControllerService.SaveMovieAsync(movie);
+            var movieId = await _movieControllerService.SaveAsync(movie);
             return Ok(movieId);
         }
 
         // GET: api/Movie/seriesId/5
         [HttpGet("seriesId/{seriesId}")]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetBySeriesId(int seriesId)
+        public ActionResult<IEnumerable<Movie>> GetBySeriesId(int seriesId)
         {
             var movies = _movieControllerService.GetMoviesBySeriesId(seriesId);
             return Ok(movies);

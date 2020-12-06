@@ -53,13 +53,13 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public async Task Get_GivenSeriesId_ThenReturnsListOfMovies()
+        public void Get_GivenSeriesId_ThenReturnsListOfMovies()
         {
             // Arrange
             var seriesId = 1;
 
             // Act
-            var movies = (await _movieController.GetBySeriesId(seriesId)).GetValue();
+            var movies = _movieController.GetBySeriesId(seriesId).GetValue();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
