@@ -42,7 +42,6 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        //Test
         public async Task GetMovies_ThenReturnsMovieList()
         {
             // Arrange, Act
