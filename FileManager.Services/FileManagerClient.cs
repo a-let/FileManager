@@ -11,13 +11,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 
-
 namespace FileManager.Services
 {
-    public class FIleManagerClient : IFileManagerClient
+    public class FileManagerClient : IFileManagerClient
     {
         private readonly IList<object> _factories;
-        private string[] _services = new[] 
+        private readonly string[] _services = new[] 
         {
             nameof(Episode),
             nameof(Movie),
@@ -26,7 +25,7 @@ namespace FileManager.Services
             nameof(Show)
         };
 
-        public FIleManagerClient(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger)
+        public FileManagerClient(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger)
         {
             _factories = new List<object>();
 

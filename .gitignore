@@ -71,3 +71,5 @@
 /FileManager.Web/healthchecksdb
 /FileManager.Interfaces/bin/Debug/netcoreapp2.2
 /FileManager.Interfaces/obj
+/.vs/FileManager/v16/TestStore/0/testlog.manifest
+/.vs/FileManager/v16/TestStore/0/000.testlog

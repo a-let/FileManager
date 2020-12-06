@@ -5,8 +5,10 @@ using Logging;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using Polly;
 using Polly.Extensions.Http;
+
 using System;
 using System.IO;
 using System.Net.Http.Headers;
@@ -22,7 +24,7 @@ namespace FileManager.ConsoleApp
         {
             var services = new ServiceCollection()
                 .AddSingleton<IConfiguration, ConfigurationRoot>(configuration => (ConfigurationRoot)GetConfiguration())
-                .AddSingleton<IFileManagerClient, FIleManagerClient>();
+                .AddSingleton<IFileManagerClient, FileManagerClient>();
 
             services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
 
