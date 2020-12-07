@@ -17,12 +17,12 @@ namespace FileManager.Web.Services
             _seriesRepository = seriesRepository;
         }
 
-        public IEnumerable<Series> GetSeries()
+        public async Task<IEnumerable<Series>> GetAsync()
         {
-            return _seriesRepository.GetSeries();
+            return await Task.Run(() => _seriesRepository.GetSeries());
         }
 
-        public async Task<Series> GetSeriesByIdAsync(int id)
+        public async Task<Series> GetAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid SeriesId");
@@ -30,15 +30,15 @@ namespace FileManager.Web.Services
             return await _seriesRepository.GetSeriesByIdAsync(id);
         }
 
-        public Series GetSeriesByName(string name)
+        public async Task<Series> GetAsync(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            return _seriesRepository.GetSeriesByName(name);
+            return await Task.Run(() => _seriesRepository.GetSeriesByName(name));
         }
 
-        public async Task<int> SaveSeriesAsync(Series series)
+        public async Task<int> SaveAsync(Series series)
         {
             if (series == null)
                 throw new ArgumentNullException(nameof(series));

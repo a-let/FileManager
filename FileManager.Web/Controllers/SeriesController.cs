@@ -24,7 +24,7 @@ namespace FileManager.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Series>>> Get()
         {
-            var series = _seriesControllerService.GetSeries();
+            var series = await _seriesControllerService.GetAsync();
             return Ok(series);
         }
 
@@ -32,7 +32,7 @@ namespace FileManager.Web.Controllers
         [HttpGet("id/{id}")]
         public async Task<ActionResult<Series>> GetById(int id)
         {
-            var series = await _seriesControllerService.GetSeriesByIdAsync(id);
+            var series = await _seriesControllerService.GetAsync(id);
             return Ok(series);
         }
 
@@ -40,7 +40,7 @@ namespace FileManager.Web.Controllers
         [HttpGet("name/{name}")]
         public async Task<ActionResult<Series>> GetByName(string name)
         {
-            var series = _seriesControllerService.GetSeriesByName(name);
+            var series = await _seriesControllerService.GetAsync(name);
             return Ok(series);
         }
         
@@ -48,7 +48,7 @@ namespace FileManager.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> Post([FromBody]Series series)
         {
-            var seriesId = await _seriesControllerService.SaveSeriesAsync(series);
+            var seriesId = await _seriesControllerService.SaveAsync(series);
             return Ok(seriesId);
         }
         
