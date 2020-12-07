@@ -29,7 +29,7 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<UserDto>>> Get()
         {
-            var users = _userControllerService.GetUsers();
+            var users = await _userControllerService.GetAsync();
             return Ok(users);
         }
 
@@ -39,7 +39,7 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<UserDto>> GetById(int id)
         {
-            var user = await _userControllerService.GetByIdAsync(id);
+            var user = await _userControllerService.GetAsync(id);
             return Ok(user);
         }
 
@@ -49,7 +49,7 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<UserDto>> GetByUserName(string userName)
         {
-            var user = _userControllerService.GetUserByUserName(userName);
+            var user = await _userControllerService.GetAsync(userName);
             return Ok(user);
         }
 
@@ -60,7 +60,7 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<int>> Post([FromBody]UserDto user)
         {
-            var userId = await _userControllerService.SaveUserAsync(user);
+            var userId = await _userControllerService.SaveAsync(user);
             return Ok(userId);
         }
 

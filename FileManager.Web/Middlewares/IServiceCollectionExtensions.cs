@@ -43,7 +43,8 @@ namespace FileManager.Web.Middlewares
                         {
                             var userService = context.HttpContext.RequestServices.GetRequiredService<IUserControllerService>();
                             var userName = context.Principal.Identity.Name;
-                            var user = userService.GetUserByUserName(userName);
+                            // TODO: Make awaitable if possible.
+                            var user = userService.GetAsync(userName).Result;
 
                             if (user == null)
                             {

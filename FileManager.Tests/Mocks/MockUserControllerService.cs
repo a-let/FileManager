@@ -9,12 +9,12 @@ namespace FileManager.Tests.Mocks
     {
         public UserDto Authenticate(string userName, string password) => new UserDto();
 
-        public async Task<UserDto> GetByIdAsync(int userId) => await Task.FromResult(new UserDto());
+        public async Task<UserDto> GetAsync(int userId) => await Task.FromResult(new UserDto());
 
-        public UserDto GetUserByUserName(string userName) => new UserDto();
+        public async Task<UserDto> GetAsync(string userName) => new UserDto();
 
-        public IEnumerable<UserDto> GetUsers() => new[] { new UserDto() };
+        public async Task<IEnumerable<UserDto>> GetAsync() => await Task.FromResult(new[] { new UserDto() });
 
-        public async Task<int> SaveUserAsync(UserDto user) => await Task.FromResult(1);
+        public async Task<int> SaveAsync(UserDto user) => await Task.FromResult(1);
     }
 }
