@@ -21,7 +21,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 0;
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await _showControllerService.GetShowByIdAsync(id));
+            var exception = await Record.ExceptionAsync(async () => await _showControllerService.GetAsync(id));
 
             // Assert
             Assert.IsType<ArgumentException>(exception);
@@ -34,43 +34,43 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             // Act
-            var show = await _showControllerService.GetShowByIdAsync(id);
+            var show = await _showControllerService.GetAsync(id);
 
             // Assert
             Assert.IsAssignableFrom<Show>(show);
         }
 
         [Fact]
-        public void GetShows_ThenReturnsShowList()
+        public async Task GetShows_ThenReturnsShowList()
         {
             // Arrange, Act
-            var shows = _showControllerService.GetShows();
+            var shows = await _showControllerService.GetAsync();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Show>>(shows);
         }
 
         [Fact]
-        public void GetShowByName_GivenInvalidName_ThenThrowsArgumentNullException()
+        public async Task GetShowByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
             // Arrange
             var name = string.Empty;
 
             // Act
-            var exception = Record.Exception(() => _showControllerService.GetShowByName(name));
+            var exception = await Record.ExceptionAsync(async () => await _showControllerService.GetAsync(name));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void GetShowByName_GivenValidName_ThenShowIsReturned()
+        public async Task GetShowByName_GivenValidName_ThenShowIsReturned()
         {
             // Arrange
             var name = "Test";
 
             // Act
-            var show = _showControllerService.GetShowByName(name);
+            var show = await _showControllerService.GetAsync(name);
 
             // Assert
             Assert.IsAssignableFrom<Show>(show);
@@ -83,7 +83,7 @@ namespace FileManager.Tests.FileManagerWebTests
             Show show = null;
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await _showControllerService.SaveShowAsync(show));
+            var exception = await Record.ExceptionAsync(async () => await _showControllerService.SaveAsync(show));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);
@@ -96,7 +96,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var show = new Show();
 
             // Act
-            var showId = await _showControllerService.SaveShowAsync(show);
+            var showId = await _showControllerService.SaveAsync(show);
 
             // Assert
             Assert.True(showId > 0);

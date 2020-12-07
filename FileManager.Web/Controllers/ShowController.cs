@@ -24,7 +24,7 @@ namespace FileManager.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Show>>> Get()
         {
-            var shows = _showControllerService.GetShows();
+            var shows = await _showControllerService.GetAsync();
             return Ok(shows);
         }
 
@@ -32,7 +32,7 @@ namespace FileManager.Web.Controllers
         [HttpGet("id/{id}")]
         public async Task<ActionResult<Show>> GetById(int id)
         {
-            var show = await _showControllerService.GetShowByIdAsync(id);
+            var show = await _showControllerService.GetAsync(id);
             return Ok(show);
         }
 
@@ -40,7 +40,7 @@ namespace FileManager.Web.Controllers
         [HttpGet("name/{name}")]
         public async Task<ActionResult<Show>> GetByName(string name)
         {
-            var show = _showControllerService.GetShowByName(name);
+            var show = await _showControllerService.GetAsync(name);
             return Ok(show);
         }
         
@@ -48,7 +48,7 @@ namespace FileManager.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> Post([FromBody]Show show)
         {
-            var showId = await _showControllerService.SaveShowAsync(show);
+            var showId = await _showControllerService.SaveAsync(show);
             return Ok(showId);
         }
         
