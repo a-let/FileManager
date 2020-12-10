@@ -17,7 +17,7 @@ namespace FileManager.Web.Services
             _episodeRepository = episodeRepository;
         }
 
-        public async Task<Episode> GetEpisodeByIdAsync(int id)
+        public async Task<Episode> GetAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid EpisodeId");
@@ -25,17 +25,17 @@ namespace FileManager.Web.Services
             return await _episodeRepository.GetEpisodeByIdAsync(id);
         }
 
-        public IEnumerable<Episode> GetEpisodes() => _episodeRepository.GetEpisodes();
+        public async Task<IEnumerable<Episode>> GetAsync() => await Task.Run(() => _episodeRepository.GetEpisodes());
 
-        public Episode GetEpisodeByName(string name)
+        public async Task<Episode> GetAsync(string name) => await Task.Run(() =>
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException();
 
             return _episodeRepository.GetEpisodeByName(name);
-        }
+        });
 
-        public async Task<int> SaveEpisodeAsync(Episode episode)
+        public async Task<int> SaveAsync(Episode episode)
         {
             if (episode == null)
                 throw new ArgumentNullException(nameof(episode));

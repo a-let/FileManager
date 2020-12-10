@@ -1,10 +1,13 @@
-﻿using FileManager.Services;
-using FileManager.Services.Interfaces;
+﻿using FileManager.Interfaces;
+using FileManager.Services;
 
 using Logging;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using Polly;
+using Polly.Extensions.Http;
 
 using System;
 using System.IO;
@@ -21,20 +24,29 @@ namespace FileManager.ConsoleApp
         {
             var services = new ServiceCollection()
                 .AddSingleton<IConfiguration, ConfigurationRoot>(configuration => (ConfigurationRoot)GetConfiguration())
-                .AddSingleton<IEpisodeService, EpisodeService>()
-                .AddSingleton<IMovieService, MovieService>()
-                .AddSingleton<ISeasonService, SeasonService>()
-                .AddSingleton<ISeriesService, SeriesService>()
-                .AddSingleton<IShowService, ShowService>();
+                .AddSingleton<IFileManagerClient, FileManagerClient>();
 
             services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
 
-            services.AddHttpClient("FileManager", c =>
-            {
-                c.BaseAddress = new Uri(_config["FileManagerBaseAddress"]);
-                c.DefaultRequestHeaders.Clear();
-                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            });
+            services
+                .AddHttpClient("FileManager", c =>
+                {
+                    c.BaseAddress = new Uri(_config["FileManagerBaseAddress"]);
+                    c.DefaultRequestHeaders.Clear();
+                    c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                })
+                .AddPolicyHandler((s, r) => HttpPolicyExtensions.HandleTransientHttpError()
+                    .WaitAndRetryAsync(new[]
+                    {
+                        TimeSpan.FromSeconds(1),
+                        TimeSpan.FromSeconds(5),
+                        TimeSpan.FromSeconds(10)
+                    },
+                    onRetryAsync: async (result, timespan, retryAttempt, context) =>
+                    {
+                        var logger = s.GetService<ILogger>();
+                        await logger.LogWarningAsync($"Timeout #{retryAttempt}: {result.Exception.Message}", result.Exception);
+                    }));
 
 
             return services.BuildServiceProvider();

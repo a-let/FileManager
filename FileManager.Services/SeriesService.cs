@@ -1,5 +1,5 @@
-﻿using FileManager.Models;
-using FileManager.Services.Interfaces;
+﻿using FileManager.Interfaces;
+using FileManager.Models;
 
 using Logging;
 
@@ -33,7 +33,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting series");
+                await _logger.LogErrorAsync(ex, $"Error getting series - {ex.Message}");
                 throw;
             }
         }
@@ -50,7 +50,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting series");
+                await _logger.LogErrorAsync(ex, $"Error getting series - {ex.Message}");
                 throw;
             }
         }
@@ -67,7 +67,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting series");
+                await _logger.LogErrorAsync(ex, $"Error getting series - {ex.Message}");
                 throw;
             }
         }
@@ -84,7 +84,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error saving series");
+                await _logger.LogErrorAsync(ex, $"Error saving series - {ex.Message}");
                 throw;
             }
         }

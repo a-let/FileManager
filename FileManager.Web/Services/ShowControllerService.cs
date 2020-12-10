@@ -17,7 +17,7 @@ namespace FileManager.Web.Services
             _showRepository = showRepository;
         }
 
-        public async Task<Show> GetShowByIdAsync(int id)
+        public async Task<Show> GetAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid ShowId");
@@ -25,7 +25,7 @@ namespace FileManager.Web.Services
             return await _showRepository.GetShowByIdAsync(id);
         }
 
-        public Show GetShowByName(string name)
+        public async Task<Show> GetAsync(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
@@ -33,12 +33,12 @@ namespace FileManager.Web.Services
             return _showRepository.GetShowByName(name);
         }
 
-        public IEnumerable<Show> GetShows()
+        public async Task<IEnumerable<Show>> GetAsync()
         {
-            return _showRepository.GetShows();
+            return await Task.Run(() => _showRepository.GetShows());
         }
 
-        public async Task<int> SaveShowAsync(Show show)
+        public async Task<int> SaveAsync(Show show)
         {
             if (show == null)
                 throw new ArgumentNullException(nameof(show));

@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="2.2.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="2.2.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="2.2.0" />
     <PackageReference Include="Logging" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
@@ -20,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileManager.DataAccessLayer\FileManager.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\FileManager.Interfaces\FileManager.Interfaces.csproj" />
     <ProjectReference Include="..\FileManager.Models\FileManager.Models.csproj" />
   </ItemGroup>
 

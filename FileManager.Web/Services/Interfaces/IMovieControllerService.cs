@@ -1,16 +1,13 @@
-﻿using FileManager.Models;
+﻿using FileManager.Interfaces;
+using FileManager.Models;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FileManager.Web.Services.Interfaces
 {
-    public interface IMovieControllerService
+    public interface IMovieControllerService : IService<Movie>
     {
-        Task<Movie> GetMovieByIdAsync(int id);
-        IEnumerable<Movie> GetMovies();
-        Movie GetMovieByName(string name);        
-        Task<int> SaveMovieAsync(Movie movie);
         IEnumerable<Movie> GetMoviesBySeriesId(int seriesId);
     }
 }

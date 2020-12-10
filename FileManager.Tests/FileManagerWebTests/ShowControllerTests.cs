@@ -11,7 +11,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class ShowControllerTests
     {
-        private readonly ShowController _showController = new ShowController(new MockShowControllerService(), new MockLog());
+        private readonly ShowController _showController = new ShowController(new MockShowControllerService());
 
         [Fact]
         public async Task Get_GivenNoParameter_ThenReturnsListOfShows()

@@ -22,7 +22,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 0;
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.GetEpisodeByIdAsync(id));
+            var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.GetAsync(id));
 
             // Assert
             Assert.IsType<ArgumentException>(exception);
@@ -35,43 +35,43 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             // Act
-            var episode = await _episodeControllerService.GetEpisodeByIdAsync(id);
+            var episode = await _episodeControllerService.GetAsync(id);
 
             // Assert
             Assert.IsAssignableFrom<Episode>(episode);
         }
 
         [Fact]
-        public void GetEpisodes_ThenReturnsEpisodeList()
+        public async Task GetEpisodes_ThenReturnsEpisodeList()
         {
             // Arrange, Act
-            var episodes = _episodeControllerService.GetEpisodes();
+            var episodes = await _episodeControllerService.GetAsync();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
         }
 
         [Fact]
-        public void GetEpisodeByName_GivenInvalidName_ThenThrowsArgumentNullException()
+        public async Task GetEpisodeByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
             // Arrange
             var name = string.Empty;
 
             // Act
-            var exception = Record.Exception(() => _episodeControllerService.GetEpisodeByName(name));
+            var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.GetAsync(name));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void GetEpisodeByName_GivenValidName_ThenEpisodeIsReturned()
+        public async Task GetEpisodeByName_GivenValidName_ThenEpisodeIsReturned()
         {
             // Arrange
             var name = "Test";
 
             // Act
-            var episode = _episodeControllerService.GetEpisodeByName(name);
+            var episode = await _episodeControllerService.GetAsync(name);
 
             // Assert
             Assert.IsAssignableFrom<Episode>(episode);
@@ -84,7 +84,7 @@ namespace FileManager.Tests.FileManagerWebTests
             Episode episode = null;
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.SaveEpisodeAsync(episode));
+            var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.SaveAsync(episode));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);
@@ -104,7 +104,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             // Act
-            var episodeId = await _episodeControllerService.SaveEpisodeAsync(episode);
+            var episodeId = await _episodeControllerService.SaveAsync(episode);
 
             // Assert
             Assert.Equal(1, episodeId);

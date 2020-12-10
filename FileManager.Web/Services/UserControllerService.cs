@@ -21,9 +21,9 @@ namespace FileManager.Web.Services
             _cryptoService = cryptoService;
         }
 
-        public IEnumerable<UserDto> GetUsers() => _userRepository.GetUsers().Select(u => new UserDto(u));
+        public async Task<IEnumerable<UserDto>> GetAsync() => await Task.Run(() => _userRepository.GetUsers().Select(u => new UserDto(u)));
 
-        public async Task<UserDto> GetByIdAsync(int userId)
+        public async Task<UserDto> GetAsync(int userId)
         {
             if (userId <= 0)
                 throw new ArgumentException("Invalid UserId");
@@ -31,15 +31,15 @@ namespace FileManager.Web.Services
             return new UserDto(await _userRepository.GetUserByIdAsync(userId));
         }
 
-        public UserDto GetUserByUserName(string userName)
+        public async Task<UserDto> GetAsync(string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
                 throw new ArgumentNullException(nameof(userName));
 
-            return new UserDto(_userRepository.GetUserByUserName(userName));
+            return await Task.Run(() => new UserDto(_userRepository.GetUserByUserName(userName)));
         }
 
-        public async Task<int> SaveUserAsync(UserDto user)
+        public async Task<int> SaveAsync(UserDto user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));

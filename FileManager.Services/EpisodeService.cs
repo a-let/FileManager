@@ -1,5 +1,5 @@
-﻿using FileManager.Models;
-using FileManager.Services.Interfaces;
+﻿using FileManager.Interfaces;
+using FileManager.Models;
 
 using Logging;
 
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FileManager.Services
 {
-    public class EpisodeService : ServiceBase, IEpisodeService
+    internal class EpisodeService : ServiceBase, IEpisodeService
     {
         private readonly IConfigurationSection _episodeAddresses;
         private readonly ILogger _logger;
@@ -33,7 +33,7 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting episodes");
+                await _logger.LogErrorAsync(ex, $"Error getting episodes - {ex.Message}");
                 throw;
             }
         }
@@ -50,7 +50,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting episode");
+                await _logger.LogErrorAsync(ex, $"Error getting episode - {ex.Message}");
                 throw;
             }
         }
@@ -67,7 +67,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting episodes");
+                await _logger.LogErrorAsync(ex, $"Error getting episodes - {ex.Message}");
                 throw;
             }
         }
@@ -84,7 +84,7 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error saving episode");
+                await _logger.LogErrorAsync(ex, $"Error saving episode - {ex.Message}");
                 throw;
             }
             
@@ -102,7 +102,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting episodes");
+                await _logger.LogErrorAsync(ex, $"Error getting episodes - {ex.Message}");
                 throw;
             }
         }

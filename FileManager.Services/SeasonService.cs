@@ -1,5 +1,5 @@
-﻿using FileManager.Models;
-using FileManager.Services.Interfaces;
+﻿using FileManager.Interfaces;
+using FileManager.Models;
 
 using Logging;
 
@@ -36,7 +36,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting season");
+                await _logger.LogErrorAsync(ex, $"Error getting season - {ex.Message}");
                 throw;
             }
         }
@@ -50,7 +50,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting seasons");
+                await _logger.LogErrorAsync(ex, $"Error getting seasons - {ex.Message}");
                 throw;
             }
         }
@@ -69,7 +69,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting seasons");
+                await _logger.LogErrorAsync(ex, $"Error getting seasons - {ex.Message}");
                 throw;
             }
         }
@@ -86,7 +86,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error saving season");
+                await _logger.LogErrorAsync(ex, $"Error saving season - {ex.Message}");
                 throw;
             }
         }

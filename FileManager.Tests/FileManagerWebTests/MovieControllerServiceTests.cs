@@ -22,7 +22,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 0;
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.GetMovieByIdAsync(id));
+            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.GetAsync(id));
 
             // Assert
             Assert.IsType<ArgumentException>(exception);
@@ -35,43 +35,43 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 1;
 
             // Act
-            var movie = await _movieControllerService.GetMovieByIdAsync(id);
+            var movie = await _movieControllerService.GetAsync(id);
 
             // Assert
             Assert.IsAssignableFrom<Movie>(movie);
         }
 
         [Fact]
-        public void GetMovies_ThenReturnsMovieList()
+        public async Task GetMovies_ThenReturnsMovieList()
         {
             // Arrange, Act
-            var movies = _movieControllerService.GetMovies();
+            var movies = await _movieControllerService.GetAsync();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
         }
 
         [Fact]
-        public void GetMovieByName_GivenInvalidName_ThenThrowsArgumentNullException()
+        public async Task GetMovieByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
             // Arrange
             var name = string.Empty;
 
             // Act
-            var exception = Record.Exception(() => _movieControllerService.GetMovieByName(name));
+            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.GetAsync(name));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public void GetMovieByName_GivenValidName_ThenMovieIsReturned()
+        public async Task GetMovieByName_GivenValidName_ThenMovieIsReturned()
         {
             // Arrange
             var name = "Test";
 
             // Act
-            var movie = _movieControllerService.GetMovieByName(name);
+            var movie = await _movieControllerService.GetAsync(name);
 
             // Assert
             Assert.IsAssignableFrom<Movie>(movie);
@@ -84,7 +84,7 @@ namespace FileManager.Tests.FileManagerWebTests
             Movie movie = null;
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.SaveMovieAsync(movie));
+            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.SaveAsync(movie));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);
@@ -106,7 +106,7 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.SaveMovieAsync(movie));
+            var exception = await Record.ExceptionAsync(async () => await _movieControllerService.SaveAsync(movie));
 
             // Assert
             Assert.Null(exception);

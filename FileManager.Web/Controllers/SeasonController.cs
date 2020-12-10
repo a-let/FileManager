@@ -1,6 +1,5 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
-using Logging;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,106 +14,56 @@ namespace FileManager.Web.Controllers
     public class SeasonController : Controller
     {
         private readonly ISeasonControllerService _seasonControllerService;
-        private readonly ILogger _logger;
 
-        public SeasonController(ISeasonControllerService seasonControllerService, ILogger logger)
+        public SeasonController(ISeasonControllerService seasonControllerService)
         {
             _seasonControllerService = seasonControllerService;
-            _logger = logger;
         }
 
         // GET: api/Season
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Season>>> Get()
         {
-            try
-            {
-                var seasons = _seasonControllerService.GetSeasons();
-                return Ok(seasons);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var seasons = await _seasonControllerService.GetAsync();
+            return Ok(seasons);
         }
 
         // GET: api/Season/5
         [HttpGet("id/{id}")]
         public async Task<ActionResult<Season>> GetById(int id)
         {
-            try
-            {
-                var season = await _seasonControllerService.GetSeasonByIdAsync(id);
-                return Ok(season);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var season = await _seasonControllerService.GetAsync(id);
+            return Ok(season);
         }
         
         // POST: api/Season
         [HttpPost]
         public async Task<ActionResult<int>> Post([FromBody]Season season)
         {
-            try
-            {
-                var seasonId = await _seasonControllerService.SaveSeasonAsync(season);
-                return Ok(seasonId);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var seasonId = await _seasonControllerService.SaveAsync(season);
+            return Ok(seasonId);
         }
 
         // Get: api/Season/showId/5
         [HttpGet("showId/{showId}")]
-        public async Task<ActionResult<IEnumerable<Season>>> GetByShowId(int showId)
+        public ActionResult<IEnumerable<Season>> GetByShowId(int showId)
         {
-            try
-            {
-                var seasons = _seasonControllerService.GetSeasonsByShowId(showId);
-                return Ok(seasons);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var seasons = _seasonControllerService.GetSeasonsByShowId(showId);
+            return Ok(seasons);
         }
         
         // PUT: api/Season/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody]string value)
         {
-            try
-            {
-                throw new NotImplementedException();
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            throw new NotImplementedException();
         }
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            try
-            {
-                throw new NotImplementedException();
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            throw new NotImplementedException();
         }
     }
 }

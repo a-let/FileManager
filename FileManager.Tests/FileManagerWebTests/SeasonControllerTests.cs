@@ -11,7 +11,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class SeasonControllerTests
     {
-        private readonly SeasonController _seasonController = new SeasonController(new MockSeasonControllerService(), new MockLog());
+        private readonly SeasonController _seasonController = new SeasonController(new MockSeasonControllerService());
 
         [Fact]
         public async Task Get_GivenNoParameter_ThenReturnsListOfSeasons()
@@ -39,13 +39,13 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public async Task Get_GivenSeasonId_ThenReturnsListOfSeasons()
+        public void Get_GivenSeasonId_ThenReturnsListOfSeasons()
         {
             // Arrange
             var seasonId = 1;
 
             // Act
-            var seasons = (await _seasonController.GetByShowId(seasonId)).GetValue();
+            var seasons = _seasonController.GetByShowId(seasonId).GetValue();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);

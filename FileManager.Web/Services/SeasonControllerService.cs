@@ -17,7 +17,7 @@ namespace FileManager.Web.Services
             _seasonRepository = seasonRepository;
         }
 
-        public async Task<Season> GetSeasonByIdAsync(int id)
+        public async Task<Season> GetAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid SeasonId");
@@ -25,9 +25,14 @@ namespace FileManager.Web.Services
             return await _seasonRepository.GetSeasonByIdAsync(id);
         }
 
-        public IEnumerable<Season> GetSeasons()
+        public async Task<IEnumerable<Season>> GetAsync()
         {
-            return _seasonRepository.GetSeasons();
+            return await Task.Run(() => _seasonRepository.GetSeasons());
+        }
+
+        public Task<Season> GetAsync(string name)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<Season> GetSeasonsByShowId(int showId)
@@ -38,7 +43,7 @@ namespace FileManager.Web.Services
             return _seasonRepository.GetSeasonsByShowId(showId);
         }
 
-        public async Task<int> SaveSeasonAsync(Season season)
+        public async Task<int> SaveAsync(Season season)
         {
             if (season == null)
                 throw new ArgumentNullException(nameof(season));

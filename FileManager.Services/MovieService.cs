@@ -1,5 +1,5 @@
-﻿using FileManager.Models;
-using FileManager.Services.Interfaces;
+﻿using FileManager.Interfaces;
+using FileManager.Models;
 
 using Logging;
 
@@ -12,7 +12,7 @@ using System.Net.Http;
 
 namespace FileManager.Services
 {
-    public class MovieService : ServiceBase, IMovieService
+    internal class MovieService : ServiceBase, IMovieService
     {        
         private readonly IConfigurationSection _movieAddresses;
         private readonly ILogger _logger;
@@ -36,7 +36,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting movie");
+                await _logger.LogErrorAsync(ex, $"Error getting movie - {ex.Message}");
                 throw;
             }
         }
@@ -53,7 +53,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting movie");
+                await _logger.LogErrorAsync(ex, $"Error getting movie - {ex.Message}");
                 throw;
             }
         }
@@ -67,7 +67,7 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting movies");
+                await _logger.LogErrorAsync(ex, $"Error getting movies - {ex.Message}");
                 throw;
             }
         }
@@ -84,7 +84,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting movie");
+                await _logger.LogErrorAsync(ex, $"Error getting movie - {ex.Message}");
                 throw;
             }
         }
@@ -101,7 +101,7 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error saving movie");
+                await _logger.LogErrorAsync(ex, $"Error saving movie - {ex.Message}");
                 throw;
             }
         }

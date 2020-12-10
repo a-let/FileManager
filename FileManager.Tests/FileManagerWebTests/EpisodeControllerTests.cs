@@ -12,7 +12,7 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class EpisodeControllerTests
     {
-        private readonly EpisodeController _episodeController = new EpisodeController(new MockEpisodeControllerService(), new MockLog());
+        private readonly EpisodeController _episodeController = new EpisodeController(new MockEpisodeControllerService());
 
         [Fact]
         public async Task Get_GivenNoParameter_ThenReturnsListOfEpisodes()
@@ -53,13 +53,13 @@ namespace FileManager.Tests.FileManagerWebTests
         }
         
         [Fact]
-        public async Task Get_GivenSeasonId_ThenReturnsListOfEpisodes()
+        public void Get_GivenSeasonId_ThenReturnsListOfEpisodes()
         {
             // Arrange
             var seasonId = 1;
 
             // Act
-            var episodes = (await _episodeController.GetBySeasonId(seasonId)).GetValue();
+            var episodes = _episodeController.GetBySeasonId(seasonId).GetValue();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);

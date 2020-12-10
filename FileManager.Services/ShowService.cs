@@ -1,5 +1,5 @@
-﻿using FileManager.Models;
-using FileManager.Services.Interfaces;
+﻿using FileManager.Interfaces;
+using FileManager.Models;
 
 using Logging;
 
@@ -37,7 +37,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting show");
+                await _logger.LogErrorAsync(ex, $"Error getting show - {ex.Message}");
                 throw;
             }
         }
@@ -54,7 +54,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting show");
+                await _logger.LogErrorAsync(ex, $"Error getting show - {ex.Message}");
                 throw;
             }
         }
@@ -68,7 +68,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error getting shows");
+                await _logger.LogErrorAsync(ex, $"Error getting shows - {ex.Message}");
                 throw;
             }
         }
@@ -86,7 +86,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, "Error saving show");
+                await _logger.LogErrorAsync(ex, $"Error saving show - {ex.Message}");
                 throw;
             }
         }

@@ -1,11 +1,9 @@
 ﻿using FileManager.Models.Dtos;
 using FileManager.Web.Services.Interfaces;
-using Logging;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,14 +15,11 @@ namespace FileManager.Web.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserControllerService _userControllerService;
-        private readonly ILogger _logger;
         private readonly ITokenGenerator _tokenService;
 
-        public UserController(IUserControllerService userControllerService,
-            ILogger logger, ITokenGenerator tokenService)
+        public UserController(IUserControllerService userControllerService, ITokenGenerator tokenService)
         {
             _userControllerService = userControllerService;
-            _logger = logger;
             _tokenService = tokenService;
         }
 
@@ -34,16 +29,8 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<UserDto>>> Get()
         {
-            try
-            {
-                var users = _userControllerService.GetUsers();
-                return Ok(users);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var users = await _userControllerService.GetAsync();
+            return Ok(users);
         }
 
         // GET: api/User/id/5
@@ -52,16 +39,8 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<UserDto>> GetById(int id)
         {
-            try
-            {
-                var user = await _userControllerService.GetByIdAsync(id);
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var user = await _userControllerService.GetAsync(id);
+            return Ok(user);
         }
 
         // GET: api/User/name/Name
@@ -70,16 +49,8 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<UserDto>> GetByUserName(string userName)
         {
-            try
-            {
-                var user = _userControllerService.GetUserByUserName(userName);
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var user = await _userControllerService.GetAsync(userName);
+            return Ok(user);
         }
 
         // POST: api/User
@@ -89,16 +60,8 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<int>> Post([FromBody]UserDto user)
         {
-            try
-            {
-                var userId = await _userControllerService.SaveUserAsync(user);
-                return Ok(userId);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+            var userId = await _userControllerService.SaveAsync(user);
+            return Ok(userId);
         }
 
         // POST: api/User/Authenticate
@@ -108,27 +71,19 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Authenticate([FromBody]UserDto user)
         {
-            try
-            {
-                var u = _userControllerService.Authenticate(user.UserName, user.Password);
+            var u = _userControllerService.Authenticate(user.UserName, user.Password);
 
-                if (u == null)
-                    return BadRequest(new { message = "Username or Password is incorrect." });
+            if (u == null)
+                return BadRequest(new { message = "Username or Password is incorrect." });
 
-                return Ok(new
-                {
-                    Id = u.UserId,
-                    Username = u.UserName,
-                    u.FirstName,
-                    u.LastName,
-                    Token = _tokenService.GenerateToken(u.UserName)
-                });
-            }
-            catch (Exception ex)
+            return Ok(new
             {
-                await _logger.LogErrorAsync(ex, ex.Message);
-                return BadRequest(ex);
-            }
+                Id = u.UserId,
+                Username = u.UserName,
+                u.FirstName,
+                u.LastName,
+                Token = _tokenService.GenerateToken(u.UserName)
+            });
         }
     }
 }
