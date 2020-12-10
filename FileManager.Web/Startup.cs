@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
 namespace FileManager.Web
@@ -47,9 +47,9 @@ namespace FileManager.Web
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ICryptographyService, CryptographyService>()
                 .AddScoped<ITokenGenerator, TokenGenerator>()
-                .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b=> b.MigrationsAssembly("FileManager.DataAccessLayer")))
-                .AddMvc();
+                .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b=> b.MigrationsAssembly("FileManager.DataAccessLayer")));
 
+            services.AddControllers();
             services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
             services.AddCustomHealthChecks(_configuration);
             services.AddCustomAuthentication(_configuration);
@@ -57,7 +57,7 @@ namespace FileManager.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCustomExceptionHandler();
 
@@ -65,6 +65,8 @@ namespace FileManager.Web
                 app.EnableSwagger();
 
             app.UseStaticFiles();
+
+            app.UseRouting();
 
             app.UseHealthChecks("/health", new HealthCheckOptions
             {
@@ -75,11 +77,9 @@ namespace FileManager.Web
 
             app.UseAuthentication();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }

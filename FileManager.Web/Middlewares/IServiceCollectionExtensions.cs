@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 using Swashbuckle.AspNetCore.Filters;
-using Swashbuckle.AspNetCore.Swagger;
-using System.Collections.Generic;
+
 using System.Text;
 using System.Threading.Tasks;
 
@@ -85,18 +85,30 @@ namespace FileManager.Web.Middlewares
             services
                 .AddSwaggerGen(c =>
                 {
-                    c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" });
-                    c.AddSecurityDefinition("Bearer",
-                        new ApiKeyScheme
-                        {
-                            In = "header",
-                            Description = "Please enter JWT with Bearer into field",
-                            Name = "Authorization",
-                            Type = "apiKey"
-                        });
-                    c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "FileManager API", Version = "v1" });
+                    c.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
                     {
-                        { "Bearer", new string[] { } },
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "bearer"
+                        },
+                        In = ParameterLocation.Header,
+                        Description = "Please enter JWT with bearer into field",
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        BearerFormat = "JWT"
+                    });
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" }
+                            },
+                            new string[] { }
+                        }
                     });
                     c.ExampleFilters();
                 })

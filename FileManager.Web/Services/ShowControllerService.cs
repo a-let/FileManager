@@ -30,7 +30,7 @@ namespace FileManager.Web.Services
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            return _showRepository.GetShowByName(name);
+            return await Task.Run(() => _showRepository.GetShowByName(name));
         }
 
         public async Task<IEnumerable<Show>> GetAsync()

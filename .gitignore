@@ -76,3 +76,8 @@
 /.vs/FileManager/v16/TestStore/0/015.testlog
 *.testlog
 /.vs/FileManager/DesignTimeBuild/.dtbcache.v2
+/FileManager.DataAccessLayer/bin/Debug/netcoreapp3.0
+/FileManager.IntegrationTests/bin/Debug/netcoreapp3.0
+/FileManager.Interfaces/bin/Debug/netcoreapp3.0
+/FileManager.Models/bin/Debug/netcoreapp3.0
+/FileManager.Web/bin/Debug/netcoreapp3.0

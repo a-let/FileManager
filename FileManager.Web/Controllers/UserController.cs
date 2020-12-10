@@ -69,7 +69,7 @@ namespace FileManager.Web.Controllers
         [HttpPost("Authenticate")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Authenticate([FromBody]UserDto user)
+        public IActionResult Authenticate([FromBody]UserDto user)
         {
             var u = _userControllerService.Authenticate(user.UserName, user.Password);
 
