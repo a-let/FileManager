@@ -19,7 +19,7 @@ namespace FileManager.DataAccessLayer.Repositories
 
         public async Task<Episode> GetEpisodeByIdAsync(int id) => await _context.Episode.FindAsync(id);
 
-        public Episode GetEpisodeByName(string name) => _context.Episode.Single(e => e.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        public Episode GetEpisodeByName(string name) => _context.Episode.FirstOrDefault(e => e.Name == name);
 
         public IEnumerable<Episode> GetEpisodes() => _context.Episode;
 

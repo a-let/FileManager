@@ -21,7 +21,7 @@ namespace FileManager.DataAccessLayer.Repositories
 
         public IEnumerable<Series> GetSeries() => _context.Series;
 
-        public Series GetSeriesByName(string name) => _context.Series.Single(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        public Series GetSeriesByName(string name) => _context.Series.FirstOrDefault(s => s.Name == name);
 
         public async Task<int> SaveSeriesAsync(Series series)
         {

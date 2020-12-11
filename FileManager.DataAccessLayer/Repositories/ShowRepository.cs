@@ -19,7 +19,7 @@ namespace FileManager.DataAccessLayer.Repositories
 
         public async Task<Show> GetShowByIdAsync(int id) => await _context.Show.FindAsync(id);
 
-        public Show GetShowByName(string name) => _context.Show.Single(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        public Show GetShowByName(string name) => _context.Show.FirstOrDefault(s => s.Name == name);
 
         public IEnumerable<Show> GetShows() => _context.Show;
 

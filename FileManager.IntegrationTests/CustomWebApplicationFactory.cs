@@ -63,7 +63,7 @@ namespace FileManager.IntegrationTests
         }
 
         /// <summary>
-        /// Required due to migrating from ASP.NET Core 2.2 to 3.0 causes the app's Startup.ConfiugreServices
+        /// Required due to migrating from ASP.NET Core 2.2 to 3.0 which causes the app's Startup.ConfiugreServices
         /// to run AFTER the test apps builder.ConfigureServices.
         /// </summary>
         /// <remarks>
