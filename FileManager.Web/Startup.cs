@@ -76,6 +76,7 @@ namespace FileManager.Web
             app.UseHealthChecksUI(config => config.UIPath = "/health-ui");
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

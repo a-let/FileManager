@@ -43,7 +43,7 @@ namespace FileManager.Web.Middlewares
                         {
                             var userService = context.HttpContext.RequestServices.GetRequiredService<IUserControllerService>();
                             var userName = context.Principal.Identity.Name;
-                            // TODO: Make awaitable if possible.
+
                             var user = userService.GetAsync(userName).Result;
 
                             if (user == null)
@@ -62,6 +62,24 @@ namespace FileManager.Web.Middlewares
 
                             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
                             logger.LogErrorAsync(context.Exception, $"Authentication Failed - Local: {localIp} Remote: {remoteIp}");
+                            return Task.CompletedTask;
+                        },
+                        OnChallenge = context =>
+                        {
+                            var localIp = context.HttpContext.Connection.LocalIpAddress.ToString();
+                            var remoteIp = context.HttpContext.Connection.RemoteIpAddress.ToString();
+  
+                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
+                            logger.LogErrorAsync(context.AuthenticateFailure, $"Authentication Challenge - {context.Error} - Local: {localIp} Remote: {remoteIp}");
+                            return Task.CompletedTask;
+                        },
+                        OnForbidden = context =>
+                        {
+                            var localIp = context.HttpContext.Connection.LocalIpAddress.ToString();
+                            var remoteIp = context.HttpContext.Connection.RemoteIpAddress.ToString();
+
+                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
+                            logger.LogErrorAsync(context.Result.Failure, $"Authentication Forbidden - Local: {localIp} Remote: {remoteIp}");
                             return Task.CompletedTask;
                         }
                     };
