@@ -1,8 +1,10 @@
-﻿using FileManager.Web.Services.Interfaces;
+﻿using FileManager.DataAccessLayer;
+using FileManager.Web.Services.Interfaces;
 
 using Logging;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -20,9 +22,12 @@ namespace FileManager.Web.Middlewares
         public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHealthChecks()
-                .AddSqlServer(configuration["FileManagerConnectionString"], name: "FileManager Database Check", tags: new[] { "filemanagerdb" });
+                .AddDbContextCheck<FileManagerContext>();
 
-            services.AddHealthChecksUI();
+            services.AddDbContext<FileManagerContext>(options =>
+            {
+                options.UseSqlServer(configuration["FileManagerConnectionString"]);
+            });
 
             return services;
         }

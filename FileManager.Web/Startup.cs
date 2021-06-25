@@ -51,7 +51,9 @@ namespace FileManager.Web
                 .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b=> b.MigrationsAssembly("FileManager.DataAccessLayer")));
 
             services.AddControllers();
+
             services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
+
             services.AddCustomHealthChecks(_configuration);
             services.AddCustomAuthentication(_configuration);
             services.AddCustomSwagger(_configuration);
@@ -69,15 +71,20 @@ namespace FileManager.Web
 
             app.UseRouting();
 
-            app.UseHealthChecks("/health", new HealthCheckOptions
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            app.UseHealthChecksUI(config => config.UIPath = "/health-ui");
+            //app.UseHealthChecks("/health", new HealthCheckOptions
+            //{
+            //    Predicate = _ => true,
+            //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            //});
+            //app.UseHealthChecksUI(config => config.UIPath = "/health-ui");
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/health");
+            });
 
             app.UseEndpoints(endpoints =>
             {
