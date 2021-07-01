@@ -5,12 +5,9 @@ using FileManager.Web.Middlewares;
 using FileManager.Web.Services;
 using FileManager.Web.Services.Interfaces;
 
-using HealthChecks.UI.Client;
-
 using Logging;
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -48,9 +45,12 @@ namespace FileManager.Web
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ICryptographyService, CryptographyService>()
                 .AddScoped<ITokenGenerator, TokenGenerator>()
-                .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b=> b.MigrationsAssembly("FileManager.DataAccessLayer")));
+                .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b => b.MigrationsAssembly("FileManager.DataAccessLayer")));
 
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.SuppressAsyncSuffixInActionNames = false;
+            });
 
             services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
 
@@ -70,13 +70,6 @@ namespace FileManager.Web
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            //app.UseHealthChecks("/health", new HealthCheckOptions
-            //{
-            //    Predicate = _ => true,
-            //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            //});
-            //app.UseHealthChecksUI(config => config.UIPath = "/health-ui");
 
             app.UseAuthentication();
             app.UseAuthorization();
