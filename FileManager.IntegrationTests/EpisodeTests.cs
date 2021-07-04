@@ -1,7 +1,9 @@
 ﻿using FileManager.Models;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Xunit;
 
 namespace FileManager.IntegrationTests
@@ -91,18 +93,10 @@ namespace FileManager.IntegrationTests
             // Act
             var responseMessage = await _client.PostAsync("api/Episode", CreateStringContent(episode));
             var strContent = await responseMessage.Content.ReadAsStringAsync();
-            var success = DeserializeObject<bool>(strContent);
+            episode = DeserializeObject<Episode>(strContent);
 
             // Assert
-            Assert.True(success);
-            Assert.Equal(2, GetEpisodes().Result.Count());
-        }
-
-        private async Task<IEnumerable<Episode>> GetEpisodes()
-        {
-            var responseMessage = await _client.GetAsync("api/Episode");
-            var strContent = await responseMessage.Content.ReadAsStringAsync();
-            return DeserializeObject<IEnumerable<Episode>>(strContent);
+            Assert.True(episode.EpisodeId > 0);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace FileManager.Web.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<int>> PostAsync([FromBody]Episode episode)
+        public async Task<ActionResult<Episode>> PostAsync([FromBody]Episode episode)
         {
             _ = await _episodeControllerService.SaveAsync(episode);
 
