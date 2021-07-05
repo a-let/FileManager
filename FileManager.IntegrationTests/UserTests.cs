@@ -79,10 +79,11 @@ namespace FileManager.IntegrationTests
 
             // Act
             var responseMessage = await _client.PostAsync("api/User", CreateStringContent(user));
-            var userId = DeserializeObject<int>(await responseMessage.Content.ReadAsStringAsync());
+
+            user = DeserializeObject<UserDto>(await responseMessage.Content.ReadAsStringAsync());
 
             // Assert
-            Assert.Equal(2, userId);
+            Assert.True(user.UserId > 0);
         }
 
         [Fact]
@@ -99,7 +100,16 @@ namespace FileManager.IntegrationTests
             var responseMessage = await _client.PostAsync("api/User/Authenticate", CreateStringContent(user));
 
             // Assert
-            Assert.Equal(HttpStatusCode.OK, responseMessage.StatusCode);
+            Assert.Equal(HttpStatusCode.Accepted, responseMessage.StatusCode);
+        }
+
+        private class UserResponse
+        {
+            public int Id { get; set; }
+            public string UserName { get; set; }
+            public string FirstName { get; set; }
+            public string LastNamne { get; set; }
+            public string Token { get; set; }
         }
     }
 }

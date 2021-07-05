@@ -1,9 +1,9 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,7 +11,7 @@ namespace FileManager.Web.Controllers
 {
     [Produces("application/json")]
     [Route("api/Episode")]
-    public class EpisodeController : Controller
+    public class EpisodeController : ControllerBase
     {
         private readonly IEpisodeControllerService _episodeControllerService;
 
@@ -20,58 +20,56 @@ namespace FileManager.Web.Controllers
             _episodeControllerService = episodeControllerService;
         }
 
-        // GET: api/Episode
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Episode>>> Get()
         {
             var episodes = await _episodeControllerService.GetAsync();
             return Ok(episodes);
         }
 
-        // GET: api/Episode/id/5
         [HttpGet("id/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Episode>> GetByIdAsync(int id)
         {
             var episode = await _episodeControllerService.GetAsync(id);
+
+            if (episode == null)
+                return NotFound();
+
             return Ok(episode);
         }
 
-        // GET: api/Episode/name/Name
         [HttpGet("name/{name}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Episode>> GetByName(string name)
         {
             var episode = await _episodeControllerService.GetAsync(name);
+
+            if (episode == null)
+                return NotFound();
+
             return Ok(episode);
         }
-        
-        // POST: api/Episode
+
         [HttpPost]
-        public async Task<ActionResult<int>> PostAsync([FromBody]Episode episode)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Episode>> PostAsync([FromBody]Episode episode)
         {
-            var episodeId = await _episodeControllerService.SaveAsync(episode);
-            return Ok(episodeId);
+            _ = await _episodeControllerService.SaveAsync(episode);
+
+            return CreatedAtAction(nameof(GetByIdAsync), new { Id = episode.EpisodeId }, episode);
         }
-        
-        // GET: api/Episode/seasonid/5
+
+        // TODO: Get episodes by season id via season controller
         [HttpGet("seasonid/{seasonId}")]
         public ActionResult<IEnumerable<Episode>> GetBySeasonId(int seasonId)
         {
             var episodes = _episodeControllerService.GetEpisodesBySeasonId(seasonId);
             return Ok(episodes);
-        }
-
-        // PUT: api/Episode/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody]string value)
-        {
-            throw new NotImplementedException();
-        }
-        
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

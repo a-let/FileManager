@@ -17,6 +17,7 @@ namespace FileManager.Web.Middlewares
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "FileManger V1");
+                c.RoutePrefix = string.Empty;
             });
 
             return app;

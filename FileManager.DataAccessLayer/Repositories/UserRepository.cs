@@ -18,7 +18,7 @@ namespace FileManager.DataAccessLayer.Repositories
 
         public async Task<User> GetUserByIdAsync(int id) => await _context.User.FindAsync(id);
 
-        public User GetUserByUserName(string userName) => _context.User.Single(u => u.UserName.Equals(userName));
+        public User GetUserByUserName(string userName) => _context.User.FirstOrDefault(u => u.UserName == userName);
 
         public IEnumerable<User> GetUsers() => _context.User.ToArray();
 

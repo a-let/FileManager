@@ -1,15 +1,17 @@
-﻿using FileManager.Web.Services.Interfaces;
+﻿using FileManager.DataAccessLayer;
+using FileManager.Web.Services.Interfaces;
 
 using Logging;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 using Swashbuckle.AspNetCore.Filters;
-using Swashbuckle.AspNetCore.Swagger;
-using System.Collections.Generic;
+
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,9 +22,12 @@ namespace FileManager.Web.Middlewares
         public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHealthChecks()
-                .AddSqlServer(configuration["FileManagerConnectionString"], name: "FileManager Database Check", tags: new[] { "filemanagerdb" });
+                .AddDbContextCheck<FileManagerContext>();
 
-            services.AddHealthChecksUI();
+            services.AddDbContext<FileManagerContext>(options =>
+            {
+                options.UseSqlServer(configuration["FileManagerConnectionString"]);
+            });
 
             return services;
         }
@@ -43,7 +48,7 @@ namespace FileManager.Web.Middlewares
                         {
                             var userService = context.HttpContext.RequestServices.GetRequiredService<IUserControllerService>();
                             var userName = context.Principal.Identity.Name;
-                            // TODO: Make awaitable if possible.
+
                             var user = userService.GetAsync(userName).Result;
 
                             if (user == null)
@@ -61,7 +66,27 @@ namespace FileManager.Web.Middlewares
                             var remoteIp = context.HttpContext.Connection.RemoteIpAddress.ToString();
 
                             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
-                            logger.LogErrorAsync(context.Exception, $"Authentication Failed - Local: {localIp} Remote: {remoteIp}");
+                            logger.LogErrorAsync(context.Exception, $"Authentication Failed - Local: {localIp} Remote: {remoteIp}").GetAwaiter().GetResult();
+                            return Task.CompletedTask;
+                        },
+                        OnChallenge = context =>
+                        {
+                            var localIp = context.HttpContext.Connection.LocalIpAddress.ToString();
+                            var remoteIp = context.HttpContext.Connection.RemoteIpAddress.ToString();
+  
+                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
+
+                            // TODO: Handle null exception
+                            logger.LogErrorAsync(context.AuthenticateFailure, $"Authentication Challenge - {context.Error} - Local: {localIp} Remote: {remoteIp}").GetAwaiter().GetResult();
+                            return Task.CompletedTask;
+                        },
+                        OnForbidden = context =>
+                        {
+                            var localIp = context.HttpContext.Connection.LocalIpAddress.ToString();
+                            var remoteIp = context.HttpContext.Connection.RemoteIpAddress.ToString();
+
+                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
+                            logger.LogErrorAsync(context.Result.Failure, $"Authentication Forbidden - Local: {localIp} Remote: {remoteIp}").GetAwaiter().GetResult();
                             return Task.CompletedTask;
                         }
                     };
@@ -85,18 +110,30 @@ namespace FileManager.Web.Middlewares
             services
                 .AddSwaggerGen(c =>
                 {
-                    c.SwaggerDoc("v1", new Info { Title = "FileManager API", Version = "v1" });
-                    c.AddSecurityDefinition("Bearer",
-                        new ApiKeyScheme
-                        {
-                            In = "header",
-                            Description = "Please enter JWT with Bearer into field",
-                            Name = "Authorization",
-                            Type = "apiKey"
-                        });
-                    c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "FileManager API", Version = "v1" });
+                    c.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
                     {
-                        { "Bearer", new string[] { } },
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "bearer"
+                        },
+                        In = ParameterLocation.Header,
+                        Description = "Please enter JWT with bearer into field",
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        BearerFormat = "JWT"
+                    });
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" }
+                            },
+                            new string[] { }
+                        }
                     });
                     c.ExampleFilters();
                 })

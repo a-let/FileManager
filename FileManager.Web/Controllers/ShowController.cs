@@ -1,9 +1,9 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,50 +20,46 @@ namespace FileManager.Web.Controllers
             _showControllerService = showControllerService;
         }
 
-        // GET: api/Show
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Show>>> Get()
         {
             var shows = await _showControllerService.GetAsync();
             return Ok(shows);
         }
 
-        // GET: api/Show/5
         [HttpGet("id/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Show>> GetById(int id)
         {
             var show = await _showControllerService.GetAsync(id);
+
+            if (show == null)
+                return NotFound();
+
             return Ok(show);
         }
 
-        // GET: api/Show/name/Name
         [HttpGet("name/{name}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Show>> GetByName(string name)
         {
             var show = await _showControllerService.GetAsync(name);
+
+            if (show == null)
+                return NotFound();
+
             return Ok(show);
         }
-        
-        // POST: api/Show
+
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody]Show show)
+        public async Task<ActionResult<Show>> Post([FromBody]Show show)
         {
-            var showId = await _showControllerService.SaveAsync(show);
-            return Ok(showId);
-        }
-        
-        // PUT: api/Show/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody]string value)
-        {
-            throw new NotImplementedException();
-        }
-        
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            throw new NotImplementedException();
+            _ = await _showControllerService.SaveAsync(show);
+
+            return CreatedAtAction(nameof(GetById), new { Id = show.ShowId }, show);
         }
     }
 }

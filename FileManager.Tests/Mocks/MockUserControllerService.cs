@@ -11,7 +11,7 @@ namespace FileManager.Tests.Mocks
 
         public async Task<UserDto> GetAsync(int userId) => await Task.FromResult(new UserDto());
 
-        public async Task<UserDto> GetAsync(string userName) => new UserDto();
+        public async Task<UserDto> GetAsync(string userName) => await Task.FromResult(new UserDto());
 
         public async Task<IEnumerable<UserDto>> GetAsync() => await Task.FromResult(new[] { new UserDto() });
 

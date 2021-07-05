@@ -19,7 +19,7 @@ namespace FileManager.DataAccessLayer.Repositories
 
         public async Task<Movie> GetMovieByIdAsync(int id) => await _context.Movie.FindAsync(id);
 
-        public Movie GetMovieByName(string name) => _context.Movie.Single(m => m.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        public Movie GetMovieByName(string name) => _context.Movie.FirstOrDefault(m => m.Name == name);
 
         public IEnumerable<Movie> GetMovies() => _context.Movie;
 

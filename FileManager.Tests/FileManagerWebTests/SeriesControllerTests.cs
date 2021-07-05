@@ -63,10 +63,10 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             // Act
-            var seriesId = (await _seriesController.Post(series)).GetValue();
+            series = (await _seriesController.Post(series)).GetValue();
 
             // Assert
-            Assert.True(seriesId > 0);
+            Assert.True(series.SeriesId > 0);
         }
     }
 }

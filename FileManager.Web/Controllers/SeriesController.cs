@@ -1,9 +1,9 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,50 +20,47 @@ namespace FileManager.Web.Controllers
             _seriesControllerService = seriesControllerService;
         }
 
-        // GET: api/Series
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
         public async Task<ActionResult<IEnumerable<Series>>> Get()
         {
             var series = await _seriesControllerService.GetAsync();
             return Ok(series);
         }
 
-        // GET: api/Series/5
         [HttpGet("id/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Series>> GetById(int id)
         {
             var series = await _seriesControllerService.GetAsync(id);
+
+            if (series == null)
+                return NotFound();
+
             return Ok(series);
         }
 
-        // GET: api/Series/name/Name
         [HttpGet("name/{name}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Series>> GetByName(string name)
         {
             var series = await _seriesControllerService.GetAsync(name);
+
+            if (series == null)
+                return NotFound();
+
             return Ok(series);
         }
-        
-        // POST: api/Series
+
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody]Series series)
+        public async Task<ActionResult<Series>> Post([FromBody]Series series)
         {
-            var seriesId = await _seriesControllerService.SaveAsync(series);
-            return Ok(seriesId);
-        }
-        
-        // PUT: api/Series/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody]string value)
-        {
-            throw new NotImplementedException();
-        }
-        
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            throw new NotImplementedException();
+            _ = await _seriesControllerService.SaveAsync(series);
+
+            return CreatedAtAction(nameof(GetById), new { Id = series.SeriesId }, series);
         }
     }
 }

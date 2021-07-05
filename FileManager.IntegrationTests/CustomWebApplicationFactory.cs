@@ -1,13 +1,17 @@
 ﻿using FileManager.DataAccessLayer;
 using FileManager.Models;
-using FileManager.Web.Services;
 using FileManager.Web.Services.Interfaces;
+
+using Logging;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using System;
+using System.Linq;
 
 namespace FileManager.IntegrationTests
 {
@@ -23,17 +27,12 @@ namespace FileManager.IntegrationTests
 
             builder.ConfigureServices(services =>
             {
-                var serviceProvider = new ServiceCollection()
-                    .AddEntityFrameworkSqlServer()
-                    .BuildServiceProvider();
+                RemoveDbContext(services);
 
                 services.AddDbContext<FileManagerContext>(options =>
                 {
                     options.UseSqlServer(configuration["IntegrationTestsConnectionString"]);
-                    options.UseInternalServiceProvider(serviceProvider);
                 });
-
-                services.AddScoped<ICryptographyService, CryptographyService>();
 
                 var sp = services.BuildServiceProvider();
 
@@ -41,13 +40,42 @@ namespace FileManager.IntegrationTests
                 {
                     var scopedServices = scope.ServiceProvider;
                     var _fileManagerContext = scopedServices.GetRequiredService<FileManagerContext>();
+                    var _logger = scopedServices.GetRequiredService<ILogger>();
 
-                    _fileManagerContext.Database.EnsureDeleted();
-                    _fileManagerContext.Database.EnsureCreated();
+                    try
+                    {
+                        var connectionString = _fileManagerContext.Database.GetDbConnection().ConnectionString;
+                        if (!connectionString.Contains("IntegrationTests"))
+                            throw new InvalidOperationException("Incorrect connection string");
 
-                    InitializeDbForTests(_fileManagerContext, scopedServices.GetRequiredService<ICryptographyService>());
+                        _fileManagerContext.Database.EnsureDeleted();
+                        _fileManagerContext.Database.EnsureCreated();
+
+                        InitializeDbForTests(_fileManagerContext, scopedServices.GetRequiredService<ICryptographyService>());
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogErrorAsync(ex, "Failed to create, delete, or init database. ");
+                        throw;
+                    }
                 }
             });
+        }
+
+        /// <summary>
+        /// Required due to migrating from ASP.NET Core 2.2 to 3.0 which causes the app's Startup.ConfiugreServices
+        /// to run AFTER the test apps builder.ConfigureServices.
+        /// </summary>
+        /// <remarks>
+        /// https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.0#customize-webapplicationfactory
+        /// </remarks>
+        /// <param name="services"></param>
+        private void RemoveDbContext(IServiceCollection services)
+        {
+            var descriptor = services
+                    .SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<FileManagerContext>));
+
+            services.Remove(descriptor);
         }
 
         private void InitializeDbForTests(FileManagerContext db, ICryptographyService cryptoService)

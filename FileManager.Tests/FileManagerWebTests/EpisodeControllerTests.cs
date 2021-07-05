@@ -80,10 +80,10 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             // Act
-            var episodeId = (await _episodeController.PostAsync(episode)).GetValue();
+            episode = (await _episodeController.PostAsync(episode)).GetValue();
 
             // Assert
-            Assert.Equal(1, episodeId);
+            Assert.Equal(1, episode.EpisodeId);
         }
     }
 }

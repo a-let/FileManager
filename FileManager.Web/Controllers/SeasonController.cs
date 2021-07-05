@@ -1,9 +1,9 @@
 ﻿using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,7 +11,7 @@ namespace FileManager.Web.Controllers
 {
     [Produces("application/json")]
     [Route("api/Season")]
-    public class SeasonController : Controller
+    public class SeasonController : ControllerBase
     {
         private readonly ISeasonControllerService _seasonControllerService;
 
@@ -20,50 +20,43 @@ namespace FileManager.Web.Controllers
             _seasonControllerService = seasonControllerService;
         }
 
-        // GET: api/Season
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Season>>> Get()
         {
             var seasons = await _seasonControllerService.GetAsync();
             return Ok(seasons);
         }
 
-        // GET: api/Season/5
         [HttpGet("id/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Season>> GetById(int id)
         {
             var season = await _seasonControllerService.GetAsync(id);
+
+            if (season == null)
+                return NotFound();
+
             return Ok(season);
         }
-        
-        // POST: api/Season
+
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody]Season season)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Season>> Post([FromBody]Season season)
         {
-            var seasonId = await _seasonControllerService.SaveAsync(season);
-            return Ok(seasonId);
+            _ = await _seasonControllerService.SaveAsync(season);
+
+            return CreatedAtAction(nameof(GetById), new { Id = season.SeasonId }, season);
         }
 
-        // Get: api/Season/showId/5
+        // TODO: Get seasons by show id via show controller
         [HttpGet("showId/{showId}")]
         public ActionResult<IEnumerable<Season>> GetByShowId(int showId)
         {
             var seasons = _seasonControllerService.GetSeasonsByShowId(showId);
             return Ok(seasons);
-        }
-        
-        // PUT: api/Season/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody]string value)
-        {
-            throw new NotImplementedException();
-        }
-        
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -64,10 +64,10 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             // Act
-            var seasonId = (await _seasonController.Post(season)).GetValue();
+            season = (await _seasonController.Post(season)).GetValue();
 
             // Assert
-            Assert.True(seasonId > 0);
+            Assert.True(season.SeasonId > 0);
         }
     }
 }
