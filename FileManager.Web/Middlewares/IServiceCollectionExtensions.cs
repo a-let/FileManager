@@ -75,6 +75,8 @@ namespace FileManager.Web.Middlewares
                             var remoteIp = context.HttpContext.Connection.RemoteIpAddress.ToString();
   
                             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
+
+                            // TODO: Handle null exception
                             logger.LogErrorAsync(context.AuthenticateFailure, $"Authentication Challenge - {context.Error} - Local: {localIp} Remote: {remoteIp}").GetAwaiter().GetResult();
                             return Task.CompletedTask;
                         },
