@@ -64,10 +64,10 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             // Act
-            var showId = (await _showController.Post(show)).GetValue();
+            show = (await _showController.Post(show)).GetValue();
 
             // Assert
-            Assert.True(showId > 0);
+            Assert.True(show.ShowId > 0);
         }
     }
 }

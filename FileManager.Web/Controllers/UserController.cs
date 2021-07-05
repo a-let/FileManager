@@ -64,7 +64,10 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserDto>> Post([FromBody]UserDto user)
         {
-            _ = await _userControllerService.SaveAsync(user);
+            user.UserId = await _userControllerService.SaveAsync(user);
+
+            // TODO : Decide what to do with password
+            user.Password = string.Empty;
 
             return CreatedAtAction(nameof(GetById), new { Id = user.UserId }, user);
         }
