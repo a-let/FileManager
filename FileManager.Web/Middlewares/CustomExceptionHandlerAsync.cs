@@ -42,7 +42,7 @@ namespace FileManager.Web.Middlewares
         {
             var response = context.Response;
             response.ContentType = "application/json";
-            response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+            response.StatusCode = StatusCodes.Status500InternalServerError;
 
             if (!_allowedExceptionTypes.Contains(ex.GetType()))
                 await response.WriteAsync(CreateMessage("Error occured"));

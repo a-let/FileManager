@@ -11,7 +11,7 @@ namespace FileManager.Web.Controllers
 {
     [Produces("application/json")]
     [Route("api/Episode")]
-    public class EpisodeController : Controller
+    public class EpisodeController : ControllerBase
     {
         private readonly IEpisodeControllerService _episodeControllerService;
 
