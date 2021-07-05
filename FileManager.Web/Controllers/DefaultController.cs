@@ -15,7 +15,6 @@ namespace FileManager.Web.Controllers
         public ActionResult<string> Get()
         {
             var message = $"File Manager - {Environment.MachineName} - {Assembly.GetExecutingAssembly().GetName().Version}";
-
             return Ok(message);
         }
     }
