@@ -5,8 +5,6 @@ using FileManager.Web.Middlewares;
 using FileManager.Web.Services;
 using FileManager.Web.Services.Interfaces;
 
-using Logging;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using System.Reflection;
+using Serilog;
 
 namespace FileManager.Web
 {
@@ -52,8 +50,6 @@ namespace FileManager.Web
                 options.SuppressAsyncSuffixInActionNames = false;
             });
 
-            services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
-
             services.AddCustomHealthChecks(_configuration);
             services.AddCustomAuthentication(_configuration);
             services.AddCustomSwagger(_configuration);
@@ -62,6 +58,8 @@ namespace FileManager.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSerilogRequestLogging();
+
             app.UseCustomExceptionHandler();
 
             if (!env.IsProduction())
