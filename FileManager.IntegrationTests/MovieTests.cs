@@ -11,7 +11,7 @@ namespace FileManager.IntegrationTests
     [Collection("Integration Test Collection")]
     public class MovieTests : TestBase
     {
-        public MovieTests() : base(new CustomWebApplicationFactory<Web.Startup>())
+        public MovieTests(CustomWebApplicationFactory<Web.Startup> factory) : base(factory)
         { }
 
         [Fact]

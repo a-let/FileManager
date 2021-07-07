@@ -12,7 +12,7 @@ namespace FileManager.IntegrationTests
     [Collection("Integration Test Collection")]
     public class UserTests : TestBase
     {
-        public UserTests() : base(new CustomWebApplicationFactory<Web.Startup>())
+        public UserTests(CustomWebApplicationFactory<Web.Startup> factory) : base(factory)
         { }
 
         [Fact]

@@ -11,7 +11,7 @@ namespace FileManager.IntegrationTests
     [Collection("Integration Test Collection")]
     public class SeasonTests : TestBase
     {
-        public SeasonTests() : base(new CustomWebApplicationFactory<Web.Startup>())
+        public SeasonTests(CustomWebApplicationFactory<Web.Startup> factory) : base(factory)
         { }
 
         [Fact]

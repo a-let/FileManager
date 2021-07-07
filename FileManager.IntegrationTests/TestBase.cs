@@ -1,7 +1,5 @@
 ﻿using FileManager.Models.Dtos;
 
-using Microsoft.AspNetCore.Mvc.Testing;
-
 using Newtonsoft.Json;
 
 using System.Collections.Generic;
@@ -13,7 +11,7 @@ using Xunit;
 
 namespace FileManager.IntegrationTests
 {
-    public abstract class TestBase : IClassFixture<WebApplicationFactory<Web.Startup>>
+    public abstract class TestBase : IClassFixture<CustomWebApplicationFactory<Web.Startup>>
     {
         protected HttpClient _client;
 
