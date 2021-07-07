@@ -90,6 +90,16 @@ namespace FileManager.IntegrationTests
             });
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (!disposing)
+                return;
+
+            Log.CloseAndFlush();
+
+            base.Dispose(disposing);
+        }
+
         /// <summary>
         /// Required due to migrating from ASP.NET Core 2.2 to 3.0 which causes the app's Startup.ConfiugreServices
         /// to run AFTER the test apps builder.ConfigureServices.
