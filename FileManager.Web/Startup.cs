@@ -52,7 +52,7 @@ namespace FileManager.Web
 
             services.AddCustomHealthChecks(_configuration);
             services.AddCustomAuthentication(_configuration);
-            services.AddCustomSwagger(_configuration);
+            services.AddCustomSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

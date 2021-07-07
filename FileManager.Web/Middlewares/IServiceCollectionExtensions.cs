@@ -1,17 +1,15 @@
 ﻿using FileManager.DataAccessLayer;
 using FileManager.Web.Services.Interfaces;
 
-using Logging;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 using Swashbuckle.AspNetCore.Filters;
-
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,8 +51,8 @@ namespace FileManager.Web.Middlewares
 
                             if (user == null)
                             {
-                                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
-                                logger.LogInfoAsync("Login Failed");
+                                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
+                                logger.LogInformation("Login Failed");
                                 context.Fail("Login Failed");
                             }
 
@@ -62,31 +60,35 @@ namespace FileManager.Web.Middlewares
                         },
                         OnAuthenticationFailed = context =>
                         {
-                            var localIp = context.HttpContext.Connection.LocalIpAddress.ToString();
+                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
                             var remoteIp = context.HttpContext.Connection.RemoteIpAddress.ToString();
 
-                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
-                            logger.LogErrorAsync(context.Exception, $"Authentication Failed - Local: {localIp} Remote: {remoteIp}").GetAwaiter().GetResult();
+                            logger.LogError(context.Exception, "Authentication Failed - IP: {RemoteIp}", remoteIp);
+
                             return Task.CompletedTask;
                         },
                         OnChallenge = context =>
                         {
-                            var localIp = context.HttpContext.Connection.LocalIpAddress.ToString();
+                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
                             var remoteIp = context.HttpContext.Connection.RemoteIpAddress.ToString();
-  
-                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
 
-                            // TODO: Handle null exception
-                            logger.LogErrorAsync(context.AuthenticateFailure, $"Authentication Challenge - {context.Error} - Local: {localIp} Remote: {remoteIp}").GetAwaiter().GetResult();
+                            if (context.AuthenticateFailure == null)
+                                logger.LogWarning("Authentication Challenge - IP: {RemoteIp}", remoteIp);
+                            else
+                                logger.LogError(context.AuthenticateFailure, "Authentication Challenge - IP: {RemoteIp}", remoteIp);
+
                             return Task.CompletedTask;
                         },
                         OnForbidden = context =>
                         {
-                            var localIp = context.HttpContext.Connection.LocalIpAddress.ToString();
+                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
                             var remoteIp = context.HttpContext.Connection.RemoteIpAddress.ToString();
 
-                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger>();
-                            logger.LogErrorAsync(context.Result.Failure, $"Authentication Forbidden - Local: {localIp} Remote: {remoteIp}").GetAwaiter().GetResult();
+                            if (context.Result.Failure == null)
+                                logger.LogWarning("Authentication Forbidden - IP: {RemoteIp}", remoteIp);
+                            else
+                                logger.LogError(context.Result.Failure, "Authentication Forbidden - IP: {RemoteIp}", remoteIp);
+
                             return Task.CompletedTask;
                         }
                     };
@@ -105,7 +107,7 @@ namespace FileManager.Web.Middlewares
             return services;
         }
 
-        public static IServiceCollection AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
         {
             services
                 .AddSwaggerGen(c =>
