@@ -17,19 +17,27 @@ using System;
 using System.Linq;
 using System.Reflection;
 
+using Xunit.Abstractions;
+
 namespace FileManager.IntegrationTests
 {
     public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Web.Startup>
     {
+        private readonly IMessageSink _messageSink;
+
+        public CustomWebApplicationFactory(IMessageSink messageSink)
+        {
+            _messageSink = messageSink;
+        }
+
         protected override IHost CreateHost(IHostBuilder builder)
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+                .MinimumLevel.Warning()
+                .MinimumLevel.Override("FileManager", LogEventLevel.Debug)
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("AssemblyName", Assembly.GetExecutingAssembly().GetName().Name)
-                .WriteTo.Debug()
+                .WriteTo.XUnitTestSink(_messageSink)
                 .CreateLogger();
 
             return base.CreateHost(builder);
