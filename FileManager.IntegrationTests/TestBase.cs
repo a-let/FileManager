@@ -7,11 +7,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-using Xunit;
-
 namespace FileManager.IntegrationTests
 {
-    public abstract class TestBase : IClassFixture<CustomWebApplicationFactory<Web.Startup>>
+    public abstract class TestBase
     {
         protected HttpClient _client;
 
