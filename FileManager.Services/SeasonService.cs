@@ -1,9 +1,8 @@
 ﻿using FileManager.Interfaces;
 using FileManager.Models;
 
-using Logging;
-
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
@@ -15,9 +14,9 @@ namespace FileManager.Services
     public class SeasonService : ServiceBase, ISeasonService
     {
         private readonly IConfigurationSection _seasonAddresses;
-        private readonly ILogger _logger;
+        private readonly ILogger<SeasonService> _logger;
 
-        public SeasonService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger) :
+        public SeasonService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<SeasonService> logger) :
             base(httpClientFactory, "FileManager")
         {
             _seasonAddresses = configuration.GetSection("SeasonAddresses");
@@ -36,7 +35,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting season - {ex.Message}");
+                _logger.LogError(ex, "Error getting season");
                 throw;
             }
         }
@@ -50,7 +49,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting seasons - {ex.Message}");
+                _logger.LogError(ex, "Error getting seasons");
                 throw;
             }
         }
@@ -69,7 +68,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting seasons - {ex.Message}");
+                _logger.LogError(ex, "Error getting seasons");
                 throw;
             }
         }
@@ -86,7 +85,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error saving season - {ex.Message}");
+                _logger.LogError(ex, "Error saving season");
                 throw;
             }
         }

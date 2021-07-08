@@ -1,9 +1,8 @@
 ﻿using FileManager.Interfaces;
 using FileManager.Models;
 
-using Logging;
-
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
@@ -15,9 +14,9 @@ namespace FileManager.Services
     internal class EpisodeService : ServiceBase, IEpisodeService
     {
         private readonly IConfigurationSection _episodeAddresses;
-        private readonly ILogger _logger;
+        private readonly ILogger<EpisodeService> _logger;
 
-        public EpisodeService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger) :
+        public EpisodeService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<EpisodeService> logger) :
             base(httpClientFactory, "FileManager")
         {
             _episodeAddresses = configuration.GetSection("EpisodeAddresses");
@@ -33,7 +32,7 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting episodes - {ex.Message}");
+                _logger.LogError(ex, "Error getting episodes");
                 throw;
             }
         }
@@ -50,7 +49,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting episode - {ex.Message}");
+                _logger.LogError(ex, "Error getting episode");
                 throw;
             }
         }
@@ -67,7 +66,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting episodes - {ex.Message}");
+                _logger.LogError(ex, "Error getting episodes");
                 throw;
             }
         }
@@ -84,7 +83,7 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error saving episode - {ex.Message}");
+                _logger.LogError(ex, "Error saving episode");
                 throw;
             }
             
@@ -102,7 +101,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting episodes - {ex.Message}");
+                _logger.LogError(ex, "Error getting episodes");
                 throw;
             }
         }

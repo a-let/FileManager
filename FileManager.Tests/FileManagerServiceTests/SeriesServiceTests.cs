@@ -21,7 +21,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Series>())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeriesService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seriesService.GetAsync());
@@ -39,7 +39,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Season())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeriesService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seriesService.GetAsync(1));
@@ -57,7 +57,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeriesService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seriesService.GetAsync(0));
@@ -75,7 +75,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Season())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeriesService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seriesService.GetAsync("Test"));
@@ -93,7 +93,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeriesService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seriesService.GetAsync(string.Empty));
@@ -111,7 +111,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeriesService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seriesService.SaveAsync(new Series()));
@@ -129,7 +129,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seriesService = new SeriesService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeriesService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seriesService.SaveAsync(null));

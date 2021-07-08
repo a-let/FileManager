@@ -2,21 +2,47 @@
 using FileManager.Models;
 using FileManager.Web.Services.Interfaces;
 
-using Logging;
-
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+using Serilog;
+using Serilog.Events;
 
 using System;
 using System.Linq;
+using System.Reflection;
+
+using Xunit.Abstractions;
 
 namespace FileManager.IntegrationTests
 {
     public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Web.Startup>
     {
+        private readonly IMessageSink _messageSink;
+
+        public CustomWebApplicationFactory(IMessageSink messageSink)
+        {
+            _messageSink = messageSink;
+        }
+
+        protected override IHost CreateHost(IHostBuilder builder)
+        {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Warning()
+                .MinimumLevel.Override("FileManager", LogEventLevel.Debug)
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("AssemblyName", Assembly.GetExecutingAssembly().GetName().Name)
+                .WriteTo.XUnitTestSink(_messageSink)
+                .CreateLogger();
+
+            return base.CreateHost(builder);
+        }
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             var configuration = new ConfigurationBuilder()
@@ -40,7 +66,7 @@ namespace FileManager.IntegrationTests
                 {
                     var scopedServices = scope.ServiceProvider;
                     var _fileManagerContext = scopedServices.GetRequiredService<FileManagerContext>();
-                    var _logger = scopedServices.GetRequiredService<ILogger>();
+                    var _logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory<Web.Startup>>>();
 
                     try
                     {
@@ -52,10 +78,12 @@ namespace FileManager.IntegrationTests
                         _fileManagerContext.Database.EnsureCreated();
 
                         InitializeDbForTests(_fileManagerContext, scopedServices.GetRequiredService<ICryptographyService>());
+
+                        _logger.LogInformation("Database Initialized");
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogErrorAsync(ex, "Failed to create, delete, or init database. ");
+                        _logger.LogError(ex, "Failed to create, delete, or init database. ");
                         throw;
                     }
                 }

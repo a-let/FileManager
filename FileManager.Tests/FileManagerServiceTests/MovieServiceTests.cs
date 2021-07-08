@@ -21,7 +21,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Movie>())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog<MovieService>());
 
             // Arrange
             var exception = await Record.ExceptionAsync(async () => await movieService.GetAsync());
@@ -39,7 +39,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Movie())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog<MovieService>());
 
             // Arrange
             var exception = await Record.ExceptionAsync(async () => await movieService.GetAsync(1));
@@ -57,7 +57,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog<MovieService>());
 
             // Arrange
             var exception = await Record.ExceptionAsync(async () => await movieService.GetAsync(0));
@@ -75,7 +75,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Movie())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog<MovieService>());
 
             // Arrange
             var exception = await Record.ExceptionAsync(async () => await movieService.GetAsync("Test Name"));
@@ -93,7 +93,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog<MovieService>());
 
             // Arrange
             var exception = await Record.ExceptionAsync(async () => await movieService.GetAsync(""));
@@ -111,7 +111,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog<MovieService>());
 
             // Arrange
             var movie = new Movie();
@@ -131,7 +131,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog<MovieService>());
 
             // Arrange
             var exception = await Record.ExceptionAsync(async () => await movieService.SaveAsync(null));
@@ -149,7 +149,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Movie>())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog<MovieService>());
 
             // Arrange
             var exception = await Record.ExceptionAsync(async () => await movieService.GetMoviesBySeriesId(1));
@@ -167,7 +167,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var movieService = new MovieService(new MockConfiguration(), mockHttpClientFactory, new MockLog<MovieService>());
 
             // Arrange
             var exception = await Record.ExceptionAsync(async () => await movieService.GetMoviesBySeriesId(0));

@@ -21,7 +21,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Season())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeasonService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seasonService.GetAsync(1));
@@ -39,7 +39,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeasonService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seasonService.GetAsync(0));
@@ -57,7 +57,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Season>())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeasonService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seasonService.GetAsync());
@@ -75,7 +75,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Season>())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeasonService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seasonService.GetSeasonsByShowId(1));
@@ -93,7 +93,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeasonService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seasonService.GetSeasonsByShowId(0));
@@ -111,7 +111,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeasonService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seasonService.SaveAsync(new Season()));
@@ -129,7 +129,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var seasonService = new SeasonService(new MockConfiguration(), mockHttpClientFactory, new MockLog<SeasonService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await seasonService.SaveAsync(null));

@@ -8,7 +8,7 @@ using System;
 
 namespace FileManager.ConsoleApp
 {
-    public  class Program
+    public class Program
     {
         private static readonly ServiceProvider _services = Setup.CreateServices();
         private static readonly IFileManagerClient _client = _services.GetService<IFileManagerClient>();

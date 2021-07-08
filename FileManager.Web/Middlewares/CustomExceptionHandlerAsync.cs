@@ -1,7 +1,5 @@
-﻿using Logging;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 using Newtonsoft.Json;
 
@@ -13,7 +11,8 @@ namespace FileManager.Web.Middlewares
 {
     public class CustomExceptionHandlerAsync
     {
-        private readonly RequestDelegate _request;
+        private readonly ILogger<CustomExceptionHandlerAsync> _logger;
+        private readonly RequestDelegate _next;
         private readonly Type[] _allowedExceptionTypes = new[] 
         {
             typeof(ArgumentException),
@@ -21,16 +20,17 @@ namespace FileManager.Web.Middlewares
             typeof(NotImplementedException)
         };
 
-        public CustomExceptionHandlerAsync(RequestDelegate request)
+        public CustomExceptionHandlerAsync(RequestDelegate next, ILogger<CustomExceptionHandlerAsync> logger)
         {
-            _request = request;
+            _logger = logger;
+            _next = next;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await _request.Invoke(context);
+                await _next.Invoke(context);
             }
             catch (Exception ex)
             {
@@ -44,15 +44,17 @@ namespace FileManager.Web.Middlewares
             response.ContentType = "application/json";
             response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            if (!_allowedExceptionTypes.Contains(ex.GetType()))
-                await response.WriteAsync(CreateMessage("Error occured"));
+            var remoteIp = context.Connection.RemoteIpAddress.ToString();
+            _logger.LogError(ex, "IP: {RemoteIp} - {Message}", remoteIp, ex.Message);
 
-            await response.WriteAsync(CreateMessage(ex.Message));
+            var responseMessage = !_allowedExceptionTypes.Contains(ex.GetType()) ?
+                CreateMessage("Error occured") :
+                CreateMessage(ex.Message);
 
-            var logger = context.RequestServices.GetRequiredService<ILogger>();
-            await logger.LogErrorAsync(ex, ex.Message);
+            await response.WriteAsync(responseMessage);
         }
 
-        private string CreateMessage(string messageText) => JsonConvert.SerializeObject(new { Message = messageText });
+        private static string CreateMessage(string messageText) =>
+            JsonConvert.SerializeObject(new { Message = messageText });
     }
 }
