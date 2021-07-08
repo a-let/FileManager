@@ -21,7 +21,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Episode>())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog<EpisodeService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await episodeService.GetAsync());
@@ -39,7 +39,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Episode())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog<EpisodeService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await episodeService.GetAsync(1));
@@ -57,7 +57,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog<EpisodeService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await episodeService.GetAsync(0));
@@ -75,7 +75,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new Episode { Name = "Test Name"})
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog<EpisodeService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await episodeService.GetAsync("Test Name"));
@@ -93,7 +93,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog<EpisodeService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await episodeService.GetAsync(""));
@@ -111,7 +111,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(1)
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog<EpisodeService>());
 
             // Act
             var episode = new Episode();
@@ -131,7 +131,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentNullException())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog<EpisodeService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await episodeService.SaveAsync(null));
@@ -149,7 +149,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new List<Episode>())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog<EpisodeService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await episodeService.GetEpisodesBySeasonId(1));
@@ -167,7 +167,7 @@ namespace FileManager.Tests.FileManagerServiceTests
                 FakeHttpMessageHandler = new FakeHttpMessageHandler(new ArgumentOutOfRangeException())
             };
 
-            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog());
+            var episodeService = new EpisodeService(new MockConfiguration(), mockHttpClientFactory, new MockLog<EpisodeService>());
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await episodeService.GetEpisodesBySeasonId(0));

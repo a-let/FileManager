@@ -1,9 +1,8 @@
 ﻿using FileManager.Interfaces;
 using FileManager.Models;
 
-using Logging;
-
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
@@ -15,9 +14,9 @@ namespace FileManager.Services
     public class SeriesService : ServiceBase, ISeriesService
     {
         private readonly IConfigurationSection _seriesAddresses;
-        private readonly ILogger _logger;
+        private readonly ILogger<SeriesService> _logger;
 
-        public SeriesService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger) : 
+        public SeriesService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<SeriesService> logger) : 
             base(httpClientFactory, "FileManager")
         {
             _seriesAddresses = configuration.GetSection("SeriesAddresses");
@@ -33,7 +32,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting series - {ex.Message}");
+                _logger.LogError(ex, "Error getting series");
                 throw;
             }
         }
@@ -50,7 +49,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting series - {ex.Message}");
+                _logger.LogError(ex, "Error getting series");
                 throw;
             }
         }
@@ -67,7 +66,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting series - {ex.Message}");
+                _logger.LogError(ex, $"Error getting series");
                 throw;
             }
         }
@@ -84,7 +83,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error saving series - {ex.Message}");
+                _logger.LogError(ex, $"Error saving series");
                 throw;
             }
         }

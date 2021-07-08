@@ -1,13 +1,15 @@
 ﻿using FileManager.Interfaces;
 using FileManager.Services;
 
-using Logging;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 using Polly;
 using Polly.Extensions.Http;
+
+using Serilog;
+using Serilog.Events;
 
 using System;
 using System.IO;
@@ -22,34 +24,74 @@ namespace FileManager.ConsoleApp
 
         public static ServiceProvider CreateServices()
         {
-            var services = new ServiceCollection()
-                .AddSingleton<IConfiguration, ConfigurationRoot>(configuration => (ConfigurationRoot)GetConfiguration())
-                .AddSingleton<IFileManagerClient, FileManagerClient>();
+            Log.Logger = GetLoggerConfiguration()
+                .CreateLogger();
 
-            services.ConfigureLogging(Assembly.GetEntryAssembly().GetName().Name);
+            try
+            {
+                Log.Logger.Information("{AssemblyName}: Starting console");
 
-            services
-                .AddHttpClient("FileManager", c =>
-                {
-                    c.BaseAddress = new Uri(_config["FileManagerBaseAddress"]);
-                    c.DefaultRequestHeaders.Clear();
-                    c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                })
-                .AddPolicyHandler((s, r) => HttpPolicyExtensions.HandleTransientHttpError()
-                    .WaitAndRetryAsync(new[]
+                var services = new ServiceCollection()
+                    .AddLogging(builder =>
                     {
-                        TimeSpan.FromSeconds(1),
-                        TimeSpan.FromSeconds(5),
-                        TimeSpan.FromSeconds(10)
-                    },
-                    onRetryAsync: async (result, timespan, retryAttempt, context) =>
+                        builder.AddSerilog(logger: Log.Logger, dispose: true);
+                    })
+                    .AddSingleton<IConfiguration, ConfigurationRoot>(configuration => (ConfigurationRoot)GetConfiguration())
+                    .AddSingleton<IFileManagerClient, FileManagerClient>();
+
+                services
+                    .AddHttpClient("FileManager", c =>
                     {
-                        var logger = s.GetService<ILogger>();
-                        await logger.LogWarningAsync($"Timeout #{retryAttempt}: {result.Exception.Message}", result.Exception);
-                    }));
+                        c.BaseAddress = new Uri(_config["FileManagerBaseAddress"]);
+                        c.DefaultRequestHeaders.Clear();
+                        c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    })
+                    .AddPolicyHandler((s,r) =>
+                    {
+                        return HttpPolicyExtensions.HandleTransientHttpError()
+                            .WaitAndRetryAsync(new[]
+                            {
+                                TimeSpan.FromSeconds(1),
+                                TimeSpan.FromSeconds(5),
+                                TimeSpan.FromSeconds(10)
+                            },
+                            onRetry: (result, timespan, retryAttempt, conext) =>
+                            {
+                                var logger = s.GetService<ILogger<Setup>>();
 
+                                var message = $"Retry Attempt: {retryAttempt}";
 
-            return services.BuildServiceProvider();
+                                if (result.Exception != null)
+                                    logger.LogWarning(result.Exception, message);
+                                else
+                                    logger.LogWarning(message);
+                            });
+                    });
+
+                return services.BuildServiceProvider();
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Fatal(ex, "{AssemblyName}: Console terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+
+            return null;
+        }
+
+        private static LoggerConfiguration GetLoggerConfiguration()
+        {
+            var loggerConfig = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("AssemblyName", Assembly.GetExecutingAssembly().GetName().Name)
+                .WriteTo.Console();
+
+            return loggerConfig;
         }
 
         private static IConfiguration GetConfiguration()

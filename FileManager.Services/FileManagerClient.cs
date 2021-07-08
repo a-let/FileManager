@@ -2,9 +2,8 @@
 using FileManager.Models;
 using FileManager.Services.Factories;
 
-using Logging;
-
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
@@ -25,14 +24,14 @@ namespace FileManager.Services
             nameof(Show)
         };
 
-        public FileManagerClient(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger)
+        public FileManagerClient(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILoggerFactory loggerFactory)
         {
             _factories = new List<object>();
 
             foreach (var service in _services)
             {
                 var factory = Activator
-                    .CreateInstance(Type.GetType($"FileManager.Services.Factories.{service}Factory"), configuration, httpClientFactory, logger);
+                    .CreateInstance(Type.GetType($"FileManager.Services.Factories.{service}Factory"), configuration, httpClientFactory, loggerFactory);
 
                 _factories.Add(factory);
             }

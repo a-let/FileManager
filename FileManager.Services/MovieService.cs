@@ -1,9 +1,8 @@
 ﻿using FileManager.Interfaces;
 using FileManager.Models;
 
-using Logging;
-
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
@@ -15,9 +14,9 @@ namespace FileManager.Services
     internal class MovieService : ServiceBase, IMovieService
     {        
         private readonly IConfigurationSection _movieAddresses;
-        private readonly ILogger _logger;
+        private readonly ILogger<MovieService> _logger;
 
-        public MovieService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger) :
+        public MovieService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<MovieService> logger) :
             base(httpClientFactory, "FileManager")
         {
             _movieAddresses = configuration.GetSection("MovieAddresses");
@@ -36,7 +35,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting movie - {ex.Message}");
+                _logger.LogError(ex, "Error getting movie}");
                 throw;
             }
         }
@@ -53,7 +52,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting movie - {ex.Message}");
+                _logger.LogError(ex, "Error getting movie");
                 throw;
             }
         }
@@ -67,7 +66,7 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting movies - {ex.Message}");
+                _logger.LogError(ex, "Error getting movies}");
                 throw;
             }
         }
@@ -84,7 +83,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting movie - {ex.Message}");
+                _logger.LogError(ex, "Error getting movie");
                 throw;
             }
         }
@@ -101,7 +100,7 @@ namespace FileManager.Services
             }
             catch(Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error saving movie - {ex.Message}");
+                _logger.LogError(ex, "Error saving movie ");
                 throw;
             }
         }

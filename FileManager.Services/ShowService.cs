@@ -1,9 +1,8 @@
 ﻿using FileManager.Interfaces;
 using FileManager.Models;
 
-using Logging;
-
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
@@ -15,9 +14,9 @@ namespace FileManager.Services
     public class ShowService : ServiceBase, IShowService
     {
         private readonly IConfigurationSection _showAddresses;
-        private readonly ILogger _logger;
+        private readonly ILogger<ShowService> _logger;
 
-        public ShowService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger) :
+        public ShowService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<ShowService> logger) :
             base(httpClientFactory, "FileManager")
         {
             _showAddresses = configuration.GetSection("ShowAddresses");
@@ -37,7 +36,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting show - {ex.Message}");
+                _logger.LogError(ex, "Error getting show");
                 throw;
             }
         }
@@ -54,7 +53,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting show - {ex.Message}");
+                _logger.LogError(ex, "Error getting show");
                 throw;
             }
         }
@@ -68,7 +67,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error getting shows - {ex.Message}");
+                _logger.LogError(ex, "Error getting shows");
                 throw;
             }
         }
@@ -86,7 +85,7 @@ namespace FileManager.Services
             }
             catch (Exception ex)
             {
-                await _logger.LogErrorAsync(ex, $"Error saving show - {ex.Message}");
+                _logger.LogError(ex, $"Error saving show");
                 throw;
             }
         }

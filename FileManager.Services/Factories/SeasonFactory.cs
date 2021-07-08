@@ -1,9 +1,8 @@
 ﻿using FileManager.Interfaces;
 using FileManager.Models;
 
-using Logging;
-
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 using System.Net.Http;
 
@@ -13,13 +12,13 @@ namespace FileManager.Services.Factories
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ILogger _logger;
+        private readonly ILogger<SeasonService> _logger;
 
-        public SeasonFactory(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger logger)
+        public SeasonFactory(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILoggerFactory loggerFactory)
         {
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<SeasonService>();
         }
 
         public override IService<Season> Create() => new SeasonService(_configuration, _httpClientFactory, _logger);
