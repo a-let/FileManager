@@ -1,14 +1,13 @@
 ﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
-    public class MovieRepository : IMovieRepository
+    public class MovieRepository : IRepository<Movie>
     {
         private readonly FileManagerContext _context;
 
@@ -17,15 +16,16 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<Movie> GetMovieByIdAsync(int id) => await _context.Movie.FindAsync(id);
+        public async Task<Movie> GetByIdAsync(int id) =>
+            await _context.Movie.FindAsync(id);
 
-        public Movie GetMovieByName(string name) => _context.Movie.FirstOrDefault(m => m.Name == name);
+        public IEnumerable<Movie> Get() =>
+            _context.Movie;
 
-        public IEnumerable<Movie> GetMovies() => _context.Movie;
+        public Movie GetByName(string name) =>
+            _context.Movie.FirstOrDefault(m => m.Name == name);
 
-        public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId) => _context.Movie.Where(m => m.SeriesId == seriesId);
-
-        public async Task<int> SaveMovieAsync(Movie movie)
+        public async Task SaveAsync(Movie movie)
         {
             if (movie.MovieId == 0)
                 await _context.Movie.AddAsync(movie);
@@ -36,8 +36,6 @@ namespace FileManager.DataAccessLayer.Repositories
             }
 
             await _context.SaveChangesAsync();
-
-            return movie.MovieId;
         }
     }
 }

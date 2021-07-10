@@ -8,47 +8,37 @@ using System.Threading.Tasks;
 
 namespace FileManager.Web.Services
 {
-    public class SeasonControllerService : ISeasonControllerService
+    public class SeasonControllerService : IControllerService<Season>
     {
-        private readonly ISeasonRepository _seasonRepository;
+        private readonly IRepository<Season> _seasonRepository;
 
-        public SeasonControllerService(ISeasonRepository seasonRepository)
+        public SeasonControllerService(IRepository<Season> seasonRepository)
         {
             _seasonRepository = seasonRepository;
         }
 
-        public async Task<Season> GetAsync(int id)
+        public async Task<Season> GetByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid SeasonId");
 
-            return await _seasonRepository.GetSeasonByIdAsync(id);
+            return await _seasonRepository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Season>> GetAsync()
-        {
-            return await Task.Run(() => _seasonRepository.GetSeasons());
-        }
+        public IEnumerable<Season> Get() => 
+            _seasonRepository.Get();
 
-        public Task<Season> GetAsync(string name)
+        public Season GetByName(string name)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Season> GetSeasonsByShowId(int showId)
-        {
-            if (showId <= 0)
-                throw new ArgumentException("Invalid ShowId");
-
-            return _seasonRepository.GetSeasonsByShowId(showId);
-        }
-
-        public async Task<int> SaveAsync(Season season)
+        public async Task SaveAsync(Season season)
         {
             if (season == null)
                 throw new ArgumentNullException(nameof(season));
 
-            return await _seasonRepository.SaveSeasonAsync(season);
+            await _seasonRepository.SaveAsync(season);
         }
     }
 }

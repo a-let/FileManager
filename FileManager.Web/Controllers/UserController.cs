@@ -11,14 +11,15 @@ using System.Threading.Tasks;
 namespace FileManager.Web.Controllers
 {
     [Authorize]
+    [ApiController]
     [Produces("application/json")]
     [Route("api/User")]
     public class UserController : ControllerBase
     {
-        private readonly IUserControllerService _userControllerService;
+        private readonly IControllerService<UserDto> _userControllerService;
         private readonly ITokenGenerator _tokenService;
 
-        public UserController(IUserControllerService userControllerService, ITokenGenerator tokenService)
+        public UserController(IControllerService<UserDto> userControllerService, ITokenGenerator tokenService)
         {
             _userControllerService = userControllerService;
             _tokenService = tokenService;
@@ -26,9 +27,9 @@ namespace FileManager.Web.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<UserDto>>> Get()
+        public ActionResult<IEnumerable<UserDto>> Get()
         {
-            var users = await _userControllerService.GetAsync();
+            var users = _userControllerService.Get();
             return Ok(users);
         }
 
@@ -37,7 +38,7 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<UserDto>> GetById(int id)
         {
-            var user = await _userControllerService.GetAsync(id);
+            var user = await _userControllerService.GetByIdAsync(id);
 
             if (user == null)
                 return NotFound();
@@ -48,9 +49,9 @@ namespace FileManager.Web.Controllers
         [HttpGet("userName/{userName}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserDto>> GetByUserName(string userName)
+        public ActionResult<UserDto> GetByUserName(string userName)
         {
-            var user = await _userControllerService.GetAsync(userName);
+            var user = _userControllerService.GetByName(userName);
 
             if (user == null)
                 return NotFound();
@@ -62,12 +63,13 @@ namespace FileManager.Web.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserDto>> Post([FromBody]UserDto user)
+        public async Task<ActionResult<UserDto>> Post(UserDto user)
         {
-            user.UserId = await _userControllerService.SaveAsync(user);
+            await _userControllerService.SaveAsync(user);
 
-            // TODO : Decide what to do with password
+            // TODO : Decide what to do with password, UserId
             user.Password = string.Empty;
+            user.UserId = _userControllerService.GetByName(user.UserName).UserId;
 
             return CreatedAtAction(nameof(GetById), new { Id = user.UserId }, user);
         }
@@ -76,9 +78,10 @@ namespace FileManager.Web.Controllers
         [HttpPost("Authenticate")]
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Authenticate([FromBody]UserDto user)
+        public IActionResult Authenticate(UserDto user)
         {
-            var u = _userControllerService.Authenticate(user.UserName, user.Password);
+            var auth = _userControllerService as IAuthenticate;
+            var u = auth.Authenticate(user.UserName, user.Password);
 
             if (u == null)
                 return BadRequest(new { message = "Username or Password is incorrect." });

@@ -30,7 +30,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var seasonRepo = new SeasonRepository(_context);
 
             // Act
-            var season = await seasonRepo.GetSeasonByIdAsync(id);
+            var season = await seasonRepo.GetByIdAsync(id);
 
             // Assert
             Assert.Equal(id, season.SeasonId);
@@ -43,26 +43,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var seasonRepo = new SeasonRepository(_context);
 
             // Act
-            var seasons = seasonRepo.GetSeasons();
+            var seasons = seasonRepo.Get();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
-        }
-
-        [Fact]
-        public void GetSeasonsByShowId_GivenValidShowId_ThenSeasonsReturned()
-        {
-            // Arrange
-            var id = 1;
-
-            var seasonRepo = new SeasonRepository(_context);
-
-            // Act
-            var seasons = seasonRepo.GetSeasonsByShowId(id);
-
-            // Assert
-            Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
-            Assert.True(seasons.Count() > 0);
         }
 
         [Fact]
@@ -80,10 +64,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var seasonRepo = new SeasonRepository(_context);
 
             // Act
-            var seasonId = await seasonRepo.SaveSeasonAsync(season);
+            await seasonRepo.SaveAsync(season);
 
             // Assert
-            Assert.True(seasonId > 0);
+            Assert.True(season.SeasonId > 0);
         }
 
         [Fact]
@@ -103,10 +87,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             // Act
             season.Path = "Updated Path";
 
-            var seasonId = await seasonRepo.SaveSeasonAsync(season);
+            await seasonRepo.SaveAsync(season);
 
             // Assert
-            Assert.Equal(season.SeasonId, seasonId);
+            Assert.Equal(1, season.SeasonId);
         }
 
         [Fact]
@@ -124,7 +108,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var seasonRepo = new SeasonRepository(_context);
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await seasonRepo.SaveSeasonAsync(season));
+            var exception = await Record.ExceptionAsync(async () => await seasonRepo.SaveAsync(season));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);

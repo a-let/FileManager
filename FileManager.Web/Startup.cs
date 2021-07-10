@@ -1,6 +1,5 @@
 ﻿using FileManager.DataAccessLayer;
 using FileManager.DataAccessLayer.Interfaces;
-using FileManager.DataAccessLayer.Repositories;
 using FileManager.Web.Middlewares;
 using FileManager.Web.Services;
 using FileManager.Web.Services.Interfaces;
@@ -12,13 +11,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using Serilog;
+using SimpleInjector;
 
 namespace FileManager.Web
 {
     public class Startup
     {
         private readonly IConfiguration _configuration;
+        private readonly Container _container = new Container();
 
         public Startup(IConfiguration configuration)
         {
@@ -28,22 +28,11 @@ namespace FileManager.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddScoped<IEpisodeControllerService, EpisodeControllerService>()
-                .AddScoped<IEpisodeRepository, EpisodeRepository>()
-                .AddScoped<ISeasonControllerService, SeasonControllerService>()
-                .AddScoped<ISeasonRepository, SeasonRepository>()
-                .AddScoped<ISeriesControllerService, SeriesControllerService>()
-                .AddScoped<ISeriesRepository, SeriesRepository>()
-                .AddScoped<IShowControllerService, ShowControllerService>()
-                .AddScoped<IShowRepository, ShowRepository>()
-                .AddScoped<IMovieControllerService, MovieControllerService>()
-                .AddScoped<IMovieRepository, MovieRepository>()
-                .AddScoped<IUserControllerService, UserControllerService>()
-                .AddScoped<IUserRepository, UserRepository>()
-                .AddScoped<ICryptographyService, CryptographyService>()
-                .AddScoped<ITokenGenerator, TokenGenerator>()
-                .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b => b.MigrationsAssembly("FileManager.DataAccessLayer")));
+            services.AddDbContext<FileManagerContext>(optionsBuilder =>
+            {
+                optionsBuilder
+                    .UseSqlServer(_configuration["FileManagerConnectionString"], b => b.MigrationsAssembly("FileManager.DataAccessLayer"));
+            });
 
             services.AddControllers(options =>
             {
@@ -51,14 +40,34 @@ namespace FileManager.Web
             });
 
             services.AddCustomHealthChecks(_configuration);
-            services.AddCustomAuthentication(_configuration);
+            services.AddCustomAuthentication(_container, _configuration);
             services.AddCustomSwagger();
+
+            services.AddSimpleInjector(_container, options =>
+            {
+                options
+                    .AddAspNetCore()
+                    .AddControllerActivation();
+            });
+
+            InitializeContainer();
+        }
+
+        private void InitializeContainer()
+        {
+            _container.Register(typeof(IControllerService<>), typeof(IControllerService<>).Assembly);
+            _container.Register(typeof(IRepository<>), typeof(IRepository<>).Assembly);
+
+            _container.Register<ICryptographyService, CryptographyService>();
+            _container.Register<ITokenGenerator, TokenGenerator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseSerilogRequestLogging();
+            app.UseSimpleInjector(_container);
+
+            app.UseCustomRequestLogging(_container);
 
             app.UseCustomExceptionHandler();
 
@@ -81,6 +90,8 @@ namespace FileManager.Web
             {
                 endpoints.MapControllers();
             });
+
+            _container.Verify();
         }
     }
 }

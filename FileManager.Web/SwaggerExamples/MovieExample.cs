@@ -3,8 +3,11 @@ using FileManager.Models.Constants;
 
 using Swashbuckle.AspNetCore.Filters;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace FileManager.Web.SwaggerExamples
 {
+    [ExcludeFromCodeCoverage]
     public class MovieExample : IExamplesProvider<Movie>
     {
         public Movie GetExamples() => new Movie

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : IRepository<User>
     {
         private readonly FileManagerContext _context;
 
@@ -16,13 +16,16 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<User> GetUserByIdAsync(int id) => await _context.User.FindAsync(id);
+        public async Task<User> GetByIdAsync(int id) =>
+            await _context.User.FindAsync(id);
 
-        public User GetUserByUserName(string userName) => _context.User.FirstOrDefault(u => u.UserName == userName);
+        public User GetByName(string userName) =>
+            _context.User.FirstOrDefault(u => u.UserName == userName);
 
-        public IEnumerable<User> GetUsers() => _context.User.ToArray();
+        public IEnumerable<User> Get() =>
+            _context.User.ToArray();
 
-        public async Task<int> SaveUserAsync(User user)
+        public async Task SaveAsync(User user)
         {
             if (user.UserId == 0)
                 await _context.User.AddAsync(user);
@@ -33,8 +36,6 @@ namespace FileManager.DataAccessLayer.Repositories
             }
 
             await _context.SaveChangesAsync();
-
-            return user.UserId;
         }
     }
 }

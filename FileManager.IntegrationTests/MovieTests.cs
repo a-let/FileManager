@@ -61,22 +61,6 @@ namespace FileManager.IntegrationTests
         }
 
         [Fact]
-        public async Task GetBySeriesId()
-        {
-            // Arrange
-            var seriesId = 1;
-
-            // Act
-            var responseMessage = await _client.GetAsync($"api/Movie/seriesId/{seriesId}");
-            var strContent = await responseMessage.Content.ReadAsStringAsync();
-            var movies = DeserializeObject<IEnumerable<Movie>>(strContent);
-
-            // Assert
-            Assert.NotEmpty(movies);
-            Assert.Equal(seriesId, movies.First().SeriesId);
-        }
-
-        [Fact]
         public async Task Post()
         {
             // Arrange

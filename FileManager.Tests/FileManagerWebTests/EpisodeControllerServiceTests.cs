@@ -1,19 +1,28 @@
-﻿using FileManager.Models.Constants;
+﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
-using FileManager.Tests.Mocks;
+using FileManager.Models.Constants;
 using FileManager.Web.Services;
+
+using NSubstitute;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xunit;
-using System.Threading.Tasks;
 
 namespace FileManager.Tests.FileManagerWebTests
 {
     public class EpisodeControllerServiceTests
     {
-        private readonly EpisodeControllerService _episodeControllerService = new EpisodeControllerService(new MockEpisodeRepository());
+        private readonly IRepository<Episode> _episodeRepo;
+        private readonly EpisodeControllerService _episodeControllerService;
+
+        public EpisodeControllerServiceTests()
+        {
+            _episodeRepo = Substitute.For<IRepository<Episode>>();
+            _episodeControllerService = new EpisodeControllerService(_episodeRepo);
+        }
 
         [Fact]
         public async Task GetEpisodeById_GivenInvalidId_ThenThrowsArgumentException()
@@ -22,7 +31,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 0;
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.GetAsync(id));
+            var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.GetByIdAsync(id));
 
             // Assert
             Assert.IsType<ArgumentException>(exception);
@@ -34,44 +43,54 @@ namespace FileManager.Tests.FileManagerWebTests
             // Arrange
             var id = 1;
 
+            _episodeRepo.GetByIdAsync(Arg.Any<int>())
+                .Returns(new Episode());
+
             // Act
-            var episode = await _episodeControllerService.GetAsync(id);
+            var episode = await _episodeControllerService.GetByIdAsync(id);
 
             // Assert
             Assert.IsAssignableFrom<Episode>(episode);
         }
 
         [Fact]
-        public async Task GetEpisodes_ThenReturnsEpisodeList()
+        public void GetEpisodes_ThenReturnsEpisodeList()
         {
-            // Arrange, Act
-            var episodes = await _episodeControllerService.GetAsync();
+            // Arrange
+            _episodeRepo.Get()
+                .Returns(new List<Episode>());
+
+            // Act
+            var episodes = _episodeControllerService.Get();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
         }
 
         [Fact]
-        public async Task GetEpisodeByName_GivenInvalidName_ThenThrowsArgumentNullException()
+        public void GetEpisodeByName_GivenInvalidName_ThenThrowsArgumentNullException()
         {
             // Arrange
             var name = string.Empty;
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.GetAsync(name));
+            var exception = Record.Exception(() => _episodeControllerService.GetByName(name));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);
         }
 
         [Fact]
-        public async Task GetEpisodeByName_GivenValidName_ThenEpisodeIsReturned()
+        public void GetEpisodeByName_GivenValidName_ThenEpisodeIsReturned()
         {
             // Arrange
             var name = "Test";
 
+            _episodeRepo.GetByName(Arg.Any<string>())
+                .Returns(new Episode());
+
             // Act
-            var episode = await _episodeControllerService.GetAsync(name);
+            var episode = _episodeControllerService.GetByName(name);
 
             // Assert
             Assert.IsAssignableFrom<Episode>(episode);
@@ -104,36 +123,10 @@ namespace FileManager.Tests.FileManagerWebTests
             };
 
             // Act
-            var episodeId = await _episodeControllerService.SaveAsync(episode);
+            var exception = await Record.ExceptionAsync(async () => await _episodeControllerService.SaveAsync(episode));
 
             // Assert
-            Assert.Equal(1, episodeId);
-        }
-
-        [Fact]
-        public void GetEpisodesBySeasonId_GivenInvalidSeasonId_ThenThrowsArgumentException()
-        {
-            // Arrange
-            var id = 0;
-
-            // Act
-            var exception = Record.Exception(() => _episodeControllerService.GetEpisodesBySeasonId(id));
-
-            // Assert
-            Assert.IsType<ArgumentException>(exception);
-        }
-
-        [Fact]
-        public void GetEpisodesBySeasonId_GivenValidSeasonId_THenThrowsArgumentException()
-        {
-            // Arrange
-            var id = 1;
-
-            // Act
-            var episodes = _episodeControllerService.GetEpisodesBySeasonId(id);
-
-            // Assert
-            Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
+            Assert.Null(exception);
         }
     }
 }

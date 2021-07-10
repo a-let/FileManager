@@ -77,7 +77,7 @@ namespace FileManager.IntegrationTests
                         _fileManagerContext.Database.EnsureDeleted();
                         _fileManagerContext.Database.EnsureCreated();
 
-                        InitializeDbForTests(_fileManagerContext, scopedServices.GetRequiredService<ICryptographyService>());
+                        InitializeDbForTests(_fileManagerContext, new Web.Services.CryptographyService());
 
                         _logger.LogInformation("Database Initialized");
                     }

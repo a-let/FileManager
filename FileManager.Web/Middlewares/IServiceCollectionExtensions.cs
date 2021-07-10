@@ -1,5 +1,6 @@
 ﻿using FileManager.DataAccessLayer;
-using FileManager.Web.Services.Interfaces;
+using FileManager.DataAccessLayer.Interfaces;
+using FileManager.Models;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
+using SimpleInjector;
+
 using Swashbuckle.AspNetCore.Filters;
+
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,7 +34,7 @@ namespace FileManager.Web.Middlewares
             return services;
         }
 
-        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, Container container, IConfiguration configuration)
         {
             services
                 .AddAuthentication(x =>
@@ -44,17 +48,20 @@ namespace FileManager.Web.Middlewares
                     {
                         OnTokenValidated = context =>
                         {
-                            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserControllerService>();
+                            var userRepo = container.GetInstance<IRepository<User>>();
+                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
+
                             var userName = context.Principal.Identity.Name;
 
-                            var user = userService.GetAsync(userName).Result;
+                            var user = userRepo.GetByName(userName);
 
                             if (user == null)
                             {
-                                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
-                                logger.LogInformation("Login Failed");
-                                context.Fail("Login Failed");
+                                logger.LogInformation("User {0} not found", userName);
+                                context.Fail("Access denied");
                             }
+                            else
+                                logger.LogInformation("{0} authenticated successfully", userName);
 
                             return Task.CompletedTask;
                         },

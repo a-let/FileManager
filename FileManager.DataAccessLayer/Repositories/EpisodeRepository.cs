@@ -1,14 +1,13 @@
 ﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
-    public class EpisodeRepository : IEpisodeRepository
+    public class EpisodeRepository : IRepository<Episode>
     {
         private readonly FileManagerContext _context;
 
@@ -17,27 +16,26 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<Episode> GetEpisodeByIdAsync(int id) => await _context.Episode.FindAsync(id);
+        public async Task<Episode> GetByIdAsync(int id) =>
+            await _context.Episode.FindAsync(id);
 
-        public Episode GetEpisodeByName(string name) => _context.Episode.FirstOrDefault(e => e.Name == name);
+        public IEnumerable<Episode> Get() =>
+            _context.Episode;
 
-        public IEnumerable<Episode> GetEpisodes() => _context.Episode;
+        public Episode GetByName(string name) =>
+            _context.Episode.FirstOrDefault(e => e.Name == name);
 
-        public IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId) => _context.Episode.Where(e => e.SeasonId == seasonId);
-
-        public async Task<int> SaveEpisodeAsync(Episode episode)
+        public async Task SaveAsync(Episode target)
         {
-            if (episode.EpisodeId == 0)
-                await _context.Episode.AddAsync(episode);
+            if (target.EpisodeId == 0)
+                await _context.Episode.AddAsync(target);
             else
             {
-                var e = await _context.Episode.FindAsync(episode.EpisodeId);
-                _context.Entry(e).CurrentValues.SetValues(episode);
+                var e = await _context.Episode.FindAsync(target.EpisodeId);
+                _context.Entry(e).CurrentValues.SetValues(target);
             }
 
             await _context.SaveChangesAsync();
-
-            return episode.EpisodeId;
         }
     }
 }

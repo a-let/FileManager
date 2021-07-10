@@ -1,6 +1,8 @@
-﻿using FileManager.Models;
-using FileManager.Tests.Mocks;
+﻿using FileManager.DataAccessLayer.Interfaces;
+using FileManager.Models;
 using FileManager.Web.Services;
+
+using NSubstitute;
 
 using System;
 using System.Collections.Generic;
@@ -12,7 +14,14 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class SeasonControllerServiceTests
     {
-        private readonly SeasonControllerService _seasonControllerService = new SeasonControllerService(new MockSeasonRepository());
+        private readonly IRepository<Season> _seasonRepo;
+        private readonly SeasonControllerService _seasonControllerService;
+
+        public SeasonControllerServiceTests()
+        {
+            _seasonRepo = Substitute.For<IRepository<Season>>();
+            _seasonControllerService = new SeasonControllerService(_seasonRepo);
+        }
 
         [Fact]
         public async Task GetSeasonById_GivenInvalidId_ThenThrowsArgumentException()
@@ -21,7 +30,7 @@ namespace FileManager.Tests.FileManagerWebTests
             var id = 0;
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await _seasonControllerService.GetAsync(id));
+            var exception = await Record.ExceptionAsync(async () => await _seasonControllerService.GetByIdAsync(id));
 
             // Assert
             Assert.IsType<ArgumentException>(exception);
@@ -33,44 +42,25 @@ namespace FileManager.Tests.FileManagerWebTests
             // Arrange
             var id = 1;
 
+            _seasonRepo.GetByIdAsync(Arg.Any<int>())
+                .Returns(new Season());
+
             // Act
-            var season = await _seasonControllerService.GetAsync(id);
+            var season = await _seasonControllerService.GetByIdAsync(id);
 
             // Assert
             Assert.IsAssignableFrom<Season>(season);
         }
 
         [Fact]
-        public void GetSeasonByShowId_GivenValidId_ThenSeasonListIsReturned()
+        public void GetSeasons_ThenReturnsSeasonList()
         {
             // Arrange
-            var id = 1;
+            _seasonRepo.Get()
+                .Returns(new List<Season>());
 
             // Act
-            var seasons = _seasonControllerService.GetSeasonsByShowId(id);
-
-            // Assert
-            Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
-        }
-
-        [Fact]
-        public void GetSeasonByShowId_GivenInvalidId_ThenThrowsArgumentException()
-        {
-            // Arrange
-            var id = 0;
-
-            // Act
-            var exception = Record.Exception(() => _seasonControllerService.GetSeasonsByShowId(id));
-
-            // Assert
-            Assert.IsType<ArgumentException>(exception);
-        }
-
-        [Fact]
-        public async Task GetSeasons_ThenReturnsSeasonList()
-        {
-            // Arrange, Act
-            var seasons =await  _seasonControllerService.GetAsync();
+            var seasons = _seasonControllerService.Get();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Season>>(seasons);
@@ -98,11 +88,14 @@ namespace FileManager.Tests.FileManagerWebTests
 
             };
 
+            _seasonRepo.SaveAsync(Arg.Any<Season>())
+                .Returns(Task.CompletedTask);
+
             // Act
-            var seasonId = await _seasonControllerService.SaveAsync(season);
+            var exception = await Record.ExceptionAsync(async () => await _seasonControllerService.SaveAsync(season));
 
             // Assert
-            Assert.True(seasonId > 0);
+            Assert.Null(exception);
         }
     }
 }

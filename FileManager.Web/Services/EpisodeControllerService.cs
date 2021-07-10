@@ -8,47 +8,40 @@ using System.Threading.Tasks;
 
 namespace FileManager.Web.Services
 {
-    public class EpisodeControllerService : IEpisodeControllerService
+    public class EpisodeControllerService : IControllerService<Episode>
     {
-        private readonly IEpisodeRepository _episodeRepository;
+        private readonly IRepository<Episode> _episodeRepository;
 
-        public EpisodeControllerService(IEpisodeRepository episodeRepository)
+        public EpisodeControllerService(IRepository<Episode> episodeRepository)
         {
             _episodeRepository = episodeRepository;
         }
 
-        public async Task<Episode> GetAsync(int id)
+        public async Task<Episode> GetByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid EpisodeId");
 
-            return await _episodeRepository.GetEpisodeByIdAsync(id);
+            return await _episodeRepository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Episode>> GetAsync() => await Task.Run(() => _episodeRepository.GetEpisodes());
+        public IEnumerable<Episode> Get() =>
+            _episodeRepository.Get();
 
-        public async Task<Episode> GetAsync(string name) => await Task.Run(() =>
+        public Episode GetByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException();
 
-            return _episodeRepository.GetEpisodeByName(name);
-        });
+            return _episodeRepository.GetByName(name);
+        }
 
-        public async Task<int> SaveAsync(Episode episode)
+        public async Task SaveAsync(Episode episode)
         {
             if (episode == null)
                 throw new ArgumentNullException(nameof(episode));
 
-            return await _episodeRepository.SaveEpisodeAsync(episode);
-        }
-
-        public IEnumerable<Episode> GetEpisodesBySeasonId(int seasonId)
-        {
-            if (seasonId <= 0)
-                throw new ArgumentException("Invalid SeasonId");
-
-            return _episodeRepository.GetEpisodesBySeasonId(seasonId);
+            await _episodeRepository.SaveAsync(episode);
         }
     }
 }

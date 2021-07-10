@@ -4,9 +4,11 @@ using FileManager.Models.Constants;
 using Swashbuckle.AspNetCore.Filters;
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FileManager.Web.SwaggerExamples
 {
+    [ExcludeFromCodeCoverage]
     public class SeasonExample : IExamplesProvider<Season>
     {
         public Season GetExamples() => new Season
