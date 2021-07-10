@@ -10,36 +10,38 @@ using System.Threading.Tasks;
 
 namespace FileManager.Web.Services
 {
-    public class UserControllerService : IUserControllerService
+    public class UserControllerService : IControllerService<UserDto>, IAuthenticate
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<User> _userRepository;
         private readonly ICryptographyService _cryptoService;
 
-        public UserControllerService(IUserRepository userRepository, ICryptographyService cryptoService)
+        public UserControllerService(IRepository<User> userRepository, ICryptographyService cryptoService)
         {
             _userRepository = userRepository;
             _cryptoService = cryptoService;
         }
 
-        public async Task<IEnumerable<UserDto>> GetAsync() => await Task.Run(() => _userRepository.GetUsers().Select(u => new UserDto(u)));
-
-        public async Task<UserDto> GetAsync(int userId)
+        public async Task<UserDto> GetByIdAsync(int userId)
         {
             if (userId <= 0)
                 throw new ArgumentException("Invalid UserId");
 
-            return new UserDto(await _userRepository.GetUserByIdAsync(userId));
+            return new UserDto(await _userRepository.GetByIdAsync(userId));
         }
 
-        public async Task<UserDto> GetAsync(string userName)
+        public IEnumerable<UserDto> Get() =>
+            _userRepository.Get()
+                .Select(u => new UserDto(u));
+
+        public UserDto GetByName(string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
                 throw new ArgumentNullException(nameof(userName));
 
-            return await Task.Run(() => new UserDto(_userRepository.GetUserByUserName(userName)));
+            return new UserDto(_userRepository.GetByName(userName));
         }
 
-        public async Task<int> SaveAsync(UserDto user)
+        public async Task SaveAsync(UserDto user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
@@ -54,17 +56,16 @@ namespace FileManager.Web.Services
                 u.PasswordSalt = passwordSalt;
             }
 
-            var userId = await _userRepository.SaveUserAsync(u);
-
-            return userId;
+            await _userRepository.SaveAsync(u);
         }
 
+        // TODO: Serperate from user controller
         public UserDto Authenticate(string userName, string password)
         {
             if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
                 return null;
 
-            var u = _userRepository.GetUserByUserName(userName);
+            var u = _userRepository.GetByName(userName);
 
             if (u == null)
                 return null;

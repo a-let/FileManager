@@ -8,42 +8,40 @@ using System.Threading.Tasks;
 
 namespace FileManager.Web.Services
 {
-    public class ShowControllerService : IShowControllerService
+    public class ShowControllerService : IControllerService<Show>
     {
-        private readonly IShowRepository _showRepository;
+        private readonly IRepository<Show> _showRepository;
 
-        public ShowControllerService(IShowRepository showRepository)
+        public ShowControllerService(IRepository<Show> showRepository)
         {
             _showRepository = showRepository;
         }
 
-        public async Task<Show> GetAsync(int id)
+        public async Task<Show> GetByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid ShowId");
 
-            return await _showRepository.GetShowByIdAsync(id);
+            return await _showRepository.GetByIdAsync(id);
         }
 
-        public async Task<Show> GetAsync(string name)
+        public IEnumerable<Show> Get() =>
+            _showRepository.Get();
+
+        public Show GetByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            return await Task.Run(() => _showRepository.GetShowByName(name));
+            return _showRepository.GetByName(name);
         }
 
-        public async Task<IEnumerable<Show>> GetAsync()
-        {
-            return await Task.Run(() => _showRepository.GetShows());
-        }
-
-        public async Task<int> SaveAsync(Show show)
+        public async Task SaveAsync(Show show)
         {
             if (show == null)
                 throw new ArgumentNullException(nameof(show));
 
-            return await _showRepository.SaveShowAsync(show);
+            await _showRepository.SaveAsync(show);
         }
     }
 }

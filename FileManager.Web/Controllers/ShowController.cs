@@ -9,22 +9,23 @@ using System.Threading.Tasks;
 
 namespace FileManager.Web.Controllers
 {
+    [ApiController]
     [Produces("application/json")]
     [Route("api/Show")]
     public class ShowController : Controller
     {
-        private readonly IShowControllerService _showControllerService;
+        private readonly IControllerService<Show> _showControllerService;
 
-        public ShowController(IShowControllerService showControllerService)
+        public ShowController(IControllerService<Show> showControllerService)
         {
             _showControllerService = showControllerService;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Show>>> Get()
+        public ActionResult<IEnumerable<Show>> Get()
         {
-            var shows = await _showControllerService.GetAsync();
+            var shows = _showControllerService.Get();
             return Ok(shows);
         }
 
@@ -33,7 +34,7 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Show>> GetById(int id)
         {
-            var show = await _showControllerService.GetAsync(id);
+            var show = await _showControllerService.GetByIdAsync(id);
 
             if (show == null)
                 return NotFound();
@@ -44,9 +45,9 @@ namespace FileManager.Web.Controllers
         [HttpGet("name/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Show>> GetByName(string name)
+        public ActionResult<Show> GetByName(string name)
         {
-            var show = await _showControllerService.GetAsync(name);
+            var show = _showControllerService.GetByName(name);
 
             if (show == null)
                 return NotFound();
@@ -55,9 +56,11 @@ namespace FileManager.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Show>> Post([FromBody]Show show)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Show>> Post(Show show)
         {
-            _ = await _showControllerService.SaveAsync(show);
+            await _showControllerService.SaveAsync(show);
 
             return CreatedAtAction(nameof(GetById), new { Id = show.ShowId }, show);
         }

@@ -1,14 +1,13 @@
 ﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
-    public class SeriesRepository : ISeriesRepository
+    public class SeriesRepository : IRepository<Series>
     {
         private readonly FileManagerContext _context;
 
@@ -17,13 +16,16 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<Series> GetSeriesByIdAsync(int id) => await _context.Series.FindAsync(id);
+        public async Task<Series> GetByIdAsync(int id) =>
+            await _context.Series.FindAsync(id);
 
-        public IEnumerable<Series> GetSeries() => _context.Series;
+        public IEnumerable<Series> Get() =>
+            _context.Series;
 
-        public Series GetSeriesByName(string name) => _context.Series.FirstOrDefault(s => s.Name == name);
+        public Series GetByName(string name) =>
+            _context.Series.FirstOrDefault(s => s.Name == name);
 
-        public async Task<int> SaveSeriesAsync(Series series)
+        public async Task SaveAsync(Series series)
         {
             if (series.SeriesId == 0)
                 await _context.Series.AddAsync(series);
@@ -34,8 +36,6 @@ namespace FileManager.DataAccessLayer.Repositories
             }
 
             await _context.SaveChangesAsync();
-
-            return series.SeriesId;
         }
     }
 }

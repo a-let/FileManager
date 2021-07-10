@@ -8,47 +8,40 @@ using System.Threading.Tasks;
 
 namespace FileManager.Web.Services
 {
-    public class MovieControllerService : IMovieControllerService
+    public class MovieControllerService : IControllerService<Movie>
     {
-        private readonly IMovieRepository _movieRepository;
+        private readonly IRepository<Movie> _movieRepository;
 
-        public MovieControllerService(IMovieRepository movieRepository)
+        public MovieControllerService(IRepository<Movie> movieRepository)
         {
             _movieRepository = movieRepository;
         }
 
-        public async Task<Movie> GetAsync(int id)
+        public async Task<Movie> GetByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid MovieId");
 
-            return await _movieRepository.GetMovieByIdAsync(id);
+            return await _movieRepository.GetByIdAsync(id);
         }
 
-        public async Task<Movie> GetAsync(string name)
+        public Movie GetByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            return await Task.Run(() => _movieRepository.GetMovieByName(name));
+            return _movieRepository.GetByName(name);
         }
 
-        public async Task<IEnumerable<Movie>> GetAsync() => await Task.Run(() => _movieRepository.GetMovies());
+        public IEnumerable<Movie> Get() =>
+            _movieRepository.Get();
 
-        public IEnumerable<Movie> GetMoviesBySeriesId(int seriesId)
-        {
-            if (seriesId < 0)
-                throw new ArgumentException("Invalid SeriesId");
-
-            return _movieRepository.GetMoviesBySeriesId(seriesId);
-        }
-
-        public async Task<int> SaveAsync(Movie movie)
+        public async Task SaveAsync(Movie movie)
         {
             if (movie == null)
                 throw new ArgumentNullException(nameof(movie));
 
-            return await _movieRepository.SaveMovieAsync(movie);
+            await _movieRepository.SaveAsync(movie);
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
 
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
-    public class SeasonRepository : ISeasonRepository
+    public class SeasonRepository : IRepository<Season>
     {
         private readonly FileManagerContext _context;
 
@@ -16,13 +16,16 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<Season> GetSeasonByIdAsync(int id) => await _context.Season.FindAsync(id);
+        public async Task<Season> GetByIdAsync(int id) =>
+            await _context.Season.FindAsync(id);
 
-        public IEnumerable<Season> GetSeasons() => _context.Season;
+        public IEnumerable<Season> Get() =>
+            _context.Season;
 
-        public IEnumerable<Season> GetSeasonsByShowId(int showId) => _context.Season.Where(s => s.ShowId == showId);
+        public Season GetByName(string name) =>
+            throw new NotImplementedException();
 
-        public async Task<int> SaveSeasonAsync(Season season)
+        public async Task SaveAsync(Season season)
         {
             if (season.SeasonId == 0)
                 await _context.Season.AddAsync(season);
@@ -33,8 +36,6 @@ namespace FileManager.DataAccessLayer.Repositories
             }
 
             await _context.SaveChangesAsync();
-
-            return season.SeasonId;
         }
     }
 }

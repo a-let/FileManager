@@ -1,4 +1,5 @@
 ﻿using FileManager.DataAccessLayer;
+using FileManager.Models.Dtos;
 using FileManager.Web.Services.Interfaces;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,7 +10,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
+using SimpleInjector;
+
 using Swashbuckle.AspNetCore.Filters;
+
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,7 +34,7 @@ namespace FileManager.Web.Middlewares
             return services;
         }
 
-        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, Container container, IConfiguration configuration)
         {
             services
                 .AddAuthentication(x =>
@@ -44,10 +48,10 @@ namespace FileManager.Web.Middlewares
                     {
                         OnTokenValidated = context =>
                         {
-                            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserControllerService>();
+                            var userService = container.GetInstance<IControllerService<UserDto>>();
                             var userName = context.Principal.Identity.Name;
 
-                            var user = userService.GetAsync(userName).Result;
+                            var user = userService.GetByName(userName);
 
                             if (user == null)
                             {

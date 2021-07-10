@@ -9,22 +9,23 @@ using System.Threading.Tasks;
 
 namespace FileManager.Web.Controllers
 {
+    [ApiController]
     [Produces("application/json")]
     [Route("api/Season")]
     public class SeasonController : ControllerBase
     {
-        private readonly ISeasonControllerService _seasonControllerService;
+        private readonly IControllerService<Season> _seasonControllerService;
 
-        public SeasonController(ISeasonControllerService seasonControllerService)
+        public SeasonController(IControllerService<Season> seasonControllerService)
         {
             _seasonControllerService = seasonControllerService;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Season>>> Get()
+        public ActionResult<IEnumerable<Season>> Get()
         {
-            var seasons = await _seasonControllerService.GetAsync();
+            var seasons = _seasonControllerService.Get();
             return Ok(seasons);
         }
 
@@ -33,7 +34,7 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Season>> GetById(int id)
         {
-            var season = await _seasonControllerService.GetAsync(id);
+            var season = await _seasonControllerService.GetByIdAsync(id);
 
             if (season == null)
                 return NotFound();
@@ -44,19 +45,11 @@ namespace FileManager.Web.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Season>> Post([FromBody]Season season)
+        public async Task<ActionResult<Season>> Post(Season season)
         {
-            _ = await _seasonControllerService.SaveAsync(season);
+            await _seasonControllerService.SaveAsync(season);
 
             return CreatedAtAction(nameof(GetById), new { Id = season.SeasonId }, season);
-        }
-
-        // TODO: Get seasons by show id via show controller
-        [HttpGet("showId/{showId}")]
-        public ActionResult<IEnumerable<Season>> GetByShowId(int showId)
-        {
-            var seasons = _seasonControllerService.GetSeasonsByShowId(showId);
-            return Ok(seasons);
         }
     }
 }

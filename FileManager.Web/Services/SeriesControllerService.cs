@@ -8,42 +8,40 @@ using System.Threading.Tasks;
 
 namespace FileManager.Web.Services
 {
-    public class SeriesControllerService : ISeriesControllerService
+    public class SeriesControllerService : IControllerService<Series>
     {
-        private readonly ISeriesRepository _seriesRepository;
+        private readonly IRepository<Series> _seriesRepository;
 
-        public SeriesControllerService(ISeriesRepository seriesRepository)
+        public SeriesControllerService(IRepository<Series> seriesRepository)
         {
             _seriesRepository = seriesRepository;
         }
 
-        public async Task<IEnumerable<Series>> GetAsync()
-        {
-            return await Task.Run(() => _seriesRepository.GetSeries());
-        }
-
-        public async Task<Series> GetAsync(int id)
+        public async Task<Series> GetByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid SeriesId");
 
-            return await _seriesRepository.GetSeriesByIdAsync(id);
+            return await _seriesRepository.GetByIdAsync(id);
         }
 
-        public async Task<Series> GetAsync(string name)
+        public IEnumerable<Series> Get() =>
+            _seriesRepository.Get();
+
+        public Series GetByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            return await Task.Run(() => _seriesRepository.GetSeriesByName(name));
+            return _seriesRepository.GetByName(name);
         }
 
-        public async Task<int> SaveAsync(Series series)
+        public async Task SaveAsync(Series series)
         {
             if (series == null)
                 throw new ArgumentNullException(nameof(series));
 
-            return await _seriesRepository.SaveSeriesAsync(series);
+            await _seriesRepository.SaveAsync(series);
         }
     }
 }

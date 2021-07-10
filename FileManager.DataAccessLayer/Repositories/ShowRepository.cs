@@ -1,14 +1,13 @@
 ﻿using FileManager.DataAccessLayer.Interfaces;
 using FileManager.Models;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories
 {
-    public class ShowRepository : IShowRepository
+    public class ShowRepository : IRepository<Show>
     {
         private readonly FileManagerContext _context;
 
@@ -17,13 +16,16 @@ namespace FileManager.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<Show> GetShowByIdAsync(int id) => await _context.Show.FindAsync(id);
+        public async Task<Show> GetByIdAsync(int id) =>
+            await _context.Show.FindAsync(id);
 
-        public Show GetShowByName(string name) => _context.Show.FirstOrDefault(s => s.Name == name);
+        public IEnumerable<Show> Get() => 
+            _context.Show;
 
-        public IEnumerable<Show> GetShows() => _context.Show;
+        public Show GetByName(string name) =>
+            _context.Show.FirstOrDefault(s => s.Name == name);
 
-        public async Task<int> SaveShowAsync(Show show)
+        public async Task SaveAsync(Show show)
         {
             if (show.ShowId == 0)
                 await _context.Show.AddAsync(show);
@@ -34,8 +36,6 @@ namespace FileManager.DataAccessLayer.Repositories
             }
 
             await _context.SaveChangesAsync();
-
-            return show.ShowId;
         }
     }
 }

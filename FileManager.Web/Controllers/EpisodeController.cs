@@ -9,22 +9,23 @@ using System.Threading.Tasks;
 
 namespace FileManager.Web.Controllers
 {
+    [ApiController]
     [Produces("application/json")]
     [Route("api/Episode")]
     public class EpisodeController : ControllerBase
     {
-        private readonly IEpisodeControllerService _episodeControllerService;
+        private readonly IControllerService<Episode> _episodeControllerService;
 
-        public EpisodeController(IEpisodeControllerService episodeControllerService)
+        public EpisodeController(IControllerService<Episode> episodeControllerService)
         {
             _episodeControllerService = episodeControllerService;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Episode>>> Get()
+        public ActionResult<IEnumerable<Episode>> Get()
         {
-            var episodes = await _episodeControllerService.GetAsync();
+            var episodes = _episodeControllerService.Get();
             return Ok(episodes);
         }
 
@@ -33,7 +34,7 @@ namespace FileManager.Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Episode>> GetByIdAsync(int id)
         {
-            var episode = await _episodeControllerService.GetAsync(id);
+            var episode = await _episodeControllerService.GetByIdAsync(id);
 
             if (episode == null)
                 return NotFound();
@@ -44,9 +45,9 @@ namespace FileManager.Web.Controllers
         [HttpGet("name/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Episode>> GetByName(string name)
+        public ActionResult<Episode> GetByName(string name)
         {
-            var episode = await _episodeControllerService.GetAsync(name);
+            var episode = _episodeControllerService.GetByName(name);
 
             if (episode == null)
                 return NotFound();
@@ -57,19 +58,11 @@ namespace FileManager.Web.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Episode>> PostAsync([FromBody]Episode episode)
+        public async Task<ActionResult<Episode>> PostAsync(Episode episode)
         {
-            _ = await _episodeControllerService.SaveAsync(episode);
+            await _episodeControllerService.SaveAsync(episode);
 
             return CreatedAtAction(nameof(GetByIdAsync), new { Id = episode.EpisodeId }, episode);
-        }
-
-        // TODO: Get episodes by season id via season controller
-        [HttpGet("seasonid/{seasonId}")]
-        public ActionResult<IEnumerable<Episode>> GetBySeasonId(int seasonId)
-        {
-            var episodes = _episodeControllerService.GetEpisodesBySeasonId(seasonId);
-            return Ok(episodes);
         }
     }
 }
