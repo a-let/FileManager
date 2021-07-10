@@ -1,6 +1,5 @@
 ﻿using FileManager.DataAccessLayer;
 using FileManager.DataAccessLayer.Interfaces;
-using FileManager.DataAccessLayer.Repositories;
 using FileManager.Web.Middlewares;
 using FileManager.Web.Services;
 using FileManager.Web.Services.Interfaces;
@@ -12,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using Serilog;
 using SimpleInjector;
 
 namespace FileManager.Web
@@ -69,7 +67,7 @@ namespace FileManager.Web
         {
             app.UseSimpleInjector(_container);
 
-            app.UseSerilogRequestLogging();
+            app.UseCustomRequestLogging(_container);
 
             app.UseCustomExceptionHandler();
 
