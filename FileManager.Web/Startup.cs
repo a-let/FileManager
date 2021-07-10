@@ -30,8 +30,11 @@ namespace FileManager.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddDbContext<FileManagerContext>(o => o.UseSqlServer(_configuration["FileManagerConnectionString"], b => b.MigrationsAssembly("FileManager.DataAccessLayer")));
+            services.AddDbContext<FileManagerContext>(optionsBuilder =>
+            {
+                optionsBuilder
+                    .UseSqlServer(_configuration["FileManagerConnectionString"], b => b.MigrationsAssembly("FileManager.DataAccessLayer"));
+            });
 
             services.AddControllers(options =>
             {

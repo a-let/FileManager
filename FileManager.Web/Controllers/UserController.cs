@@ -67,8 +67,9 @@ namespace FileManager.Web.Controllers
         {
             await _userControllerService.SaveAsync(user);
 
-            // TODO : Decide what to do with password
+            // TODO : Decide what to do with password, UserId
             user.Password = string.Empty;
+            user.UserId = _userControllerService.GetByName(user.UserName).UserId;
 
             return CreatedAtAction(nameof(GetById), new { Id = user.UserId }, user);
         }

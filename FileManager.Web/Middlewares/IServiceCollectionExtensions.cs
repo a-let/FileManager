@@ -1,6 +1,6 @@
 ﻿using FileManager.DataAccessLayer;
-using FileManager.Models.Dtos;
-using FileManager.Web.Services.Interfaces;
+using FileManager.DataAccessLayer.Interfaces;
+using FileManager.Models;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -48,17 +48,20 @@ namespace FileManager.Web.Middlewares
                     {
                         OnTokenValidated = context =>
                         {
-                            var userService = container.GetInstance<IControllerService<UserDto>>();
+                            var userRepo = container.GetInstance<IRepository<User>>();
+                            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
+
                             var userName = context.Principal.Identity.Name;
 
-                            var user = userService.GetByName(userName);
+                            var user = userRepo.GetByName(userName);
 
                             if (user == null)
                             {
-                                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
-                                logger.LogInformation("Login Failed");
-                                context.Fail("Login Failed");
+                                logger.LogInformation("User {0} not found", userName);
+                                context.Fail("Access denied");
                             }
+                            else
+                                logger.LogInformation("{0} authenticated successfully", userName);
 
                             return Task.CompletedTask;
                         },

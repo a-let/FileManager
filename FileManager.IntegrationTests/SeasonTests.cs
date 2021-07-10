@@ -45,22 +45,6 @@ namespace FileManager.IntegrationTests
         }
 
         [Fact]
-        public async Task GetByShowId()
-        {
-            // Arrange
-            var showId = 1;
-
-            // Act
-            var responseMessage = await _client.GetAsync($"api/Season/showId/{showId}");
-            var strContent = await responseMessage.Content.ReadAsStringAsync();
-            var seasons = DeserializeObject<IEnumerable<Season>>(strContent);
-
-            // Assert
-            Assert.NotEmpty(seasons);
-            Assert.Equal(showId, seasons.First().ShowId);
-        }
-
-        [Fact]
         public async Task Post()
         {
             // Arrange
