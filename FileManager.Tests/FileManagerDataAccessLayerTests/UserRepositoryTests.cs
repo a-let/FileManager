@@ -31,7 +31,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var userRepo = new UserRepository(_context);
 
             // Act
-            var user = await userRepo.GetUserByIdAsync(id);
+            var user = await userRepo.GetByIdAsync(id);
 
             // Assert
             Assert.Equal(id, user.UserId);
@@ -46,7 +46,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var userRepo = new UserRepository(_context);
 
             // Act
-            var user = userRepo.GetUserByUserName(userName);
+            var user = userRepo.GetByName(userName);
 
             // Assert
             Assert.Equal(userName, user.UserName);
@@ -59,7 +59,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var userRepo = new UserRepository(_context);
 
             // Act
-            var users = userRepo.GetUsers();
+            var users = userRepo.Get();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<User>>(users);
@@ -83,11 +83,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var userRepo = new UserRepository(_context);
 
             // Act
-            var userId = await userRepo.SaveUserAsync(user);
+            await userRepo.SaveAsync(user);
 
             // Assert
-            Assert.True(userId > 0);
-            Assert.Equal(userId, user.UserId);
+            Assert.True(user.UserId > 0);
         }
 
         [Fact]
@@ -111,10 +110,9 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             // Act
             user.UserName = newUserName;
 
-            var userId = await userRepo.SaveUserAsync(user);
+            await userRepo.SaveAsync(user);
 
             // Assert
-            Assert.True(userId > 0);
             Assert.Equal(newUserName, user.UserName);
         }
 
@@ -135,7 +133,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var userRepo = new UserRepository(_context);
 
             // Act
-            var exception = await Record.ExceptionAsync(() => userRepo.SaveUserAsync(user));
+            var exception = await Record.ExceptionAsync(() => userRepo.SaveAsync(user));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);

@@ -29,7 +29,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var seriesRepo = new SeriesRepository(_context);
 
             // Act
-            var series = await seriesRepo.GetSeriesByIdAsync(id);
+            var series = await seriesRepo.GetByIdAsync(id);
 
             // Assert
             Assert.Equal(id, series.SeriesId);
@@ -44,7 +44,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var seriesRepo = new SeriesRepository(_context);
 
             // Act
-            var series = seriesRepo.GetSeriesByName(name);
+            var series = seriesRepo.GetByName(name);
 
             // Assert
             Assert.IsAssignableFrom<Series>(series);
@@ -58,7 +58,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var seriesRepo = new SeriesRepository(_context);
 
             // Act
-            var seriess = seriesRepo.GetSeries();
+            var seriess = seriesRepo.Get();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Series>>(seriess);
@@ -78,10 +78,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var seriesRepo = new SeriesRepository(_context);
 
             // Act
-            var seriesId = await seriesRepo.SaveSeriesAsync(series);
+            await seriesRepo.SaveAsync(series);
 
             // Assert
-            Assert.True(seriesId > 0);
+            Assert.True(series.SeriesId > 0);
         }
 
         [Fact]
@@ -100,10 +100,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             // Act
             series.Path = "New path";
 
-            var seriesId = await seriesRepo.SaveSeriesAsync(series);
+            await seriesRepo.SaveAsync(series);
 
             // Assert
-            Assert.Equal(series.SeriesId, seriesId);
+            Assert.Equal(1, series.SeriesId);
         }
 
         [Fact]
@@ -120,7 +120,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var seriesRepo = new SeriesRepository(_context);
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await seriesRepo.SaveSeriesAsync(series));
+            var exception = await Record.ExceptionAsync(async () => await seriesRepo.SaveAsync(series));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);

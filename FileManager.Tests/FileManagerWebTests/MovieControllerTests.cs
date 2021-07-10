@@ -1,7 +1,9 @@
 ﻿using FileManager.Models;
-using FileManager.Tests.Mocks;
-using FileManager.Web.Controllers;
 using FileManager.Models.Constants;
+using FileManager.Web.Controllers;
+using FileManager.Web.Services.Interfaces;
+
+using NSubstitute;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,15 +14,24 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class MovieControllerTests
     {
-        private readonly MovieController _movieController = new MovieController(new MockMovieControllerService());
+        private readonly IControllerService<Movie> _movieControllerService;
+        private readonly MovieController _movieController;
+
+        public MovieControllerTests()
+        {
+            _movieControllerService = Substitute.For<IControllerService<Movie>>();
+            _movieController = new MovieController(_movieControllerService);
+        }
 
         [Fact]
-        public async Task Get_GivenNoParameter_ThenReturnsListOfMovies()
+        public void Get_GivenNoParameter_ThenReturnsListOfMovies()
         {
             // Arrange
+            _movieControllerService.Get()
+                .Returns(new List<Movie>());
 
             // Act
-            var movies = (await _movieController.Get()).GetValue();
+            var movies = _movieController.Get().GetValue();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
@@ -32,6 +43,9 @@ namespace FileManager.Tests.FileManagerWebTests
             // Arrange
             var id = 1;
 
+            _movieControllerService.GetByIdAsync(Arg.Any<int>())
+                .Returns(new Movie { MovieId = id });
+
             // Act
             var movie = (await _movieController.GetById(id)).GetValue();
 
@@ -40,29 +54,19 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public async Task Get_GivenName_ThenMovieIsReturned()
+        public void Get_GivenName_ThenMovieIsReturned()
         {
             // Arrange
             var name = "Test Movie";
 
+            _movieControllerService.GetByName(Arg.Any<string>())
+                .Returns(new Movie { Name = name });
+
             // Act
-            var movie = (await _movieController.GetByName(name)).GetValue();
+            var movie = _movieController.GetByName(name).GetValue();
 
             // Assert
             Assert.Equal(name, movie.Name);
-        }
-
-        [Fact]
-        public void Get_GivenSeriesId_ThenReturnsListOfMovies()
-        {
-            // Arrange
-            var seriesId = 1;
-
-            // Act
-            var movies = _movieController.GetBySeriesId(seriesId).GetValue();
-
-            // Assert
-            Assert.IsAssignableFrom<IEnumerable<Movie>>(movies);
         }
 
         [Fact]
@@ -79,6 +83,9 @@ namespace FileManager.Tests.FileManagerWebTests
                 Category = "Test",
                 Path = "Test"
             };
+
+            _movieControllerService.SaveAsync(Arg.Any<Movie>())
+                .Returns(Task.CompletedTask);
 
             // Act
             var exception = await Record.ExceptionAsync(async () => (await _movieController.Post(movie)).GetValue());

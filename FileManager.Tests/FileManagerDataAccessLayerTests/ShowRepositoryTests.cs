@@ -29,7 +29,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var showRepo = new ShowRepository(_context);
 
             // Act
-            var show = await showRepo.GetShowByIdAsync(id);
+            var show = await showRepo.GetByIdAsync(id);
 
             // Assert
             Assert.Equal(id, show.ShowId);
@@ -44,7 +44,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var showRepo = new ShowRepository(_context);
 
             // Act
-            var show = showRepo.GetShowByName(name);
+            var show = showRepo.GetByName(name);
 
             // Assert
             Assert.IsAssignableFrom<Show>(show);
@@ -58,7 +58,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var showRepo = new ShowRepository(_context);
 
             // Act
-            var shows = showRepo.GetShows();
+            var shows = showRepo.Get();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Show>>(shows);
@@ -79,10 +79,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var showRepo = new ShowRepository(_context);
 
             // Act
-            var showId = await showRepo.SaveShowAsync(show);
+            await showRepo.SaveAsync(show);
 
             // Assert
-            Assert.True(showId > 0);
+            Assert.True(show.ShowId > 0);
         }
 
         [Fact]
@@ -102,10 +102,10 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             // Act
             show.Path = "Updated Path";
 
-            var showId = await showRepo.SaveShowAsync(show);
+            await showRepo.SaveAsync(show);
 
             // Assert
-            Assert.Equal(show.ShowId, showId);
+            Assert.Equal(1, show.ShowId);
         }
 
         [Fact]
@@ -123,7 +123,7 @@ namespace FileManager.Tests.FileManagerDataAccessLayerTests
             var showRepo = new ShowRepository(_context);
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await showRepo.SaveShowAsync(show));
+            var exception = await Record.ExceptionAsync(async () => await showRepo.SaveAsync(show));
 
             // Assert
             Assert.IsType<ArgumentNullException>(exception);

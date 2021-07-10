@@ -1,7 +1,9 @@
 ﻿using FileManager.Models;
-using FileManager.Tests.Mocks;
-using FileManager.Web.Controllers;
 using FileManager.Models.Constants;
+using FileManager.Web.Controllers;
+using FileManager.Web.Services.Interfaces;
+
+using NSubstitute;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,15 +14,22 @@ namespace FileManager.Tests.FileManagerWebTests
 {
     public class EpisodeControllerTests
     {
-        private readonly EpisodeController _episodeController = new EpisodeController(new MockEpisodeControllerService());
+        private readonly IControllerService<Episode> _episodeControllerService;
+        private readonly EpisodeController _episodeController;
+
+        public EpisodeControllerTests()
+        {
+            _episodeControllerService = Substitute.For<IControllerService<Episode>>();
+            _episodeController = new EpisodeController(_episodeControllerService);
+        }
 
         [Fact]
-        public async Task Get_GivenNoParameter_ThenReturnsListOfEpisodes()
+        public void Get_GivenNoParameter_ThenReturnsListOfEpisodes()
         {
             // Arrange
 
             // Act
-            var episodes = (await _episodeController.Get()).GetValue();
+            var episodes = _episodeController.Get().GetValue();
 
             // Assert
             Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
@@ -32,6 +41,9 @@ namespace FileManager.Tests.FileManagerWebTests
             // Arrange
             var id = 1;
 
+            _episodeControllerService.GetByIdAsync(Arg.Any<int>())
+                .Returns(new Episode { EpisodeId = id });
+
             // Act
             var episode = (await _episodeController.GetByIdAsync(id)).GetValue();
 
@@ -40,29 +52,19 @@ namespace FileManager.Tests.FileManagerWebTests
         }
 
         [Fact]
-        public async Task Get_GivenName_ThenEpisodeIsReturned()
+        public void Get_GivenName_ThenEpisodeIsReturned()
         {
             // Arrange
             var name = "Test Episode";
 
+            _episodeControllerService.GetByName(Arg.Any<string>())
+                .Returns(new Episode { Name = name });
+
             // Act
-            var episode = (await _episodeController.GetByName(name)).GetValue();
+            var episode = _episodeController.GetByName(name).GetValue();
 
             // Assert
             Assert.Equal(name, episode.Name);
-        }
-        
-        [Fact]
-        public void Get_GivenSeasonId_ThenReturnsListOfEpisodes()
-        {
-            // Arrange
-            var seasonId = 1;
-
-            // Act
-            var episodes = _episodeController.GetBySeasonId(seasonId).GetValue();
-
-            // Assert
-            Assert.IsAssignableFrom<IEnumerable<Episode>>(episodes);
         }
 
         [Fact]
@@ -78,6 +80,9 @@ namespace FileManager.Tests.FileManagerWebTests
                 Format = FileFormatTypes.MP4,
                 Path = "Test"
             };
+
+            _episodeControllerService.SaveAsync(Arg.Any<Episode>())
+                .Returns(Task.CompletedTask);
 
             // Act
             episode = (await _episodeController.PostAsync(episode)).GetValue();
