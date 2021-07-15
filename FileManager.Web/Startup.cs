@@ -57,6 +57,9 @@ namespace FileManager.Web
         {
             _container.Register(typeof(IControllerService<>), typeof(IControllerService<>).Assembly);
             _container.Register(typeof(IRepository<>), typeof(IRepository<>).Assembly);
+            _container.Register(typeof(IQueryByIdAsync<,>), typeof(IQueryByIdAsync<,>).Assembly);
+            _container.Register(typeof(IQueryByName<,>), typeof(IQueryByName<,>).Assembly);
+            _container.Register(typeof(IQueryForList<>), typeof(IQueryForList<>).Assembly);
 
             _container.Register<ICryptographyService, CryptographyService>();
             _container.Register<ITokenGenerator, TokenGenerator>();

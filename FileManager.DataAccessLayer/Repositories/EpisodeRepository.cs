@@ -37,5 +37,10 @@ namespace FileManager.DataAccessLayer.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public Task<Episode> FindAsync(int id)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

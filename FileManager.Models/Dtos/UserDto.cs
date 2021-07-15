@@ -1,6 +1,6 @@
 ﻿namespace FileManager.Models.Dtos
 {
-    public class UserDto
+    public sealed class UserDto : Dto
     {
         public int UserId { get; set; }
         public string FirstName { get; set; }

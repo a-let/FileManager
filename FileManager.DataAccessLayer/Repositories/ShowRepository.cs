@@ -1,8 +1,9 @@
 ﻿using FileManager.DataAccessLayer.Interfaces;
+using FileManager.DataAccessLayer.Queries;
 using FileManager.Models;
+using FileManager.Models.Dtos;
 
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileManager.DataAccessLayer.Repositories
@@ -10,20 +11,29 @@ namespace FileManager.DataAccessLayer.Repositories
     public class ShowRepository : IRepository<Show>
     {
         private readonly FileManagerContext _context;
+        private readonly IQueryByIdAsync<QueryById, ShowDto> _queryById;
 
-        public ShowRepository(FileManagerContext context)
+        public ShowRepository(FileManagerContext context, IQueryByIdAsync<QueryById, ShowDto> queryById)
         {
             _context = context;
+            _queryById = queryById;
         }
 
-        public async Task<Show> GetByIdAsync(int id) =>
-            await _context.Show.FindAsync(id);
+        public async Task<Show> GetByIdAsync(int id) => null;
 
-        public IEnumerable<Show> Get() => 
-            _context.Show;
+        public IEnumerable<Show> Get() => null;
 
-        public Show GetByName(string name) =>
-            _context.Show.FirstOrDefault(s => s.Name == name);
+        public Show GetByName(string name) => null;
+
+        public async Task<Show> FindAsync(int id)
+        {
+            var showDto = await _queryById.QueryAsync(id);
+
+            if (showDto == null)
+                return null;
+
+            return new Show(showDto);
+        }
 
         public async Task SaveAsync(Show show)
         {
